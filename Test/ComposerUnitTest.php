@@ -84,4 +84,48 @@ class ComposerUnitTest extends PHPUnit_Framework_TestCase
 
         $this->assertSame($version, $result);
     }
+
+    public function testGetLockVersionReturnsNullWhenItsNotThere()
+    {
+        $config = [];
+        $lock = [];
+        $name = 'company/repo';
+        $composer = new Composer($config, $lock);
+
+        $result = $composer->getLockVersion($name);
+
+        $this->assertNull($result);
+    }
+
+    public function testGetLockVersionReturnsVersionWhenItsThere()
+    {
+        $config = [];
+        $name = 'company/repo';
+        $version = '1.0.0';
+        $lock = ["packages" => [
+            ['name' => $name, 'version' => $version]
+        ]];
+
+        $composer = new Composer($config, $lock);
+
+        $result = $composer->getLockVersion($name);
+
+        $this->assertSame($version, $result);
+    }
+
+    public function testGetLockVersionReturnsVersionWhenItsADevDependency()
+    {
+        $config = [];
+        $name = 'company/repo';
+        $version = '1.0.0';
+        $lock = ["packages-dev" => [
+            ['name' => $name, 'version' => $version]
+        ]];
+
+        $composer = new Composer($config, $lock);
+
+        $result = $composer->getLockVersion($name);
+
+        $this->assertSame($version, $result);
+    }
 }

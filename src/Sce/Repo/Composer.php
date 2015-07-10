@@ -52,9 +52,18 @@ class Composer
         }
     }
 
+    /**
+     * @param $name
+     * @return mixed
+     */
     public function getLockVersion($name)
     {
+        var_dump($this->lock);
 
+        $lock_dependencies = $this->getLockDependencies();
+        if (isset($lock_dependencies[$name])){
+            return $lock_dependencies[$name];
+        }
     }
 
     /**
@@ -71,6 +80,28 @@ class Composer
 
         if (isset($this->config['require-dev'])){
             $dependencies = array_merge($dependencies, $this->config['require-dev']);
+        }
+
+        return $dependencies;
+    }
+
+    /**
+     * @return array
+     */
+    private function getLockDependencies()
+    {
+        $dependencies = [];
+
+        if (isset($this->lock['packages'])) {
+            foreach ($this->lock['packages'] as $package) {
+                $dependencies[$package['name']] = $package['version'];
+            }
+        }
+
+        if (isset($this->lock['packages-dev'])) {
+            foreach ($this->lock['packages-dev'] as $package) {
+                $dependencies[$package['name']] = $package['version'];
+            }
         }
 
         return $dependencies;
