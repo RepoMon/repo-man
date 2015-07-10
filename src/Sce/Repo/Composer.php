@@ -58,8 +58,6 @@ class Composer
      */
     public function getLockVersion($name)
     {
-        var_dump($this->lock);
-
         $lock_dependencies = $this->getLockDependencies();
         if (isset($lock_dependencies[$name])){
             return $lock_dependencies[$name];
