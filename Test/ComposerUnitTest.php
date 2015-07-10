@@ -9,7 +9,7 @@ use Sce\Repo\Composer;
 class ComposerUnitTest extends PHPUnit_Framework_TestCase
 {
 
-    public function testHasDependency()
+    public function testHasDependencyReturnsFalseWhenItsNotThere()
     {
         $config = [];
         $lock = [];
@@ -19,5 +19,18 @@ class ComposerUnitTest extends PHPUnit_Framework_TestCase
         $result = $composer->hasDependency($name);
 
         $this->assertFalse($result);
+    }
+
+    public function testHasDependencyReturnsTrueWhenItsThere()
+    {
+        $name = 'company/repo';
+        $config = ['require' => [$name => '1.0.0']];
+        $lock = [];
+
+        $composer = new Composer($config, $lock);
+
+        $result = $composer->hasDependency($name);
+
+        $this->assertTrue($result);
     }
 }
