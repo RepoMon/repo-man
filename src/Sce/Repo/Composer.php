@@ -40,9 +40,16 @@ class Composer
         return false;
     }
 
+    /**
+     * @param $name
+     * @return mixed
+     */
     public function getDependencyVersion($name)
     {
-
+        if ($this->hasDependency($name)){
+            $dependencies = $this->getDependencies();
+            return $dependencies[$name];
+        }
     }
 
     public function getLockVersion($name)
@@ -60,6 +67,10 @@ class Composer
 
         if (isset($this->config['require'])){
             $dependencies = $this->config['require'];
+        }
+
+        if (isset($this->config['require-dev'])){
+            $dependencies = array_merge($dependencies, $this->config['require-dev']);
         }
 
         return $dependencies;
