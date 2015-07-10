@@ -23,7 +23,7 @@ class Composer
 
     public function hasDependency($name)
     {
-
+        return false;
     }
 
     public function getDependencyVersion($name)
