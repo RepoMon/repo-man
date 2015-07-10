@@ -1,4 +1,4 @@
-<?php namespace Ace\Repo;
+<?php namespace Sce\Repo;
 
 
 class GitRepo

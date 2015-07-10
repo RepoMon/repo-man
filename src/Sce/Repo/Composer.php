@@ -1,7 +1,7 @@
-<?php namespace Ace\Repo; 
+<?php namespace Sce\Repo;
+
 /**
- * @author timrodger
- * Date: 10/07/15
+ * Represents a composer config file & lock
  */
 class Composer
 {
@@ -19,5 +19,20 @@ class Composer
     {
         $this->config = $config;
         $this->lock = $lock;
+    }
+
+    public function hasDependency($name)
+    {
+
+    }
+
+    public function getDependencyVersion($name)
+    {
+
+    }
+
+    public function getLockVersion($name)
+    {
+
     }
 }
