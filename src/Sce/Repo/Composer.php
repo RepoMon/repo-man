@@ -2,6 +2,9 @@
 
 /**
  * Represents a composer config contents & its lock file contents
+ *
+ * @todo rename to ComposerConfig and implement a Composer class that interacts with composer
+ * eg running composer update etc
  */
 class Composer
 {
