@@ -67,4 +67,15 @@ class SemVer
     {
         return $this->value;
     }
+
+    /**
+     * Compare this version against another
+     * Return 0 if they are equal, -1 if this is less than other, 1 if this is greater than other
+     * @param SemVer $other
+     * @return integer
+     */
+    public function compare(SemVer $other)
+    {
+
+    }
 }

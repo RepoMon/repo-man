@@ -42,7 +42,7 @@ class GitRepo
     {
 
     }
-    S
+
     public function add($name)
     {
 
