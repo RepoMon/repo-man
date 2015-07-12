@@ -68,6 +68,16 @@ class GitRepoIntegrationTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(is_dir($this->directory . '/'. $name));
     }
 
+    public function testListLocalBranches()
+    {
+        $git_repo = new GitRepo($this->url, $this->directory);
+
+        $git_repo->update();
+
+        $this->assertSame($this->branches, $git_repo->listLocalBranches());
+    }
+
+
     private function createGitRepo()
     {
         mkdir($this->url, 0777, true);
