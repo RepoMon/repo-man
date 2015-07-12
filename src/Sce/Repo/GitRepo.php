@@ -25,12 +25,25 @@ class GitRepo
 
     /**
      * Update the local repo from the remote
-     *
+     * clones repo if it has not been checked out out yet
      * runs git remote update and git fetch --tags
      */
     public function update()
     {
+        // cd to dir
+        chdir($this->directory);
 
+        // check if local repo exists
+        $parts = explode('/', $this->url);
+        $name = array_pop($parts);
+
+        if (!is_dir($this->directory . '/' . $name)) {
+            exec('git clone ' . $this->url);
+        }
+
+        chdir($this->directory . '/' . $name);
+        exec('git remote update');
+        exec('git fetch --tags origin');
     }
 
     public function branch($name)
