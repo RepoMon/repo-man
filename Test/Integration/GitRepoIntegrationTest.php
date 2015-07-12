@@ -19,11 +19,27 @@ class GitRepoIntegrationTest extends PHPUnit_Framework_TestCase
      */
     private $directory;
 
+    /**
+     * @var string
+     */
+    private $repo_name = 'TestRepo';
+
+    /**
+     * @var array
+     */
+    private $branches = ['feature/new-stuff', 'bug/bad-bug'];
+
+    /**
+     * @var array
+     */
+    private $tags = ['v0.1.0', 'v.1.3.4'];
+
     public function setUp()
     {
         parent::setUp();
 
         $this->directory = TEMP_DIR;
+        $this->url = $this->directory . '/Fixtures/' . $this->repo_name;
 
         if (!is_dir($this->directory)) {
             mkdir($this->directory);
@@ -54,14 +70,9 @@ class GitRepoIntegrationTest extends PHPUnit_Framework_TestCase
 
     private function createGitRepo()
     {
-        $name = 'TestRepo';
-        $branch = 'feature/new-stuff';
-        $tag = 'v0.1.0';
+        mkdir($this->url, 0777, true);
 
-        mkdir($this->directory . "/Fixtures");
-        mkdir($this->directory . "/Fixtures/" . $name);
-
-        chdir($this->directory . "/Fixtures/" . $name);
+        chdir($this->url);
 
         touch('one.txt');
         touch('two.txt');
@@ -70,9 +81,12 @@ class GitRepoIntegrationTest extends PHPUnit_Framework_TestCase
         exec("git add .");
         exec("git commit -m 'first commit'");
 
-        exec("git checkout -b $branch");
-        exec("git tag -a $tag -m 'first tag'");
+        foreach ($this->branches as $branch) {
+            exec("git checkout -b $branch");
+        }
 
-        $this->url = $this->directory . '/Fixtures/' . $name;
+        foreach($this->tags as $index => $tag){
+            exec("git tag -a $tag -m 'tag number $index'");
+        }
     }
 }
