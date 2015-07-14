@@ -18,7 +18,7 @@ class GitRepo
     private $directory;
 
     /**
-     * @var name of checkout
+     * @var string name of checkout
      */
     private $name;
 
@@ -46,26 +46,46 @@ class GitRepo
 
         // check if local repo exists
         if (!is_dir($this->directory . '/' . $this->name)) {
-            exec('git clone ' . $this->url);
+            exec('git clone ' . $this->url, $output);
         }
 
-        chdir($this->directory . '/' . $this->name);
-        exec('git remote update');
-        exec('git fetch --tags origin');
+        $this->execGitCommand('git remote update');
+        $this->execGitCommand('git fetch --tags origin');
     }
 
     /**
      * return a list of branch names for the local repo
+     *
      * @return array
      */
     public function listLocalBranches()
     {
-        chdir($this->directory . '/' . $this->name);
-        exec('git branch', $output);
+        $branches = $this->execGitCommand('git branch');
 
-        var_dump($output);
+        return array_map(function($name){
+            return trim($name, '* ');
+        }, $branches);
+    }
 
-        return $output;
+    public function listAllBranches()
+    {
+
+        $branches = $this->execGitCommand('git branch -a');
+
+        $branches = array_map(function($name){
+            return trim($name, '* ');
+        }, $branches);
+
+        $branches = array_map(function($name) {
+            return preg_replace('/^remotes\/origin\//', '', $name);
+        }, $branches);
+
+        // de-duplicate array and remove HEAD
+        $branches = array_filter($branches, function($name){
+            return !preg_match('/^HEAD/', $name);
+        });
+
+        return array_unique($branches);
     }
 
     /**
@@ -73,6 +93,15 @@ class GitRepo
      * @return array
      */
     public function listTags()
+    {
+        return $this->execGitCommand('git tag -l');
+    }
+
+    /**
+     * Checkout the branch or tag with this name
+     * @param $name
+     */
+    public function checkout($name)
     {
 
     }
@@ -86,16 +115,29 @@ class GitRepo
 
     }
 
+    /**
+     * Create a new branch
+     * @param $name
+     */
     public function branch($name)
     {
 
     }
 
-    public function tag($name)
+    /**
+     * Create a new tag
+     * @param $name string
+     * @param $comment string
+     */
+    public function tag($name, $comment)
     {
 
     }
 
+    /**
+     * Add a file
+     * @param $name
+     */
     public function add($name)
     {
 
@@ -111,12 +153,11 @@ class GitRepo
 
     }
 
-    /**
-     * Checkout the branch or tag with this name
-     * @param $name
-     */
-    public function checkout($name)
+    private function execGitCommand($cmd)
     {
-
+        chdir($this->directory . '/' . $this->name);
+        return explode("\n", trim(`$cmd`));// `, $output);
+        //return $output;
     }
+
 }

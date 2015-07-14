@@ -59,7 +59,6 @@ class GitRepoIntegrationTest extends PHPUnit_Framework_TestCase
     public function testUpdate()
     {
         $git_repo = new GitRepo($this->url, $this->directory);
-
         $git_repo->update();
 
         $parts = explode('/', $this->url);
@@ -71,12 +70,45 @@ class GitRepoIntegrationTest extends PHPUnit_Framework_TestCase
     public function testListLocalBranches()
     {
         $git_repo = new GitRepo($this->url, $this->directory);
-
         $git_repo->update();
 
-        $this->assertSame($this->branches, $git_repo->listLocalBranches());
+        $local_branches = $git_repo->listLocalBranches();
+
+        $this->assertSame(1, count($local_branches));
+        $this->assertSame(['master'], $local_branches);
     }
 
+    public function testListTags()
+    {
+        $git_repo = new GitRepo($this->url, $this->directory);
+        $git_repo->update();
+
+        $tags = $git_repo->listTags();
+
+        var_dump($tags);
+
+        $this->assertSame(count($this->tags), count($tags));
+
+        foreach($this->tags as $tag){
+            $this->assertTrue(in_array($tag, $tags));
+        }
+    }
+
+    public function testListAllBranches()
+    {
+        $git_repo = new GitRepo($this->url, $this->directory);
+        $git_repo->update();
+
+        $branches = $git_repo->listAllBranches();
+
+        $this->assertSame(3, count($branches));
+
+        $this->assertTrue(in_array('master', $branches));
+
+        foreach($this->branches as $branch){
+            $this->assertTrue(in_array($branch, $branches));
+        }
+    }
 
     private function createGitRepo()
     {
@@ -89,11 +121,14 @@ class GitRepoIntegrationTest extends PHPUnit_Framework_TestCase
 
         exec("git init .");
         exec("git add .");
-        exec("git commit -m 'first commit'");
+        exec("git commit -m 'first commit'", $output);
 
         foreach ($this->branches as $branch) {
-            exec("git checkout -b $branch");
+            exec("git checkout -b $branch",  $output);
         }
+
+        // then checkout master
+        exec("git checkout master", $output);
 
         foreach($this->tags as $index => $tag){
             exec("git tag -a $tag -m 'tag number $index'");
