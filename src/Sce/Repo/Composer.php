@@ -71,7 +71,7 @@ class Composer
      * Return a flat array of dependencies and versions
      * @return array
      */
-    private function getDependencies()
+    public function getDependencies()
     {
         $dependencies = [];
 
@@ -89,7 +89,7 @@ class Composer
     /**
      * @return array
      */
-    private function getLockDependencies()
+    public function getLockDependencies()
     {
         $dependencies = [];
 

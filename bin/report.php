@@ -17,15 +17,33 @@ $dir = __DIR__ . '/../tmp';
 
 $config = new Config();
 
-foreach ($config->getRepositories() as $repository){
-    $repository = new GitRepo($repository, $dir);
+foreach ($config->getRepositories() as $uri){
+    $repository = new GitRepo($uri, $dir);
+
+    print "updating $uri\n";
+
     $repository->update();
 
     $composer_json = $repository->getFile('composer.json');
     $composer_lock = $repository->getFile('composer.lock');
 
     $composer = new Composer(json_decode($composer_json, true), json_decode($composer_lock, true));
-    $repositories[$repository] = $repository;
-    $composers[$repository] = $composer;
+    $repositories[$uri] = $repository;
+    $composers[$uri] = $composer;
 }
 
+$dependencies = [];
+
+foreach($composers as $uri => $composer) {
+
+    $lock_dependencies = $composer->getLockDependencies();
+
+    foreach($lock_dependencies as $name => $version){
+        if (!isset($dependencies[$name])){
+            $dependencies[$name] = [];
+        }
+        $dependencies[$name][$uri] = $version;
+    }
+}
+
+var_dump($dependencies);
