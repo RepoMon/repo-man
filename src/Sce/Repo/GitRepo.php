@@ -67,6 +67,18 @@ class GitRepo
         }, $branches);
     }
 
+    /**
+     * @param $name
+     * @return bool
+     */
+    public function isLocalBranch($name)
+    {
+        return in_array($name, $this->listLocalBranches());
+    }
+
+    /**
+     * @return array
+     */
     public function listAllBranches()
     {
 
@@ -108,11 +120,11 @@ class GitRepo
 
     /**
      * @param $name
-     * @return string the file named $name in checkout
+     * @return string the contents of file named $name in checkout
      */
     public function getFile($name)
     {
-
+        return file_get_contents($this->directory . '/' . $this->name . '/' . $name);
     }
 
     /**
@@ -153,11 +165,15 @@ class GitRepo
 
     }
 
+    /**
+     * @param $cmd string
+     * @return array
+     */
     private function execGitCommand($cmd)
     {
         chdir($this->directory . '/' . $this->name);
-        return explode("\n", trim(`$cmd`));// `, $output);
-        //return $output;
+        exec($cmd, $output);
+        return $output;
     }
 
 }

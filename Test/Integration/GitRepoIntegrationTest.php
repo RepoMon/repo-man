@@ -78,14 +78,27 @@ class GitRepoIntegrationTest extends PHPUnit_Framework_TestCase
         $this->assertSame(['master'], $local_branches);
     }
 
+    public function testIsLocalBranch()
+    {
+        $git_repo = new GitRepo($this->url, $this->directory);
+        $git_repo->update();
+
+        $result = $git_repo->isLocalBranch('master');
+        $this->assertTrue($result);
+
+        $result = $git_repo->isLocalBranch('not-a-branch');
+        $this->assertFalse($result);
+
+        $result = $git_repo->isLocalBranch('feature/new-stuff');
+        $this->assertFalse($result);
+    }
+
     public function testListTags()
     {
         $git_repo = new GitRepo($this->url, $this->directory);
         $git_repo->update();
 
         $tags = $git_repo->listTags();
-
-        var_dump($tags);
 
         $this->assertSame(count($this->tags), count($tags));
 
@@ -110,14 +123,24 @@ class GitRepoIntegrationTest extends PHPUnit_Framework_TestCase
         }
     }
 
+    public function testGetFile()
+    {
+        $git_repo = new GitRepo($this->url, $this->directory);
+        $git_repo->update();
+
+        $contents = $git_repo->getFile('one.txt');
+
+        $this->assertSame('one contents', $contents);
+    }
+
     private function createGitRepo()
     {
         mkdir($this->url, 0777, true);
 
         chdir($this->url);
 
-        touch('one.txt');
-        touch('two.txt');
+        file_put_contents('one.txt', 'one contents');
+        file_put_contents('two.txt', 'two contents');
 
         exec("git init .");
         exec("git add .");
