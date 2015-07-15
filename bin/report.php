@@ -1,5 +1,3 @@
-#!/usr/local/bin/php
-
 <?php
 /**
  * @author timrodger
