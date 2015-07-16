@@ -43,6 +43,11 @@ foreach($composers as $uri => $composer) {
         if (!isset($dependencies[$name][$version])){
             $dependencies[$name][$version] = [];
         }
+
+        // store the uri, configured version and date here, not just the uri
+        $configured_version = $composer->getDependencyVersion($name);
+        //$date = $composer->getLockDate($name);
+
         $dependencies[$name][$version] []= $uri;
     }
 }
