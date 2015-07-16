@@ -40,8 +40,48 @@ foreach($composers as $uri => $composer) {
         if (!isset($dependencies[$name])){
             $dependencies[$name] = [];
         }
-        $dependencies[$name][$uri] = $version;
+        if (!isset($dependencies[$name][$version])){
+            $dependencies[$name][$version] = [];
+        }
+        $dependencies[$name][$version] []= $uri;
     }
 }
 
-var_dump($dependencies);
+foreach($dependencies as $name => &$deps){
+    ksort($deps, SORT_NATURAL);
+}
+
+$output = [];
+$output []= ['Library', 'Version', 'Used by'];
+
+foreach($dependencies as $name => $deps){
+
+    $first_name = true;
+
+    foreach($deps as $version => $uris){
+
+        $first_version = true;
+
+        foreach($uris as $uri) {
+            if ($first_name) {
+                $output [] = [$name, $version, $uri];
+                $first_name = false;
+                $first_version = false;
+            } elseif ($first_version){
+                $output [] = ['', $version, $uri];
+                $first_version = false;
+            } else {
+                $output [] = ['', '', $uri];
+            }
+        }
+    }
+
+    $output []= ['','',''];
+}
+
+$out = fopen(__DIR__. '/report.csv', 'w+');
+
+foreach($output as $line) {
+    fputcsv($out, $line);
+}
+fclose($out);
