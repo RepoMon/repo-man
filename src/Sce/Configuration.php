@@ -9,22 +9,22 @@ class Configuration
     /**
      * @var string
      */
-    private $base_dir;
+    private $repo_dir;
 
     /**
      * @param $base_dir
      */
-    public function __construct($base_dir)
+    public function __construct($repo_dir)
     {
-        $this->base_dir = $base_dir;
+        $this->repo_dir = $repo_dir;
     }
 
     /**
      * @return string
      */
-    public function getBaseDir()
+    public function getRepoDir()
     {
-        return $this->base_dir;
+        return $this->repo_dir;
     }
 
     /**
