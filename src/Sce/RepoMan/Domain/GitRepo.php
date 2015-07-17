@@ -128,11 +128,22 @@ class GitRepo
 
     /**
      * @param $name
+     * @return bool
+     */
+    public function hasFile($name)
+    {
+        return file_exists($this->directory . '/' . $this->name . '/' . $name);
+    }
+
+    /**
+     * @param $name
      * @return string the contents of file named $name in checkout
      */
     public function getFile($name)
     {
-        return file_get_contents($this->directory . '/' . $this->name . '/' . $name);
+        if ($this->hasFile($name)) {
+            return file_get_contents($this->directory . '/' . $this->name . '/' . $name);
+        }
     }
 
     /**

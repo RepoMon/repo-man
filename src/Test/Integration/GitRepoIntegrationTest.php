@@ -135,6 +135,36 @@ class GitRepoIntegrationTest extends PHPUnit_Framework_TestCase
         $this->assertSame('one contents', $contents);
     }
 
+    public function testGetFileReturnsNullForMissingFile()
+    {
+        $git_repo = new GitRepo($this->url, $this->directory);
+        $git_repo->update();
+
+        $contents = $git_repo->getFile('not-there');
+
+        $this->assertSame(null, $contents);
+    }
+
+    public function testHasFile()
+    {
+        $git_repo = new GitRepo($this->url, $this->directory);
+        $git_repo->update();
+
+        $result = $git_repo->hasFile('one.txt');
+
+        $this->assertTrue($result);
+    }
+
+    public function testHasFileReturnsFalseForMissingFile()
+    {
+        $git_repo = new GitRepo($this->url, $this->directory);
+        $git_repo->update();
+
+        $result = $git_repo->hasFile('not-there');
+
+        $this->assertFalse($result);
+    }
+
     public function testGetUrl()
     {
         $git_repo = new GitRepo($this->url, $this->directory);
