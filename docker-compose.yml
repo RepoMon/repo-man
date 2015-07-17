@@ -1,0 +1,4 @@
+repoman:
+  build: .
+  ports:
+    - "49300:80"
