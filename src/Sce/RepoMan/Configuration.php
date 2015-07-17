@@ -1,4 +1,4 @@
-<?php namespace Sce;
+<?php namespace Sce\RepoMan;
 
 /*
  * @author tim rodger
@@ -30,7 +30,7 @@ class Configuration
     /**
      * @return array
      */
-    public function getRepositories()
+    public function getRepositoryNames()
     {
         return [
         ];

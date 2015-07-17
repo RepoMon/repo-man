@@ -15,7 +15,7 @@ $dir = __DIR__ . '/../tmp';
 
 $config = new Config();
 
-foreach ($config->getRepositories() as $uri){
+foreach ($config->getRepositoryNames() as $uri){
     $repository = new GitRepo($uri, $dir);
 
     print "updating $uri\n";

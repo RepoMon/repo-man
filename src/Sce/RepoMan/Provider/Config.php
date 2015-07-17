@@ -1,6 +1,6 @@
 <?php namespace Sce\RepoMan\Provider;
 
-use Sce\Configuration;
+use Sce\RepoMan\Configuration;
 use Silex\Application;
 use Silex\ServiceProviderInterface;
 
@@ -11,7 +11,7 @@ use Silex\ServiceProviderInterface;
 class Config implements ServiceProviderInterface
 {
     /**
-     * @var directory path
+     * @var string directory path
      */
     private $dir;
 
