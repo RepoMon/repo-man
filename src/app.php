@@ -12,7 +12,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 $app = new Application();
 
-$dir = '/tmp';
+$dir = '/tmp/repositories';
 
 $app->register(new ConfigProvider($dir));
 $app->register(new LogProvider());
