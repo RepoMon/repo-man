@@ -1,10 +1,9 @@
-<?php namespace Ace\Provider;
+<?php namespace Sce\Provider;
 
 use Silex\Application;
 use Silex\ServiceProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-
 
 /**
  * Configures routing
