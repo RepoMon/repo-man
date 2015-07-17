@@ -1,6 +1,6 @@
 <?php
 
-use Sce\Repo\SemVer;
+use Sce\RepoMan\Domain\SemVer;
 
 /**
  * @group unit
