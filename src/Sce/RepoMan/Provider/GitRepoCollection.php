@@ -4,7 +4,7 @@
  * @author timrodger
  * Date: 17/07/15
  */
-class GitRepo
+class GitRepoCollection
 {
     public function register(Application $app)
     {

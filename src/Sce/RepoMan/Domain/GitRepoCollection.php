@@ -16,7 +16,7 @@ class GitRepoCollection
     /**
      * @var array of GitRepo instances
      */
-    private $git_repos = [];
+    private $repositories = [];
 
     /**
      * @param Configuration $config
@@ -31,11 +31,14 @@ class GitRepoCollection
      */
     public function getRepositories()
     {
-        $repositories = [];
+        if (count($this->repositories)){
+            return $this->repositories;
+        }
 
         foreach($this->config->getRepositoryNames() as $name){
-            $repositories []= new GitRepo($name, $this->config->getRepoDir());
+            $this->repositories []= new GitRepo($name, $this->config->getRepoDir());
         }
-        return $repositories;
+
+        return $this->repositories;
     }
 }
