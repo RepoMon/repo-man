@@ -2,6 +2,7 @@
 
 use Silex\Application;
 use Silex\ServiceProviderInterface;
+use Sce\RepoMan\Domain\GitRepoCollection as Collection;
 
 /**
  * @author timrodger
@@ -15,7 +16,7 @@ class GitRepoCollection implements ServiceProviderInterface
 
     public function boot(Application $app)
     {
-        $app['git_repo_collection'] = new GitRepoCollection(
+        $app['git_repo_collection'] = new Collection(
             $app['config']
         );
     }
