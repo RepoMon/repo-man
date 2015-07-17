@@ -36,7 +36,11 @@ foreach($composers as $uri => $composer) {
 
     $lock_dependencies = $composer->getLockDependencies();
 
-    foreach($lock_dependencies as $name => $version){
+    foreach($lock_dependencies as $name => $data){
+
+        $version = $data['version'];
+        $date = $data['time'];
+
         if (!isset($dependencies[$name])){
             $dependencies[$name] = [];
         }
@@ -46,9 +50,9 @@ foreach($composers as $uri => $composer) {
 
         // store the uri, configured version and date here, not just the uri
         $configured_version = $composer->getDependencyVersion($name);
-        //$date = $composer->getLockDate($name);
+        $date = $composer->getLockDate($name);
 
-        $dependencies[$name][$version] []= $uri;
+        $dependencies[$name][$version] []= ['uri' => $uri, 'config_version' => $configured_version, 'date' => $date];
     }
 }
 
@@ -57,26 +61,26 @@ foreach($dependencies as $name => &$deps){
 }
 
 $output = [];
-$output []= ['Library', 'Version', 'Used by'];
+$output []= ['Library', 'Version', 'Used By', 'Configured Version', 'Last Updated'];
 
 foreach($dependencies as $name => $deps){
 
     $first_name = true;
 
-    foreach($deps as $version => $uris){
+    foreach($deps as $version => $client_data){
 
         $first_version = true;
 
-        foreach($uris as $uri) {
+        foreach($client_data as $client) {
             if ($first_name) {
-                $output [] = [$name, $version, $uri];
+                $output [] = [$name, $version, $client['uri'], $client['config_version'], $client['date']];
                 $first_name = false;
                 $first_version = false;
             } elseif ($first_version){
-                $output [] = ['', $version, $uri];
+                $output [] = ['', $version, $client['uri'], $client['config_version'], $client['date']];
                 $first_version = false;
             } else {
-                $output [] = ['', '', $uri];
+                $output [] = ['', '', $client['uri'], $client['config_version'], $client['date']];
             }
         }
     }

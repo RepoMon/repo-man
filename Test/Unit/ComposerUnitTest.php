@@ -103,7 +103,7 @@ class ComposerUnitTest extends PHPUnit_Framework_TestCase
         $name = 'company/repo';
         $version = '1.0.0';
         $lock = ["packages" => [
-            ['name' => $name, 'version' => $version]
+            ['name' => $name, 'version' => $version, 'time' => "2015-07-10 06:54:46"]
         ]];
 
         $composer = new Composer($config, $lock);
@@ -119,7 +119,7 @@ class ComposerUnitTest extends PHPUnit_Framework_TestCase
         $name = 'company/repo';
         $version = '1.0.0';
         $lock = ["packages-dev" => [
-            ['name' => $name, 'version' => $version]
+            ['name' => $name, 'version' => $version, 'time' => "2015-07-10 06:54:46"]
         ]];
 
         $composer = new Composer($config, $lock);
@@ -127,5 +127,22 @@ class ComposerUnitTest extends PHPUnit_Framework_TestCase
         $result = $composer->getLockVersion($name);
 
         $this->assertSame($version, $result);
+    }
+
+    public function testGetLockDateReturnsTheLockDate()
+    {
+        $config = [];
+        $name = 'company/repo';
+        $version = '1.0.0';
+        $time = "2015-07-10 06:54:46";
+        $lock = ["packages-dev" => [
+            ['name' => $name, 'version' => $version, 'time' => $time]
+        ]];
+
+        $composer = new Composer($config, $lock);
+
+        $result = $composer->getLockDate($name);
+
+        $this->assertSame($time, $result);
     }
 }
