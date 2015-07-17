@@ -3,6 +3,7 @@
 use Sce\Repo\Composer;
 
 /**
+ * @group unit
  * @author timrodger
  * Date: 10/07/15
  */

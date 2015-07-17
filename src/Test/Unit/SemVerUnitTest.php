@@ -3,6 +3,7 @@
 use Sce\Repo\SemVer;
 
 /**
+ * @group unit
  * @author timrodger
  * Date: 12/07/15
  */

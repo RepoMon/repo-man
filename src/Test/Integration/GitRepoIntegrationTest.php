@@ -3,6 +3,8 @@
 use Sce\Repo\GitRepo;
 
 /**
+ * @group integration
+ *
  * @author timrodger
  * Date: 12/07/15
  */
