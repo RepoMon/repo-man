@@ -35,6 +35,14 @@ class GitRepo
     }
 
     /**
+     * @return string
+     */
+    public function getUrl()
+    {
+        return $this->url;
+    }
+
+    /**
      * Update the local repo from the remote
      * clones repo if it has not been checked out out yet
      * runs git remote update and git fetch --tags
