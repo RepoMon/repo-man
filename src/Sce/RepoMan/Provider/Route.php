@@ -1,4 +1,4 @@
-<?php namespace Sce\Provider;
+<?php namespace Sce\RepoMan\Provider;
 
 use Silex\Application;
 use Silex\ServiceProviderInterface;

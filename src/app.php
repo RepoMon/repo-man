@@ -2,11 +2,11 @@
 
 use Silex\Application;
 
-use Sce\Provider\Config as ConfigProvider;
-use Sce\Provider\Twig as TwigProvider;
-use Sce\Provider\Log as LogProvider;
-use Sce\Provider\Route as RouteProvider;
-use Sce\Provider\ErrorHandler as ErrorHandlerProvider;
+use Sce\RepoMan\Provider\Config as ConfigProvider;
+use Sce\RepoMan\Provider\Twig as TwigProvider;
+use Sce\RepoMan\Provider\Log as LogProvider;
+use Sce\RepoMan\Provider\Route as RouteProvider;
+use Sce\RepoMan\Provider\ErrorHandler as ErrorHandlerProvider;
 
 require_once __DIR__ . '/vendor/autoload.php';
 

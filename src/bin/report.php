@@ -3,8 +3,8 @@
  * @author timrodger
  * Date: 14/07/15
  */
-use Sce\Repo\GitRepo;
-use Sce\Repo\Composer;
+use Sce\RepoMan\Domain\GitRepo;
+use Sce\RepoMan\Domain\Composer;
 
 require_once(__DIR__.'/../vendor/autoload.php');
 require_once(__DIR__.'/../config.php');
