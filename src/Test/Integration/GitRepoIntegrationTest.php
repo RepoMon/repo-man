@@ -1,6 +1,6 @@
 <?php
 
-use Sce\Repo\GitRepo;
+use Sce\RepoMan\Domain\GitRepo;
 
 /**
  * @group integration

@@ -1,6 +1,6 @@
 <?php
 
-use Sce\Repo\Composer;
+use Sce\RepoMan\Domain\Composer;
 
 /**
  * @group unit
