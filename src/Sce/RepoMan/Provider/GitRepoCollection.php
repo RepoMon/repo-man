@@ -1,10 +1,13 @@
-<?php namespace Ace\RepoMan\Provider;
+<?php namespace Sce\RepoMan\Provider;
+
+use Silex\Application;
+use Silex\ServiceProviderInterface;
 
 /**
  * @author timrodger
  * Date: 17/07/15
  */
-class GitRepoCollection
+class GitRepoCollection implements ServiceProviderInterface
 {
     public function register(Application $app)
     {

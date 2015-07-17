@@ -36,7 +36,7 @@ class GitRepoCollection
         }
 
         foreach($this->config->getRepositoryNames() as $name){
-            $this->repositories []= new GitRepo($name, $this->config->getRepoDir());
+            $this->repositories [$name]= new GitRepo($name, $this->config->getRepoDir());
         }
 
         return $this->repositories;
