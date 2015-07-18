@@ -53,6 +53,7 @@ class Route implements ServiceProviderInterface
         /**
          * Update all the configured repositories
          * Is this needed ? do we want to have users do this manually?
+         * If we do support this it needs to be on a different endpoint
          */
         $app->post('/repositories/update', function(Request $req) use ($app){
 

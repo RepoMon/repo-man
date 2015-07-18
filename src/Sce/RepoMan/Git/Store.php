@@ -55,11 +55,23 @@ class Store implements StoreInterface
 
         if (is_array($keys)) {
             foreach ($keys as $key) {
-                $data = $this->client->hmget($key, 'url', 'path');
-                $this->repositories [] = new Repository($data[0], $data[1]);
+                $this->repositories [] = new Repository($key, $this->config->getRepoDir());
             }
         }
 
         return $this->repositories;
+    }
+
+    /**
+     * @param $url
+     */
+    public function add($url)
+    {
+        $repository = new Repository($url, $this->config->getRepoDir());
+
+        // add to set in redis
+        $this->client->sadd(self::REPO_SET_NAME, $url);
+
+        return $repository;
     }
 }

@@ -7,4 +7,6 @@
 interface StoreInterface
 {
     public function getAll();
+
+    public function add($url);
 }

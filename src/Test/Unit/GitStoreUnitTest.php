@@ -35,13 +35,12 @@ class GitStoreUnitTest extends PHPUnit_Framework_TestCase
         $this->givenAStore();
 
         $this->givenSomeMockedData([
-            ['url' => 'https://github.com/user/repo-name',
-            'path' => '/tmp/repos/repo-name']
+            'https://github.com/user/repo-name'
         ]);
 
-        $all_repos = $this->store->getAll();
-        $this->assertTrue(is_array($all_repos));
-        $this->assertSame(1, count($all_repos));
+        $result = $this->store->getAll();
+        $this->assertTrue(is_array($result));
+        $this->assertSame(1, count($result));
     }
 
     /**
@@ -54,26 +53,35 @@ class GitStoreUnitTest extends PHPUnit_Framework_TestCase
         $this->givenAMockClient();
         $this->givenAStore();
 
-        $all_repos = $this->store->getAll();
-        $this->assertTrue(is_array($all_repos));
-        $this->assertSame(0, count($all_repos));
+        $result = $this->store->getAll();
+        $this->assertTrue(is_array($result));
+        $this->assertSame(0, count($result));
+    }
+
+    public function testAddRepository()
+    {
+        $dir = '/tmp/repos';
+        $this->givenAMockConfig($dir);
+        $this->givenAMockClient();
+        $this->givenAStore();
+
+        $url = 'https://github.com/user/repo-name';
+
+        $this->mock_client->expects($this->once())
+            ->method('sadd')
+            ->with(Store::REPO_SET_NAME, $url);
+
+        $repository = $this->store->add($url);
+        $this->assertInstanceOf('Sce\RepoMan\Git\Repository', $repository);
     }
 
     private function givenSomeMockedData(array $repos)
     {
         // set up some contents of the mock redis instance
-        foreach($repos as $repo) {
-
-            $this->mock_client->expects($this->once())
-                ->method('smembers')
-                ->with(Store::REPO_SET_NAME)
-                ->will($this->returnValue([$repo['url']]));
-
-            $this->mock_client->expects($this->once())
-                ->method('hmget')
-                ->with($repo['url'])
-                ->will($this->returnValue([$repo['url'], $repo['path']]));
-        }
+        $this->mock_client->expects($this->once())
+            ->method('smembers')
+            ->with(Store::REPO_SET_NAME)
+            ->will($this->returnValue($repos));
     }
 
     /**
