@@ -3,6 +3,7 @@
 use Predis\Response\ServerException;
 use Sce\RepoMan\Configuration;
 use Predis\Client;
+use Sce\RepoMan\Git\UnavailableException;
 
 /**
  * Uses redis to store data on git repositories
@@ -61,6 +62,7 @@ class Store implements StoreInterface
             }
         } catch (ServerException $ex) {
             // log this exception
+            throw new UnavailableException($ex->getMessage());
         }
 
         return $this->repositories;

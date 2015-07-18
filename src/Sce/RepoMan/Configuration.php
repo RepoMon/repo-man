@@ -28,11 +28,18 @@ class Configuration
     }
 
     /**
+     * @deprecated
      * @return array
      */
     public function getRepositoryNames()
     {
         return [
         ];
+    }
+
+    public function getStoreDsn()
+    {
+        // should contain a string like this 'tcp://172.17.0.154:6379'
+        return getenv('REDIS_PORT');
     }
 }

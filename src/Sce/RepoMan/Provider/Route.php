@@ -28,7 +28,7 @@ class Route implements ServiceProviderInterface
          */
         $app->get('/repositories', function(Request $req) use ($app){
 
-            $repositories = $app['git_repo_collection']->getRepositories();
+            $repositories = $app['git_repo_store']->getAll();
 
             $names = [];
 
@@ -45,7 +45,7 @@ class Route implements ServiceProviderInterface
         $app->put('/repositories/{name}', function(Request $req, $name) use ($app){
 
             // add the repo to the store
-
+            $app['git_repo_store']->add($name);
             return $app->json(['status' => 'success', 'name' => $name]);
 
         })->assert('name', '.+');
@@ -57,7 +57,7 @@ class Route implements ServiceProviderInterface
          */
         $app->post('/repositories/update', function(Request $req) use ($app){
 
-            $repositories = $app['git_repo_collection']->getRepositories();
+            $repositories = $app['git_repo_store']->getAll();
 
             foreach($repositories as $repository) {
                 $repository->update();

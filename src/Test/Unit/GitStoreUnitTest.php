@@ -58,7 +58,10 @@ class GitStoreUnitTest extends PHPUnit_Framework_TestCase
         $this->assertSame(0, count($result));
     }
 
-    public function testGetAllReturnEmptyArrayWhenServerIsUnavailable()
+    /**
+     * @expectedException Sce\RepoMan\Git\UnavailableException
+     */
+    public function testGetAllThrowsExceptionWhenServerIsUnavailable()
     {
         $dir = '/tmp/repos';
         $this->givenAMockConfig($dir);
@@ -71,8 +74,6 @@ class GitStoreUnitTest extends PHPUnit_Framework_TestCase
             ->will($this->throwException(new \Predis\Response\ServerException));
 
         $result = $this->store->getAll();
-        $this->assertTrue(is_array($result));
-        $this->assertSame(0, count($result));
     }
 
     public function testAddRepository()
