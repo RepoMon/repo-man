@@ -54,14 +54,13 @@ class Store implements StoreInterface
         try {
             // get the repository data from redis
             $keys = $this->client->smembers(SELF::REPO_SET_NAME);
-        } catch (ServerException $ex) {
-            return $this->repositories;
-        }
-        
-        if (is_array($keys)) {
-            foreach ($keys as $key) {
-                $this->repositories [] = new Repository($key, $this->config->getRepoDir());
+            if (is_array($keys)) {
+                foreach ($keys as $key) {
+                    $this->repositories [] = new Repository($key, $this->config->getRepoDir());
+                }
             }
+        } catch (ServerException $ex) {
+            // log this exception
         }
 
         return $this->repositories;
