@@ -4,8 +4,6 @@ MAINTAINER Tim Rodger <tim.rodger@gmail.com>
 
 EXPOSE 80
 
-# RUN add-apt-repository ppa:ondrej/php5-5.6
-
 RUN apt-get update -qq && \
     apt-get install -y \
     php5-cli \
@@ -23,6 +21,10 @@ COPY src/ /home/repo-man/
 
 # remove any development cruft
 RUN rm -rf /home/repo-man/vendor/*
+
+# create the directory to store the checked out repositories
+RUN mkdir /tmp/repositories
+
 
 WORKDIR /home/repo-man
 
