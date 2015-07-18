@@ -2,7 +2,7 @@
 
 use Silex\Application;
 use Silex\ServiceProviderInterface;
-use Sce\RepoMan\Domain\GitRepoCollection as Collection;
+use Sce\RepoMan\Git\RepositoryCollection as Collection;
 
 /**
  * @author timrodger

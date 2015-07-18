@@ -1,4 +1,4 @@
-<?php namespace Sce\RepoMan\Domain;
+<?php namespace Sce\RepoMan\Git;
 
 use Sce\RepoMan\Configuration;
 
@@ -6,7 +6,7 @@ use Sce\RepoMan\Configuration;
  * @author timrodger
  * Date: 17/07/15
  */
-class GitRepoCollection
+class Store
 {
     /**
      * @var Configuration
@@ -29,15 +29,13 @@ class GitRepoCollection
     /**
      * @return array of GitRepo instances
      */
-    public function getRepositories()
+    public function getAll()
     {
         if (count($this->repositories)){
             return $this->repositories;
         }
 
-        foreach($this->config->getRepositoryNames() as $name){
-            $this->repositories [$name]= new GitRepo($name, $this->config->getRepoDir());
-        }
+        // get the repos from redis
 
         return $this->repositories;
     }

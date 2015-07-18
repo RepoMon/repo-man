@@ -5,6 +5,7 @@
  */
 use Sce\RepoMan\Domain\GitRepo;
 use Sce\RepoMan\Domain\Composer;
+use Sce\RepoMan\Configuration;
 
 require_once(__DIR__.'/../vendor/autoload.php');
 require_once(__DIR__.'/../config.php');
@@ -13,7 +14,7 @@ $composers = [];
 $repositories = [];
 $dir = __DIR__ . '/../tmp';
 
-$config = new Config();
+$config = new Configuration($dir);
 
 foreach ($config->getRepositoryNames() as $uri){
     $repository = new GitRepo($uri, $dir);

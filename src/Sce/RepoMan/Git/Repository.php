@@ -1,11 +1,11 @@
-<?php namespace Sce\RepoMan\Domain;
+<?php namespace Sce\RepoMan\Git;
 
 /**
  * Class GitRepo
  * @package Sce\Repo
  * Represents a git repo
  */
-class GitRepo
+class Repository
 {
     /**
      * @var string url of remote git repo

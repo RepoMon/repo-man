@@ -1,4 +1,4 @@
-<?php namespace Sce\RepoMan\Domain;
+<?php namespace Sce\RepoMan\Git;
 
 use Sce\RepoMan\Configuration;
 
@@ -6,7 +6,7 @@ use Sce\RepoMan\Configuration;
  * @author timrodger
  * Date: 17/07/15
  */
-class GitRepoStore
+class RepositoryCollection
 {
     /**
      * @var Configuration
@@ -35,7 +35,9 @@ class GitRepoStore
             return $this->repositories;
         }
 
-        // get the repos from redis
+        foreach($this->config->getRepositoryNames() as $name){
+            $this->repositories [$name]= new Repository($name, $this->config->getRepoDir());
+        }
 
         return $this->repositories;
     }

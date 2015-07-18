@@ -1,6 +1,6 @@
 <?php
 
-use Sce\RepoMan\Domain\GitRepoCollection;
+use Sce\RepoMan\Git\RepositoryCollection;
 
 /**
  * @group unit
@@ -20,14 +20,14 @@ class GitRepoCollectionUnitTest extends PHPUnit_Framework_TestCase
         $repos = ['https://github.com/user/repo-1', 'https://github.com/user/repo-2'];
 
         $this->givenAMockConfig($dir, $repos);
-        $collection = new GitRepoCollection($this->mock_config);
+        $collection = new RepositoryCollection($this->mock_config);
 
         $repos = $collection->getRepositories();
 
         $this->assertTrue(is_array($repos));
         $this->assertTrue(2 == count($repos));
         foreach($repos as $repo){
-            $this->assertInstanceOf('Sce\RepoMan\Domain\GitRepo', $repo);
+            $this->assertInstanceOf('Sce\RepoMan\Git\Repository', $repo);
         }
     }
 
