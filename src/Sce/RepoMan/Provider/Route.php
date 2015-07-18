@@ -28,11 +28,9 @@ class Route implements ServiceProviderInterface
          */
         $app->get('/repositories', function(Request $req) use ($app){
 
-            $repositories = $app['git_repo_store']->getAll();
-
             $names = [];
 
-            foreach($repositories as $repository) {
+            foreach($app['git_repo_store']->getAll() as $repository) {
                 $names [] = $repository->getUrl();
             }
 
@@ -57,9 +55,7 @@ class Route implements ServiceProviderInterface
          */
         $app->post('/repositories/update', function(Request $req) use ($app){
 
-            $repositories = $app['git_repo_store']->getAll();
-
-            foreach($repositories as $repository) {
+            foreach($app['git_repo_store']->getAll() as $repository) {
                 $repository->update();
             }
 
