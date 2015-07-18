@@ -73,7 +73,7 @@ class GitStoreUnitTest extends PHPUnit_Framework_TestCase
             ->with(Store::REPO_SET_NAME)
             ->will($this->throwException(new \Predis\Response\ServerException));
 
-        $result = $this->store->getAll();
+        $this->store->getAll();
     }
 
     public function testAddRepository()
@@ -91,6 +91,26 @@ class GitStoreUnitTest extends PHPUnit_Framework_TestCase
 
         $repository = $this->store->add($url);
         $this->assertInstanceOf('Sce\RepoMan\Git\Repository', $repository);
+    }
+
+    /**
+     * @expectedException Sce\RepoMan\Git\UnavailableException
+     */
+    public function testAddRepositoryThrowsExecptionWhenServerIsUnavailable()
+    {
+        $dir = '/tmp/repos';
+        $this->givenAMockConfig($dir);
+        $this->givenAMockClient();
+        $this->givenAStore();
+
+        $url = 'https://github.com/user/repo-name';
+
+        $this->mock_client->expects($this->once())
+            ->method('sadd')
+            ->with(Store::REPO_SET_NAME, $url)
+            ->will($this->throwException(new \Predis\Response\ServerException));
+
+        $this->store->add($url);
     }
 
     private function givenSomeMockedData(array $repos)

@@ -60,12 +60,11 @@ class Store implements StoreInterface
                     $this->repositories [] = new Repository($key, $this->config->getRepoDir());
                 }
             }
+            return $this->repositories;
+
         } catch (ServerException $ex) {
-            // log this exception
             throw new UnavailableException($ex->getMessage());
         }
-
-        return $this->repositories;
     }
 
     /**
@@ -73,11 +72,16 @@ class Store implements StoreInterface
      */
     public function add($url)
     {
-        $repository = new Repository($url, $this->config->getRepoDir());
+        try {
+            $repository = new Repository($url, $this->config->getRepoDir());
 
-        // add to set in redis
-        $this->client->sadd(self::REPO_SET_NAME, $url);
+            // add to set in redis
+            $this->client->sadd(self::REPO_SET_NAME, $url);
 
-        return $repository;
+            return $repository;
+
+        } catch (ServerException $ex) {
+            throw new UnavailableException($ex->getMessage());
+        }
     }
 }

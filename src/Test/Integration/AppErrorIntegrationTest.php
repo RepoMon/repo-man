@@ -8,13 +8,13 @@ use Silex\WebTestCase;
  * @author timrodger
  * Date: 18/03/15
  */
-class AppIntegrationTest extends WebTestCase
+class AppErrorIntegrationTest extends WebTestCase
 {
     private $client;
 
     public function createApplication()
     {
-        putenv('REDIS_PORT=MEMORY');
+        putenv('REDIS_PORT=tcp://172.17.0.154:9999');
         return require __DIR__.'/../../app.php';
     }
 
@@ -26,35 +26,30 @@ class AppIntegrationTest extends WebTestCase
         $this->thenTheResponseIsSuccess();
     }
 
-    public function testListRepositoriesReturnsAJsonArray()
+    public function testListRepositoriesFails()
     {
         $this->givenAClient();
         $this->client->request('GET', '/repositories');
 
-        $this->thenTheResponseIsSuccess();
-
-        $body = $this->client->getResponse()->getContent();
-
-        $this->assertTrue(is_array(json_decode($body, 1)));
+        $this->thenTheResponseIs500();
     }
 
-    public function testAddRepositorySucceeds()
+    public function testAddRepositoryFails()
     {
         $name =  'https://github.com/timothy-r/render';
 
         $this->givenAClient();
         $this->client->request('PUT', '/repositories/' . rawurlencode($name));
 
-        $this->thenTheResponseIsSuccess();
-
+        $this->thenTheResponseIs500();
     }
 
-    public function testUpdateRepositoriesSucceeds()
+    public function testUpdateRepositoriesFails()
     {
         $this->givenAClient();
         $this->client->request('POST', '/repositories/update');
 
-        $this->thenTheResponseIsSuccess();
+        $this->thenTheResponseIs500();
     }
 
     private function givenAClient()
@@ -67,9 +62,9 @@ class AppIntegrationTest extends WebTestCase
         $this->assertSame(200, $this->client->getResponse()->getStatusCode());
     }
 
-    private function thenTheResponseIs404()
+    private function thenTheResponseIs500()
     {
-        $this->assertSame(404, $this->client->getResponse()->getStatusCode());
+        $this->assertSame(500, $this->client->getResponse()->getStatusCode());
     }
 
     protected function assertResponseContents($expected_body)
