@@ -58,6 +58,23 @@ class GitStoreUnitTest extends PHPUnit_Framework_TestCase
         $this->assertSame(0, count($result));
     }
 
+    public function testGetAllReturnEmptyArrayWhenServerIsUnavailable()
+    {
+        $dir = '/tmp/repos';
+        $this->givenAMockConfig($dir);
+        $this->givenAMockClient();
+        $this->givenAStore();
+
+        $this->mock_client->expects($this->once())
+            ->method('smembers')
+            ->with(Store::REPO_SET_NAME)
+            ->will($this->throwException(new \Predis\Response\ServerException));
+
+        $result = $this->store->getAll();
+        $this->assertTrue(is_array($result));
+        $this->assertSame(0, count($result));
+    }
+
     public function testAddRepository()
     {
         $dir = '/tmp/repos';
