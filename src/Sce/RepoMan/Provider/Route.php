@@ -40,11 +40,12 @@ class Route implements ServiceProviderInterface
         /**
          * Adds a repository
          */
-        $app->put('/repositories/{name}', function(Request $req, $name) use ($app){
+        $app->post('/repositories', function(Request $req) use ($app){
 
             // add the repo to the store
-            $app['git_repo_store']->add($name);
-            return $app->json(['status' => 'success', 'name' => $name]);
+            $url = $req->request->get('url');
+            $app['git_repo_store']->add($url);
+            return $app->json(['status' => 'success', 'name' => $url]);
 
         })->assert('name', '.+');
 

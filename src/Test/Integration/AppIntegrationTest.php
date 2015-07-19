@@ -10,6 +10,9 @@ use Silex\WebTestCase;
  */
 class AppIntegrationTest extends WebTestCase
 {
+    /**
+     * @var Symfony\Component\HttpKernel\Client
+     */
     private $client;
 
     public function createApplication()
@@ -40,10 +43,10 @@ class AppIntegrationTest extends WebTestCase
 
     public function testAddRepositorySucceeds()
     {
-        $name =  'https://github.com/timothy-r/render';
+        $url =  'https://github.com/timothy-r/render';
 
         $this->givenAClient();
-        $this->client->request('PUT', '/repositories/' . rawurlencode($name));
+        $this->client->request('POST', '/repositories', ['url' => $url]);
 
         $this->thenTheResponseIsSuccess();
 

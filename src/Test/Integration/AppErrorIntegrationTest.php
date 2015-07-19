@@ -36,10 +36,10 @@ class AppErrorIntegrationTest extends WebTestCase
 
     public function testAddRepositoryFails()
     {
-        $name =  'https://github.com/timothy-r/render';
+        $url =  'https://github.com/timothy-r/render';
 
         $this->givenAClient();
-        $this->client->request('PUT', '/repositories/' . rawurlencode($name));
+        $this->client->request('POST', '/repositories', ['url' => $url]);
 
         $this->thenTheResponseIs500();
     }
