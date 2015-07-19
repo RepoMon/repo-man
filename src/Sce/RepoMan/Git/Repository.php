@@ -43,6 +43,15 @@ class Repository
     }
 
     /**
+     * Return an id string for this repo
+     * @return string
+     */
+    public function getId()
+    {
+        return base64_encode($this->url);
+    }
+
+    /**
      * Update the local repo from the remote
      * clones repo if it has not been checked out out yet
      * runs git remote update and git fetch --tags

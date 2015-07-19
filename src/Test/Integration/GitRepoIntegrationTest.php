@@ -172,6 +172,16 @@ class GitRepoIntegrationTest extends PHPUnit_Framework_TestCase
         $this->assertSame($this->url, $result);
     }
 
+    public function testGetId()
+    {
+        $expected = base64_encode($this->url);
+
+        $git_repo = new GitRepo($this->url, $this->directory);
+        $result = $git_repo->getId();
+
+        $this->assertSame($expected, $result);
+    }
+
     private function createGitRepo()
     {
         mkdir($this->url, 0777, true);
