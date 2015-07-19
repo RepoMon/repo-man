@@ -20,7 +20,7 @@ class Route implements ServiceProviderInterface
     public function boot(Application $app)
     {
         $app->get("/", function(Request $req) use ($app){
-            return new Response('hello', 200);
+            return new Response('RepoMan', 200);
         });
 
         /**
@@ -28,13 +28,13 @@ class Route implements ServiceProviderInterface
          */
         $app->get('/repositories', function(Request $req) use ($app){
 
-            $names = [];
+            $repositories = [];
 
             foreach($app['git_repo_store']->getAll() as $repository) {
-                $names [] = $repository->getUrl();
+                $repositories[$repository->getId()] = $repository->getUrl();
             }
 
-            return $app->json($names);
+            return $app->json($repositories);
         });
 
         /**
