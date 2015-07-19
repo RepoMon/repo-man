@@ -44,4 +44,12 @@ class MemoryStore implements StoreInterface
         return $repositories;
     }
 
+    /**
+     * @param $host
+     * @param $token
+     */
+    public function addToken($host, $token)
+    {
+
+    }
 }

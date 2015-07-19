@@ -9,4 +9,6 @@ interface StoreInterface
     public function getAll();
 
     public function add($url);
+
+    public function addToken($host, $token);
 }

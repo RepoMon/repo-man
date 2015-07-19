@@ -63,5 +63,13 @@ class Route implements ServiceProviderInterface
 
             return new Response('', 200);
         });
+
+        /**
+         * Adds a token to use when authenticating with remote repository
+         * $req should have a token and a host field
+         */
+        $app->post('/config/tokens', function(Request $req) use ($app){
+
+        });
     }
 }

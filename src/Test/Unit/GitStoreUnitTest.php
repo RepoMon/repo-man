@@ -96,7 +96,7 @@ class GitStoreUnitTest extends PHPUnit_Framework_TestCase
     /**
      * @expectedException Sce\RepoMan\Git\UnavailableException
      */
-    public function testAddRepositoryThrowsExecptionWhenServerIsUnavailable()
+    public function testAddRepositoryThrowsExceptionWhenServerIsUnavailable()
     {
         $dir = '/tmp/repos';
         $this->givenAMockConfig($dir);

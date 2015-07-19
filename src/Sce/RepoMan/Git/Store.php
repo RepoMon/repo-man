@@ -84,4 +84,14 @@ class Store implements StoreInterface
             throw new UnavailableException($ex->getMessage());
         }
     }
+
+    /**
+     * Store tokens in a set using the values of host=token
+     * @param $host
+     * @param $token
+     */
+    public function addToken($host, $token)
+    {
+
+    }
 }
