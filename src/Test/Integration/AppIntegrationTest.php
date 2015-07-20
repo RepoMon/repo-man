@@ -60,6 +60,17 @@ class AppIntegrationTest extends WebTestCase
         $this->thenTheResponseIsSuccess();
     }
 
+    public function testAddTokenSucceeds()
+    {
+        $host =  'github.com';
+        $token = 'abcde12345';
+
+        $this->givenAClient();
+        $this->client->request('POST', '/tokens', ['host' => $host, 'token'=> $token]);
+
+        $this->thenTheResponseIsSuccess();
+    }
+
     private function givenAClient()
     {
         $this->client = $this->createClient();

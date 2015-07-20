@@ -57,6 +57,7 @@ class Store implements StoreInterface
             $keys = $this->client->smembers(SELF::REPO_SET_NAME);
             if (is_array($keys)) {
                 foreach ($keys as $key) {
+                    // insert token into the repo url here
                     $this->repositories [] = new Repository($key, $this->config->getRepoDir());
                 }
             }
@@ -73,6 +74,7 @@ class Store implements StoreInterface
     public function add($url)
     {
         try {
+            // insert token into the repo url here
             $repository = new Repository($url, $this->config->getRepoDir());
 
             // add to set in redis
@@ -86,7 +88,9 @@ class Store implements StoreInterface
     }
 
     /**
-     * Store tokens in a set using the values of host=token
+     * Store tokens in a set using the values of host=token?
+     * Or use a set to store the hosts and separate key values to store the token string for each host
+     *
      * @param $host
      * @param $token
      */

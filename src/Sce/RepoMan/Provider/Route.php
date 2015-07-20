@@ -48,7 +48,7 @@ class Route implements ServiceProviderInterface
             $app['git_repo_store']->add($url);
             return $app->json(['status' => 'success', 'name' => $url]);
 
-        })->assert('name', '.+');
+        });
 
         /**
          * Update all the configured repositories
@@ -68,8 +68,13 @@ class Route implements ServiceProviderInterface
          * Adds a token to use when authenticating with remote repository
          * $req should have a token and a host field
          */
-        $app->post('/config/tokens', function(Request $req) use ($app){
+        $app->post('/tokens', function(Request $req) use ($app){
 
+            $host = $req->request->get('host');
+            $token = $req->request->get('token');
+            $app['git_repo_store']->addToken($host, $token);
+
+            return $app->json(['status' => 'success', 'host' => $host]);
         });
     }
 }
