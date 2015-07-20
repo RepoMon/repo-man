@@ -52,6 +52,22 @@ class AppIntegrationTest extends WebTestCase
 
     }
 
+    public function testAddRepositoryFailsWhenUrlIsEmpty()
+    {
+        $this->givenAClient();
+        $this->client->request('POST', '/repositories', ['url' => '']);
+
+        $this->thenTheResponseIs400();
+    }
+
+    public function testAddRepositoryFailsWhenUrlIsMissing()
+    {
+        $this->givenAClient();
+        $this->client->request('POST', '/repositories');
+
+        $this->thenTheResponseIs400();
+    }
+
     public function testUpdateRepositoriesSucceeds()
     {
         $this->givenAClient();
@@ -71,6 +87,26 @@ class AppIntegrationTest extends WebTestCase
         $this->thenTheResponseIsSuccess();
     }
 
+    public function testAddTokenFailsWhenHostIsMssing()
+    {
+        $token = 'abcde12345';
+
+        $this->givenAClient();
+        $this->client->request('POST', '/tokens', ['token'=> $token]);
+
+        $this->thenTheResponseIs400();
+    }
+
+    public function testAddTokenFailsWhenTokenIsMssing()
+    {
+        $host =  'github.com';
+
+        $this->givenAClient();
+        $this->client->request('POST', '/tokens', ['host' => $host]);
+
+        $this->thenTheResponseIs400();
+    }
+
     private function givenAClient()
     {
         $this->client = $this->createClient();
@@ -81,9 +117,9 @@ class AppIntegrationTest extends WebTestCase
         $this->assertSame(200, $this->client->getResponse()->getStatusCode());
     }
 
-    private function thenTheResponseIs404()
+    private function thenTheResponseIs400()
     {
-        $this->assertSame(404, $this->client->getResponse()->getStatusCode());
+        $this->assertSame(400, $this->client->getResponse()->getStatusCode());
     }
 
     protected function assertResponseContents($expected_body)

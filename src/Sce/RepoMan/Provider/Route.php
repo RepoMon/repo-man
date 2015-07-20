@@ -45,8 +45,13 @@ class Route implements ServiceProviderInterface
 
             // add the repo to the store
             $url = $req->request->get('url');
-            $app['git_repo_store']->add($url);
-            return $app->json(['status' => 'success', 'name' => $url]);
+
+            if (!empty($url)) {
+                $app['git_repo_store']->add($url);
+                return $app->json(['status' => 'success', 'name' => $url]);
+            } else {
+                return $app->json(['status' => 'error'], 400);
+            }
 
         });
 
@@ -72,9 +77,13 @@ class Route implements ServiceProviderInterface
 
             $host = $req->request->get('host');
             $token = $req->request->get('token');
-            $app['git_repo_store']->addToken($host, $token);
-
-            return $app->json(['status' => 'success', 'host' => $host]);
+            
+            if (!empty($host) && !empty($token)) {
+                $app['git_repo_store']->addToken($host, $token);
+                return $app->json(['status' => 'success', 'host' => $host]);
+            } else {
+                return $app->json(['status' => 'error'], 400);
+            }
         });
     }
 }
