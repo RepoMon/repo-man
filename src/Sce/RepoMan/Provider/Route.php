@@ -85,5 +85,18 @@ class Route implements ServiceProviderInterface
                 return $app->json(['status' => 'error'], 400);
             }
         });
+
+        /**
+         * Generate a composer dependency report on the repositories
+         */
+        $app->get('/reports/dependencies', function(Request $req) use ($app){
+
+            $report = $app['report_factory']->create('dependency/composer');
+
+            // respond with the report output
+            $result = $report->generate();
+
+
+        });
     }
 }
