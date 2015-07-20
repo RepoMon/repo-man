@@ -63,7 +63,7 @@ class Store implements StoreInterface
             if (is_array($keys)) {
                 foreach ($keys as $key) {
                     // insert token into the repo url here
-                    $this->repositories [] = new Repository($key, $this->config->getRepoDir());
+                    $this->repositories [] = $this->createRepository($key);
                 }
             }
             return $this->repositories;
@@ -80,7 +80,7 @@ class Store implements StoreInterface
     {
         try {
             // insert token into the repo url here
-            $repository = new Repository($url, $this->config->getRepoDir());
+            $repository = $this->createRepository($url);
 
             // add to set in redis
             $this->client->sadd(self::REPO_SET_NAME, $url);
@@ -99,9 +99,33 @@ class Store implements StoreInterface
     public function addToken($host, $token)
     {
         try {
-            $this->client->set(self::TOKEN_SET_NAME . ':' . $host, $token);
+            $this->client->set($this->getTokenKey($host), $token);
         } catch (ServerException $ex) {
             throw new UnavailableException($ex->getMessage());
         }
+    }
+
+    /**
+     * Create a new Repository instance, pass it the token to use if one is available
+     *
+     * @param $url string
+     */
+    private function createRepository($url)
+    {
+        // try to get the token for this url
+        $parts = parse_url($url);
+        $token = $this->client->get($this->getTokenKey($parts['host']));
+        return new Repository($url, $this->config->getRepoDir(), $token);
+    }
+
+    /**
+     * Generate the key to store the token for this host
+     *
+     * @param $host
+     * @return string
+     */
+    private function getTokenKey($host)
+    {
+        return self::TOKEN_SET_NAME . ':' . $host;
     }
  }

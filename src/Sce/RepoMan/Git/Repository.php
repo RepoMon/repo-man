@@ -23,15 +23,23 @@ class Repository
     private $name;
 
     /**
-     * @param $url
-     * @param $directory
+     * @var string
+     * Optional token to authenticate access to the remote repo
      */
-    public function __construct($url, $directory)
+    private $token;
+
+    /**
+     * @param $url string location of remote repo
+     * @param $directory string directory location to clone repo into
+     * @param null $token authentication token
+     */
+    public function __construct($url, $directory, $token = null)
     {
         $this->url = $url;
         $this->directory = $directory;
         $parts = explode('/', $this->url);
         $this->name = array_pop($parts);
+        $this->token = $token;
     }
 
     /**
@@ -63,7 +71,7 @@ class Repository
 
         // check if local repo exists
         if (!is_dir($this->directory . '/' . $this->name)) {
-            exec('git clone ' . $this->url, $output);
+            exec('git clone ' . $this->generateUrl(), $output);
         }
 
         $this->execGitCommand('git remote update');
@@ -191,6 +199,22 @@ class Repository
     public function push()
     {
 
+    }
+
+    /**
+     * Insert the token into the url if it is set
+     * @return string
+     */
+    private function generateUrl()
+    {
+        if (!is_null($this->token)){
+            $parts = parse_url($this->url);
+            // format is http://token@host/path for github at least
+            $url = sprintf('%s://%s@%s%s', $parts['scheme'], $this->token, $parts['host'], $parts['path']);
+            return $url;
+        }
+
+        return $this->url;
     }
 
     /**
