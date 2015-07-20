@@ -1,9 +1,10 @@
-<?php namespace Sce\RepoMan\Git;
+<?php namespace Sce\RepoMan\Store;
 
 use Predis\Response\ServerException;
 use Sce\RepoMan\Configuration;
 use Predis\Client;
-use Sce\RepoMan\Git\UnavailableException;
+use Sce\RepoMan\Store\UnavailableException;
+use Sce\RepoMan\Domain\Repository;
 
 /**
  * Uses redis to store data on git repositories
@@ -12,7 +13,7 @@ use Sce\RepoMan\Git\UnavailableException;
  * @author timrodger
  * Date: 17/07/15
  */
-class Store implements StoreInterface
+class Redis implements StoreInterface
 {
     /**
      * the key used to store the set of git repository urls being managed

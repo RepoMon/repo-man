@@ -1,12 +1,13 @@
-<?php namespace Sce\RepoMan\Git;
+<?php namespace Sce\RepoMan\Store;
 
 use Sce\RepoMan\Configuration;
+use Sce\RepoMan\Domain\Repository;
 
 /**
  * @author timrodger
  * Date: 29/03/15
  */
-class MemoryStore implements StoreInterface
+class Memory implements StoreInterface
 {
     /**
      * @var array

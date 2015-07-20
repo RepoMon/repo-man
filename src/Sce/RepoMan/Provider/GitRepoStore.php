@@ -1,10 +1,10 @@
 <?php namespace Sce\RepoMan\Provider;
 
 use Predis\Client;
-use Sce\RepoMan\Git\MemoryStore;
+use Sce\RepoMan\Store\Memory as MemoryStore;
 use Silex\Application;
 use Silex\ServiceProviderInterface;
-use Sce\RepoMan\Git\Store;
+use Sce\RepoMan\Store\Redis as RedisStore;
 
 /**
  * @author timrodger
@@ -26,7 +26,7 @@ class GitRepoStore implements ServiceProviderInterface
         } else if ('UNAVAILABLE' == $dsn) {
             //return new UnavailableStore();
         } else {
-            $store = new Store($app['config'], new Client($dsn));
+            $store = new RedisStore($app['config'], new Client($dsn));
         }
 
         $app['git_repo_store'] = $store;

@@ -1,6 +1,6 @@
 <?php
 
-use Sce\RepoMan\Git\Store;
+use Sce\RepoMan\Store\Redis as RedisStore;
 
 /**
  * @author timrodger
@@ -10,7 +10,7 @@ class GitStoreUnitTest extends PHPUnit_Framework_TestCase
 {
 
     /**
-     * @var Sce\RepoMan\Git\Store
+     * @var RedisStore
      */
     private $store;
 
@@ -58,13 +58,13 @@ class GitStoreUnitTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Sce\RepoMan\Git\UnavailableException
+     * @expectedException Sce\RepoMan\Store\UnavailableException
      */
     public function testGetAllThrowsExceptionWhenServerIsUnavailable()
     {
         $this->mock_client->expects($this->once())
             ->method('smembers')
-            ->with(Store::REPO_SET_NAME)
+            ->with(RedisStore::REPO_SET_NAME)
             ->will($this->throwException(new \Predis\Response\ServerException));
 
         $this->store->getAll();
@@ -76,14 +76,14 @@ class GitStoreUnitTest extends PHPUnit_Framework_TestCase
 
         $this->mock_client->expects($this->once())
             ->method('sadd')
-            ->with(Store::REPO_SET_NAME, $url);
+            ->with(RedisStore::REPO_SET_NAME, $url);
 
         $repository = $this->store->add($url);
-        $this->assertInstanceOf('Sce\RepoMan\Git\Repository', $repository);
+        $this->assertInstanceOf('Sce\RepoMan\Domain\Repository', $repository);
     }
 
     /**
-     * @expectedException Sce\RepoMan\Git\UnavailableException
+     * @expectedException Sce\RepoMan\Store\UnavailableException
      */
     public function testAddRepositoryThrowsExceptionWhenServerIsUnavailable()
     {
@@ -91,7 +91,7 @@ class GitStoreUnitTest extends PHPUnit_Framework_TestCase
 
         $this->mock_client->expects($this->once())
             ->method('sadd')
-            ->with(Store::REPO_SET_NAME, $url)
+            ->with(RedisStore::REPO_SET_NAME, $url)
             ->will($this->throwException(new \Predis\Response\ServerException));
 
         $this->store->add($url);
@@ -104,13 +104,13 @@ class GitStoreUnitTest extends PHPUnit_Framework_TestCase
 
         $this->mock_client->expects($this->once())
             ->method('set')
-            ->with(Store::TOKEN_SET_NAME . ':' . $host, $token);
+            ->with(RedisStore::TOKEN_SET_NAME . ':' . $host, $token);
 
         $this->store->addToken($host, $token);
     }
 
     /**
-     * @expectedException Sce\RepoMan\Git\UnavailableException
+     * @expectedException Sce\RepoMan\Store\UnavailableException
      */
     public function testAddTokenThrowsExceptionWhenServerIsUnavailable()
     {
@@ -119,7 +119,7 @@ class GitStoreUnitTest extends PHPUnit_Framework_TestCase
 
         $this->mock_client->expects($this->once())
             ->method('set')
-            ->with(Store::TOKEN_SET_NAME . ':' . $host, $token)
+            ->with(RedisStore::TOKEN_SET_NAME . ':' . $host, $token)
             ->will($this->throwException(new \Predis\Response\ServerException));
 
         $this->store->addToken($host, $token);
@@ -130,7 +130,7 @@ class GitStoreUnitTest extends PHPUnit_Framework_TestCase
         // set up some contents of the mock redis instance
         $this->mock_client->expects($this->once())
             ->method('smembers')
-            ->with(Store::REPO_SET_NAME)
+            ->with(RedisStore::REPO_SET_NAME)
             ->will($this->returnValue($repos));
     }
 
@@ -139,7 +139,7 @@ class GitStoreUnitTest extends PHPUnit_Framework_TestCase
      */
     private function givenAStore()
     {
-        $this->store = new Store($this->mock_config, $this->mock_client);
+        $this->store = new RedisStore($this->mock_config, $this->mock_client);
     }
 
     /**

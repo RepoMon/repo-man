@@ -1,4 +1,4 @@
-<?php namespace Sce\RepoMan\Git;
+<?php namespace Sce\RepoMan\Store;
 
 use Exception;
 
