@@ -20,6 +20,11 @@ class Store implements StoreInterface
     const REPO_SET_NAME = 'git-repositories';
 
     /**
+     * key used to store the host names that have tokens attached
+     */
+    const TOKEN_SET_NAME = 'git-host-tokens';
+
+    /**
      * @var Configuration
      */
     private $config;
