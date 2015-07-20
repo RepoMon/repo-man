@@ -77,7 +77,7 @@ class Route implements ServiceProviderInterface
 
             $host = $req->request->get('host');
             $token = $req->request->get('token');
-            
+
             if (!empty($host) && !empty($token)) {
                 $app['git_repo_store']->addToken($host, $token);
                 return $app->json(['status' => 'success', 'host' => $host]);
