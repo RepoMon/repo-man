@@ -11,7 +11,7 @@ require_once(__DIR__.'/../vendor/autoload.php');
 require_once(__DIR__.'/../config.php');
 
 $composers = [];
-$repositories = [];
+//$repositories = [];
 $dir = __DIR__ . '/../tmp';
 
 $config = new Configuration($dir);
@@ -27,7 +27,7 @@ foreach ($config->getRepositoryNames() as $uri){
     $composer_lock = $repository->getFile('composer.lock');
 
     $composer = new Composer(json_decode($composer_json, true), json_decode($composer_lock, true));
-    $repositories[$uri] = $repository;
+    //$repositories[$uri] = $repository;
     $composers[$uri] = $composer;
 }
 
@@ -94,4 +94,5 @@ $out = fopen(__DIR__. '/report.csv', 'w+');
 foreach($output as $line) {
     fputcsv($out, $line);
 }
+
 fclose($out);

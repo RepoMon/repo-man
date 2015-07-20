@@ -107,6 +107,14 @@ class AppIntegrationTest extends WebTestCase
         $this->thenTheResponseIs400();
     }
 
+    public function testGetComposerReportSucceeds()
+    {
+        $this->givenAClient();
+        $this->client->request('GET', '/reports/dependency/composer');
+
+        $this->thenTheResponseIsSuccess();
+    }
+
     private function givenAClient()
     {
         $this->client = $this->createClient();
