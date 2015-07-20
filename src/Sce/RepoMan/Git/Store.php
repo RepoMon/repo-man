@@ -93,14 +93,15 @@ class Store implements StoreInterface
     }
 
     /**
-     * Store tokens in a set using the values of host=token?
-     * Or use a set to store the hosts and separate key values to store the token string for each host
-     *
      * @param $host
      * @param $token
      */
     public function addToken($host, $token)
     {
-
+        try {
+            $this->client->set(self::TOKEN_SET_NAME . ':' . $host, $token);
+        } catch (ServerException $ex) {
+            throw new UnavailableException($ex->getMessage());
+        }
     }
-}
+ }

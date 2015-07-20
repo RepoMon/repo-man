@@ -24,16 +24,20 @@ class GitStoreUnitTest extends PHPUnit_Framework_TestCase
      */
     private $mock_config;
 
+    public function setUp()
+    {
+        parent::setUp();
+        $dir = '/tmp/repos';
+        $this->givenAMockConfig($dir);
+        $this->givenAMockClient();
+        $this->givenAStore();
+    }
+
     /**
      *
      */
     public function testGetAll()
     {
-        $dir = '/tmp/repos';
-        $this->givenAMockConfig($dir);
-        $this->givenAMockClient();
-        $this->givenAStore();
-
         $this->givenSomeMockedData([
             'https://github.com/user/repo-name'
         ]);
@@ -48,11 +52,6 @@ class GitStoreUnitTest extends PHPUnit_Framework_TestCase
      */
     public function testGetAllReturnsAnEmptyArrayWhenNoRepositoriesExist()
     {
-        $dir = '/tmp/repos';
-        $this->givenAMockConfig($dir);
-        $this->givenAMockClient();
-        $this->givenAStore();
-
         $result = $this->store->getAll();
         $this->assertTrue(is_array($result));
         $this->assertSame(0, count($result));
@@ -63,11 +62,6 @@ class GitStoreUnitTest extends PHPUnit_Framework_TestCase
      */
     public function testGetAllThrowsExceptionWhenServerIsUnavailable()
     {
-        $dir = '/tmp/repos';
-        $this->givenAMockConfig($dir);
-        $this->givenAMockClient();
-        $this->givenAStore();
-
         $this->mock_client->expects($this->once())
             ->method('smembers')
             ->with(Store::REPO_SET_NAME)
@@ -78,11 +72,6 @@ class GitStoreUnitTest extends PHPUnit_Framework_TestCase
 
     public function testAddRepository()
     {
-        $dir = '/tmp/repos';
-        $this->givenAMockConfig($dir);
-        $this->givenAMockClient();
-        $this->givenAStore();
-
         $url = 'https://github.com/user/repo-name';
 
         $this->mock_client->expects($this->once())
@@ -98,11 +87,6 @@ class GitStoreUnitTest extends PHPUnit_Framework_TestCase
      */
     public function testAddRepositoryThrowsExceptionWhenServerIsUnavailable()
     {
-        $dir = '/tmp/repos';
-        $this->givenAMockConfig($dir);
-        $this->givenAMockClient();
-        $this->givenAStore();
-
         $url = 'https://github.com/user/repo-name';
 
         $this->mock_client->expects($this->once())
@@ -111,6 +95,34 @@ class GitStoreUnitTest extends PHPUnit_Framework_TestCase
             ->will($this->throwException(new \Predis\Response\ServerException));
 
         $this->store->add($url);
+    }
+
+    public function testAddToken()
+    {
+        $host = 'https://github.com';
+        $token = 'abcdef';
+
+        $this->mock_client->expects($this->once())
+            ->method('set')
+            ->with(Store::TOKEN_SET_NAME . ':' . $host, $token);
+
+        $this->store->addToken($host, $token);
+    }
+
+    /**
+     * @expectedException Sce\RepoMan\Git\UnavailableException
+     */
+    public function testAddTokenThrowsExceptionWhenServerIsUnavailable()
+    {
+        $host = 'https://github.com';
+        $token = 'abcdef';
+
+        $this->mock_client->expects($this->once())
+            ->method('set')
+            ->with(Store::TOKEN_SET_NAME . ':' . $host, $token)
+            ->will($this->throwException(new \Predis\Response\ServerException));
+
+        $this->store->addToken($host, $token);
     }
 
     private function givenSomeMockedData(array $repos)
@@ -149,7 +161,7 @@ class GitStoreUnitTest extends PHPUnit_Framework_TestCase
     private function givenAMockClient()
     {
         $this->mock_client = $this->getMockBuilder('Predis\Client')
-            ->setMethods(['hmset', 'hmget', 'sadd', 'smembers'])
+            ->setMethods(['hmset', 'hmget', 'sadd', 'smembers', 'set', 'get'])
             ->disableOriginalConstructor()
             ->getMock();
     }
