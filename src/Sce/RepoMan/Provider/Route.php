@@ -62,11 +62,20 @@ class Route implements ServiceProviderInterface
          */
         $app->post('/repositories/update', function(Request $req) use ($app){
 
+            $result = true;
+
             foreach($app['git_repo_store']->getAll() as $repository) {
-                $repository->update();
+                if (!$repository->update()){
+                    $result = false;
+                }
             }
 
-            return new Response('', 200);
+            if ($result) {
+                return new Response('', 200);
+            } else {
+                return new Response('', 500);
+            }
+
         });
 
         /**

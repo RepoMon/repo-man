@@ -74,10 +74,14 @@ class Repository
             exec('git clone ' . $this->generateUrl(), $output);
         }
 
-        $this->execGitCommand('git remote update');
-        $this->execGitCommand('git fetch --tags origin');
+        try {
+            $this->execGitCommand('git remote update');
+            $this->execGitCommand('git fetch --tags origin');
+            return true;
+        } catch (NoDirectoryException $ex){
+            return false;
+        }
     }
-
     /**
      * return a list of branch names for the local repo
      *
@@ -85,11 +89,15 @@ class Repository
      */
     public function listLocalBranches()
     {
-        $branches = $this->execGitCommand('git branch');
+        try {
+            $branches = $this->execGitCommand('git branch');
 
-        return array_map(function($name){
-            return trim($name, '* ');
-        }, $branches);
+            return array_map(function ($name) {
+                return trim($name, '* ');
+            }, $branches);
+        } catch (NoDirectoryException $ex){
+            return [];
+        }
     }
 
     /**
@@ -106,23 +114,27 @@ class Repository
      */
     public function listAllBranches()
     {
+        try {
+            $branches = $this->execGitCommand('git branch -a');
 
-        $branches = $this->execGitCommand('git branch -a');
+            $branches = array_map(function ($name) {
+                return trim($name, '* ');
+            }, $branches);
 
-        $branches = array_map(function($name){
-            return trim($name, '* ');
-        }, $branches);
+            $branches = array_map(function ($name) {
+                return preg_replace('/^remotes\/origin\//', '', $name);
+            }, $branches);
 
-        $branches = array_map(function($name) {
-            return preg_replace('/^remotes\/origin\//', '', $name);
-        }, $branches);
+            // de-duplicate array and remove HEAD
+            $branches = array_filter($branches, function ($name) {
+                return !preg_match('/^HEAD/', $name);
+            });
 
-        // de-duplicate array and remove HEAD
-        $branches = array_filter($branches, function($name){
-            return !preg_match('/^HEAD/', $name);
-        });
+            return array_unique($branches);
 
-        return array_unique($branches);
+        } catch (NoDirectoryException $ex){
+            return [];
+        }
     }
 
     /**
@@ -223,9 +235,13 @@ class Repository
      */
     private function execGitCommand($cmd)
     {
-        chdir($this->directory . '/' . $this->name);
-        exec($cmd, $output);
-        return $output;
+        if (is_dir($this->directory . '/' . $this->name)) {
+            chdir($this->directory . '/' . $this->name);
+            exec($cmd, $output);
+            return $output;
+        } else {
+            throw new NoDirectoryException();
+        }
     }
 
 }
