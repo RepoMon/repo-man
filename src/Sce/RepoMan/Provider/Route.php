@@ -101,8 +101,7 @@ class Route implements ServiceProviderInterface
 
             $view = $app['view_factory']->create('dependency/composer', $type);
 
-            // $body = $view->render($result);
-            $body = print_r($result,1);
+            $body = $view->render($result);
 
             // format based on request accept header
             return new Response($body, 200, ['Content-Type' => 'text/csv']);
