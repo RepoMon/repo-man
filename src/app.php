@@ -8,6 +8,7 @@ use Sce\RepoMan\Provider\Route as RouteProvider;
 use Sce\RepoMan\Provider\ErrorHandler as ErrorHandlerProvider;
 use Sce\RepoMan\Provider\GitRepoStore as GitRepoStoreProvider;
 use Sce\RepoMan\Provider\ReportFactory as ReportFactoryProvider;
+use Sce\RepoMan\Provider\ViewFactory as ViewFactoryProvider;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
@@ -21,5 +22,6 @@ $app->register(new ErrorHandlerProvider());
 $app->register(new RouteProvider());
 $app->register(new GitRepoStoreProvider());
 $app->register(new ReportFactoryProvider());
+$app->register(new ViewFactoryProvider());
 
 return $app;
