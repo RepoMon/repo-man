@@ -184,7 +184,9 @@ class GitRepoIntegrationTest extends PHPUnit_Framework_TestCase
 
     private function createGitRepo()
     {
-        mkdir($this->url, 0777, true);
+        if (!is_dir($this->url)) {
+            mkdir($this->url, 0777, true);
+        }
 
         chdir($this->url);
 
