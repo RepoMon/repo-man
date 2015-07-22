@@ -4,6 +4,7 @@ use Sce\RepoMan\Domain\Repository as GitRepo;
 
 /**
  * @group integration
+ * @group filesystem
  *
  * @author timrodger
  * Date: 12/07/15

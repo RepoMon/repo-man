@@ -3,6 +3,7 @@
 use Sce\RepoMan\Report\ComposerDependencyReport;
 
 /**
+ * @group unit
  * @author timrodger
  * Date: 20/07/15
  */

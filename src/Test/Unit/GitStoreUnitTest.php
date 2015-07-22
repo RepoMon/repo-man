@@ -3,6 +3,7 @@
 use Sce\RepoMan\Store\Redis as RedisStore;
 
 /**
+ * @group unit
  * @author timrodger
  * Date: 18/07/15
  */
