@@ -10,6 +10,9 @@ use Silex\WebTestCase;
  */
 class AppErrorIntegrationTest extends WebTestCase
 {
+    /**
+     * @var Symfony\Component\HttpKernel\Client
+     */
     private $client;
 
     public function createApplication()
@@ -48,6 +51,14 @@ class AppErrorIntegrationTest extends WebTestCase
     {
         $this->givenAClient();
         $this->client->request('POST', '/repositories/update');
+
+        $this->thenTheResponseIs500();
+    }
+
+    public function testAddTokenFails()
+    {
+        $this->givenAClient();
+        $this->client->request('POST', '/tokens', ['host' => 'github.com', 'token'=> 'abcde']);
 
         $this->thenTheResponseIs500();
     }

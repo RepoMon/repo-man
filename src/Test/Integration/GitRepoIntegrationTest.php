@@ -4,6 +4,7 @@ use Sce\RepoMan\Domain\Repository as GitRepo;
 
 /**
  * @group integration
+ * @group filesystem
  *
  * @author timrodger
  * Date: 12/07/15
@@ -184,7 +185,9 @@ class GitRepoIntegrationTest extends PHPUnit_Framework_TestCase
 
     private function createGitRepo()
     {
-        mkdir($this->url, 0777, true);
+        if (!is_dir($this->url)) {
+            mkdir($this->url, 0777, true);
+        }
 
         chdir($this->url);
 

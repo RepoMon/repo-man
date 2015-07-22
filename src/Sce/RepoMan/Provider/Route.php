@@ -85,5 +85,28 @@ class Route implements ServiceProviderInterface
                 return $app->json(['status' => 'error'], 400);
             }
         });
+
+        /**
+         * Generate a composer dependency report on the repositories
+         */
+        $app->get('/reports/dependency/composer', function(Request $req) use ($app){
+
+            $report = $app['report_factory']->create('dependency/composer');
+
+            // respond with the report output
+            $result = $report->generate();
+
+            // derive this from the accept header
+            $type = 'text/csv';
+
+            $view = $app['view_factory']->create('dependency/composer', $type);
+
+            // $body = $view->render($result);
+            $body = print_r($result,1);
+
+            // format based on request accept header
+            return new Response($body, 200, ['Content-Type' => 'text/csv']);
+
+        });
     }
 }
