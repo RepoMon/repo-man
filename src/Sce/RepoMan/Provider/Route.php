@@ -103,7 +103,7 @@ class Route implements ServiceProviderInterface
 
             // $body = $view->render($result);
             $body = print_r($result,1);
-            
+
             // format based on request accept header
             return new Response($body, 200, ['Content-Type' => 'text/csv']);
 
