@@ -1,8 +1,9 @@
 <?php
 
-use Sce\Repo\SemVer;
+use Sce\RepoMan\Domain\SemVer;
 
 /**
+ * @group unit
  * @author timrodger
  * Date: 12/07/15
  */

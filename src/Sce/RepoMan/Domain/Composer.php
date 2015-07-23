@@ -1,4 +1,4 @@
-<?php namespace Sce\Repo;
+<?php namespace Sce\RepoMan\Domain;
 
 /**
  * Represents a composer config contents & its lock file contents
@@ -63,7 +63,19 @@ class Composer
     {
         $lock_dependencies = $this->getLockDependencies();
         if (isset($lock_dependencies[$name])){
-            return $lock_dependencies[$name];
+            return $lock_dependencies[$name]['version'];
+        }
+    }
+
+    /**
+     * @param $name
+     * @return mixed
+     */
+    public function getLockDate($name)
+    {
+        $lock_dependencies = $this->getLockDependencies();
+        if (isset($lock_dependencies[$name])){
+            return $lock_dependencies[$name]['time'];
         }
     }
 
@@ -95,13 +107,19 @@ class Composer
 
         if (isset($this->lock['packages'])) {
             foreach ($this->lock['packages'] as $package) {
-                $dependencies[$package['name']] = $package['version'];
+                $dependencies[$package['name']] = [
+                    'version' => $package['version'],
+                    'time' => $package['time']
+                ];
             }
         }
 
         if (isset($this->lock['packages-dev'])) {
             foreach ($this->lock['packages-dev'] as $package) {
-                $dependencies[$package['name']] = $package['version'];
+                $dependencies[$package['name']] = [
+                    'version' => $package['version'],
+                    'time' => $package['time']
+                ];
             }
         }
 

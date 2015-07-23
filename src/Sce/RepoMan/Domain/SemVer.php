@@ -1,4 +1,4 @@
-<?php namespace Sce\Repo;
+<?php namespace Sce\RepoMan\Domain;
 
 /**
  * Provides access to the elements of a semantic version string

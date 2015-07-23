@@ -1,8 +1,11 @@
 <?php
 
-use Sce\Repo\GitRepo;
+use Sce\RepoMan\Domain\Repository as GitRepo;
 
 /**
+ * @group integration
+ * @group filesystem
+ *
  * @author timrodger
  * Date: 12/07/15
  */
@@ -133,9 +136,58 @@ class GitRepoIntegrationTest extends PHPUnit_Framework_TestCase
         $this->assertSame('one contents', $contents);
     }
 
+    public function testGetFileReturnsNullForMissingFile()
+    {
+        $git_repo = new GitRepo($this->url, $this->directory);
+        $git_repo->update();
+
+        $contents = $git_repo->getFile('not-there');
+
+        $this->assertSame(null, $contents);
+    }
+
+    public function testHasFile()
+    {
+        $git_repo = new GitRepo($this->url, $this->directory);
+        $git_repo->update();
+
+        $result = $git_repo->hasFile('one.txt');
+
+        $this->assertTrue($result);
+    }
+
+    public function testHasFileReturnsFalseForMissingFile()
+    {
+        $git_repo = new GitRepo($this->url, $this->directory);
+        $git_repo->update();
+
+        $result = $git_repo->hasFile('not-there');
+
+        $this->assertFalse($result);
+    }
+
+    public function testGetUrl()
+    {
+        $git_repo = new GitRepo($this->url, $this->directory);
+        $result = $git_repo->getUrl();
+        $this->assertSame($this->url, $result);
+    }
+
+    public function testGetId()
+    {
+        $expected = base64_encode($this->url);
+
+        $git_repo = new GitRepo($this->url, $this->directory);
+        $result = $git_repo->getId();
+
+        $this->assertSame($expected, $result);
+    }
+
     private function createGitRepo()
     {
-        mkdir($this->url, 0777, true);
+        if (!is_dir($this->url)) {
+            mkdir($this->url, 0777, true);
+        }
 
         chdir($this->url);
 
