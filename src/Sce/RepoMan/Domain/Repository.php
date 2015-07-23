@@ -77,6 +77,7 @@ class Repository
         try {
             $this->execGitCommand('git remote update');
             $this->execGitCommand('git fetch --tags origin');
+            $this->execGitCommand('git pull origin');
             return true;
         } catch (NoDirectoryException $ex){
             return false;
