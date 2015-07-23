@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 URL=$1
+IP=172.17.8.123
 
-curl -X POST -d url=$URL 'http://192.168.59.103:49400/repositories' -v
+curl -X POST -d url=$URL http://$IP:49400/repositories -v
 

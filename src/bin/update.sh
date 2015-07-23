@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
 
-curl -X POST 'http://192.168.59.103:49400/repositories/update' -v
+IP=172.17.8.123
+
+curl -X POST http://$IP:49400/repositories/update -v
 
