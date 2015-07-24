@@ -7,7 +7,8 @@ Tools for managing source code in multiple repositories, provided as a service.
 For a set of git repo uris which contain a composer.json and composer.lock file in the root directory, report on the dependencies across all the repositories and the versions installed with the lock files.
 
 Steps to follow
-* Add your authentication token to the service, if required to access the repositories
+
+* Add your authentication token for a git repository host to the service (if required to access its repositories)
 
         curl -X POST /tokens "host name" "token string"
 * Add each repository's url to the service 
@@ -17,10 +18,18 @@ Steps to follow
 
         curl -X POST /repositories/update
 
-* GET the report on composer dependencies (currently only serves text/csv resport)
+* GET the report on composer dependencies (default content-type is application/json)
 
         curl -X GET /reports/dependency/composer
+* GET a HTML representation of the report
+        
+        curl -X GET /reports/dependency/composer -H "Accept: text/html"
+* GET a CSV representation of the report
+
+        curl -X GET /reports/dependency/composer -H "Accept: text/csv"
+        
 or vist with your web browser
-* List the repositories being managed as json
+
+* List the repositories being managed (as JSON)
 
         curl -X GET /repositories
