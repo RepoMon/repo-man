@@ -110,6 +110,15 @@ class GitRepoIntegrationTest extends PHPUnit_Framework_TestCase
         }
     }
 
+    public function testGetLatestTag()
+    {
+        $git_repo = new GitRepo($this->url, $this->directory);
+        $git_repo->update();
+
+        $latest_tag = $git_repo->getLatestTag();
+        $this->assertSame('v.1.3.4', (string) $latest_tag);
+    }
+
     public function testListAllBranches()
     {
         $git_repo = new GitRepo($this->url, $this->directory);

@@ -27,14 +27,14 @@ class ComposerDependencyReportCSVView implements ViewInterface
 
                 foreach($client_data as $client) {
                     if ($first_name) {
-                        fputcsv($csv, [$name, $version, $client['uri'], $client['config_version'], $client['date']]);
+                        fputcsv($csv, [$name, $version, $client['uri'].':'.$client['latest_tag'], $client['config_version'], $client['date']]);
                         $first_name = false;
                         $first_version = false;
                     } elseif ($first_version){
-                        fputcsv($csv, ['', $version, $client['uri'], $client['config_version'], $client['date']]);
+                        fputcsv($csv, ['', $version, $client['uri'].':'.$client['latest_tag'], $client['config_version'], $client['date']]);
                         $first_version = false;
                     } else {
-                        fputcsv($csv, ['', '', $client['uri'], $client['config_version'], $client['date']]);
+                        fputcsv($csv, ['', '', $client['uri'].':'.$client['latest_tag'], $client['config_version'], $client['date']]);
                     }
                 }
             }
