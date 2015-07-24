@@ -32,6 +32,7 @@ class ComposerDependencyReportUnitTest extends PHPUnit_Framework_TestCase
         // create a mock repository
         $name = 'widgets/cool';
         $uri = 'https://github.com/user/service-name';
+        $latest_tag = 'v2.0.4';
 
         $version = '~1.1';
         $config_data = ['require' => [$name => $version]];
@@ -42,7 +43,7 @@ class ComposerDependencyReportUnitTest extends PHPUnit_Framework_TestCase
             ['name' => $name, 'version' => $lock_version, 'time' => $time]
         ]];
 
-        $this->givenAMockRepository($uri, json_encode($config_data), json_encode($lock_data));
+        $this->givenAMockRepository($uri, json_encode($config_data), json_encode($lock_data), $latest_tag);
 
         // get mock store
         $this->givenAMockStore();
@@ -57,6 +58,7 @@ class ComposerDependencyReportUnitTest extends PHPUnit_Framework_TestCase
         $this->assertSame($uri, $result[$name][$lock_version][0]['uri']);
         $this->assertSame($version, $result[$name][$lock_version][0]['config_version']);
         $this->assertSame($time, $result[$name][$lock_version][0]['date']);
+        $this->assertSame($latest_tag, $result[$name][$lock_version][0]['latest_tag']);
     }
 
     public function testGenerateForMoreThanOneRepository()
@@ -64,6 +66,7 @@ class ComposerDependencyReportUnitTest extends PHPUnit_Framework_TestCase
         // create a mock repository
         $name = 'widgets/cool';
         $uri = 'https://github.com/user/service-name';
+        $latest_tag = 'v2.0.4';
 
         $version_a = '~1.1';
         $config_data = ['require' => [$name => $version_a]];
@@ -74,7 +77,7 @@ class ComposerDependencyReportUnitTest extends PHPUnit_Framework_TestCase
             ['name' => $name, 'version' => $lock_version_a, 'time' => $time_a]
         ]];
 
-        $this->givenAMockRepository($uri, json_encode($config_data), json_encode($lock_data));
+        $this->givenAMockRepository($uri, json_encode($config_data), json_encode($lock_data), $latest_tag);
 
         $version_b = '~2.3';
         $config_data = ['require' => [$name => $version_b]];
@@ -85,7 +88,7 @@ class ComposerDependencyReportUnitTest extends PHPUnit_Framework_TestCase
             ['name' => $name, 'version' => $lock_version_b, 'time' => $time_b]
         ]];
 
-        $this->givenAMockRepository($uri, json_encode($config_data), json_encode($lock_data));
+        $this->givenAMockRepository($uri, json_encode($config_data), json_encode($lock_data), $latest_tag);
 
         // get mock store
         $this->givenAMockStore();
@@ -101,11 +104,13 @@ class ComposerDependencyReportUnitTest extends PHPUnit_Framework_TestCase
         $this->assertSame($uri, $result[$name][$lock_version_a][0]['uri']);
         $this->assertSame($version_a, $result[$name][$lock_version_a][0]['config_version']);
         $this->assertSame($time_a, $result[$name][$lock_version_a][0]['date']);
+        $this->assertSame($latest_tag, $result[$name][$lock_version_a][0]['latest_tag']);
 
         $this->assertTrue(array_key_exists($lock_version_b, $result[$name]));
         $this->assertSame($uri, $result[$name][$lock_version_b][0]['uri']);
         $this->assertSame($version_b, $result[$name][$lock_version_b][0]['config_version']);
         $this->assertSame($time_b, $result[$name][$lock_version_b][0]['date']);
+        $this->assertSame($latest_tag, $result[$name][$lock_version_b][0]['latest_tag']);
     }
 
     private function givenAMockStore()
@@ -118,7 +123,7 @@ class ComposerDependencyReportUnitTest extends PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->repositories));
     }
 
-    private function givenAMockRepository($url, $config_json, $lock_json)
+    private function givenAMockRepository($url, $config_json, $lock_json, $latest_tag)
     {
         $mock_repository = $this->getMockBuilder('Sce\RepoMan\Domain\Repository')
             ->disableOriginalConstructor()
@@ -137,6 +142,10 @@ class ComposerDependencyReportUnitTest extends PHPUnit_Framework_TestCase
             ->method('getFile')
             ->with('composer.lock')
             ->will($this->returnValue($lock_json));
+
+        $mock_repository->expects($this->any())
+            ->method('getLatestTag')
+            ->will($this->returnValue($latest_tag));
 
         $this->repositories []= $mock_repository;
     }

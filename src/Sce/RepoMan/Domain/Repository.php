@@ -148,6 +148,27 @@ class Repository
     }
 
     /**
+     * Return the lasted tag name according to semantic versioning format
+     * Ignore tags with invalid semantic version names
+     *
+     * @return string
+     */
+    public function getLatestTag()
+    {
+        $versions = [];
+
+        foreach ($this->listTags() as $tag) {
+            $version = new SemVer($tag);
+            if ($version->isValid()){
+                $versions []= $version;
+            }
+        }
+
+        usort($versions, function($a, $b) { return $a->compare($b);});
+        return array_pop($versions);
+    }
+
+    /**
      * Checkout the branch or tag with this name
      * @param $name
      */

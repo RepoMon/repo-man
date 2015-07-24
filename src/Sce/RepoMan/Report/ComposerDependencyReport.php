@@ -40,6 +40,8 @@ class ComposerDependencyReport implements ReportInterface
 
             $lock_dependencies = $composer->getLockDependencies();
 
+            $repository_tag = $repository->getLatestTag();
+
             foreach($lock_dependencies as $name => $data){
 
                 $version = $data['version'];
@@ -58,6 +60,7 @@ class ComposerDependencyReport implements ReportInterface
                 $dependencies[$name][$version] []= [
                     'uri' => $repository->getUrl(),
                     'config_version' => $configured_version,
+                    'latest_tag' => $repository_tag,
                     'date' => $date
                 ];
             }
