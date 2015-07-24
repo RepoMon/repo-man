@@ -4,6 +4,7 @@ use Silex\Application;
 use Silex\ServiceProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Negotiation\FormatNegotiator;
 
 /**
  * Configures routing
@@ -105,15 +106,18 @@ class Route implements ServiceProviderInterface
             // respond with the report output
             $result = $report->generate();
 
-            // derive this from the accept header
-            $type = 'text/csv';
+            $accept = $req->headers->get('Accept');
+            $priorities = ['application/json', 'text/html', 'text/csv'];
 
-            $view = $app['view_factory']->create('dependency/composer', $type);
+            $negotiator = new FormatNegotiator();
+            $type = $negotiator->getBest($accept, $priorities);
+            $value = $type ? $type->getValue() : '';
+            $view = $app['view_factory']->create('dependency/composer', $value);
 
             $body = $view->render($result);
 
             // format based on request accept header
-            return new Response($body, 200, ['Content-Type' => 'text/csv']);
+            return new Response($body, 200, ['Content-Type' => $type]);
 
         });
     }

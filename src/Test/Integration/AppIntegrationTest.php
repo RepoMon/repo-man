@@ -107,12 +107,47 @@ class AppIntegrationTest extends WebTestCase
         $this->thenTheResponseIs400();
     }
 
-    public function testGetComposerReportSucceeds()
+    public function testGetComposerReportSucceedsWithHTML()
     {
         $this->givenAClient();
-        $this->client->request('GET', '/reports/dependency/composer');
-
+        $this->client->request('GET', '/reports/dependency/composer', [], [], ['HTTP_Accept' => 'text/html']);
         $this->thenTheResponseIsSuccess();
+        $empty_html = "<table>
+<thead><tr><th>Library</th><th>Version</th><th>Used By</th><th>Configured Version</th><th>Last Updated</th></tr></thead>
+</table>";
+        $this->assertResponseContents($empty_html);
+    }
+
+    public function testGetComposerReportSucceedsWithJSON()
+    {
+        $this->givenAClient();
+        $this->client->request('GET', '/reports/dependency/composer', [], [], ['HTTP_Accept' => 'application/json']);
+        $this->thenTheResponseIsSuccess();
+        $this->assertResponseContents(json_encode([]));
+    }
+
+    public function testGetComposerReportSucceedsWithCSV()
+    {
+        $this->givenAClient();
+        $this->client->request('GET', '/reports/dependency/composer', [], [], ['HTTP_Accept' => 'text/csv']);
+        $this->thenTheResponseIsSuccess();
+        $this->assertResponseContents('Library,Version,"Used By","Configured Version","Last Updated"');
+    }
+
+    public function testGetComposerReportSucceedsWithJSONAsDefault()
+    {
+        $this->givenAClient();
+        $this->client->request('GET', '/reports/dependency/composer', [], [], ['HTTP_Accept' => '']);
+        $this->thenTheResponseIsSuccess();
+        $this->assertResponseContents(json_encode([]));
+    }
+
+    public function testGetComposerReportSucceedsWithJSONIfAcceptIsntSupported()
+    {
+        $this->givenAClient();
+        $this->client->request('GET', '/reports/dependency/composer', [], [], ['HTTP_Accept' => 'text/xml']);
+        $this->thenTheResponseIsSuccess();
+        $this->assertResponseContents(json_encode([]));
     }
 
     private function givenAClient()

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "d434411a5f1d34810fdcd2201806fb13",
+    "hash": "edfeec9fc424ff30512186e8316bf771",
     "packages": [
         {
             "name": "monolog/monolog",
@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/monolog.git",
-                "reference": "c5b08724f4b11fd90a2c36a64d4868bcee7ba6a4"
+                "reference": "e4f45be5dcfeb54c45f85b50cdbb3ef8a2bfbd81"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/c5b08724f4b11fd90a2c36a64d4868bcee7ba6a4",
-                "reference": "c5b08724f4b11fd90a2c36a64d4868bcee7ba6a4",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/e4f45be5dcfeb54c45f85b50cdbb3ef8a2bfbd81",
+                "reference": "e4f45be5dcfeb54c45f85b50cdbb3ef8a2bfbd81",
                 "shasum": ""
             },
             "require": {
@@ -80,7 +80,7 @@
                 "logging",
                 "psr-3"
             ],
-            "time": "2015-07-14 09:27:59"
+            "time": "2015-07-20 18:31:46"
         },
         {
             "name": "pimple/pimple",
@@ -134,12 +134,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nrk/predis.git",
-                "reference": "d84bca131b514ef1b30ba3358c0ecfb3615a658c"
+                "reference": "bb6287f22d62eb872220ab677df9b675992dc219"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nrk/predis/zipball/d84bca131b514ef1b30ba3358c0ecfb3615a658c",
-                "reference": "d84bca131b514ef1b30ba3358c0ecfb3615a658c",
+                "url": "https://api.github.com/repos/nrk/predis/zipball/bb6287f22d62eb872220ab677df9b675992dc219",
+                "reference": "bb6287f22d62eb872220ab677df9b675992dc219",
                 "shasum": ""
             },
             "require": {
@@ -181,7 +181,7 @@
                 "predis",
                 "redis"
             ],
-            "time": "2015-07-07 16:51:00"
+            "time": "2015-07-24 14:20:50"
         },
         {
             "name": "psr/log",
@@ -435,12 +435,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/HttpFoundation.git",
-                "reference": "5339030f5af0d6fef7c897130291ac168278289f"
+                "reference": "a60d4dd1eddf5c4103442533119c0479dd93953b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/HttpFoundation/zipball/5339030f5af0d6fef7c897130291ac168278289f",
-                "reference": "5339030f5af0d6fef7c897130291ac168278289f",
+                "url": "https://api.github.com/repos/symfony/HttpFoundation/zipball/a60d4dd1eddf5c4103442533119c0479dd93953b",
+                "reference": "a60d4dd1eddf5c4103442533119c0479dd93953b",
                 "shasum": ""
             },
             "require": {
@@ -480,7 +480,7 @@
             ],
             "description": "Symfony HttpFoundation Component",
             "homepage": "https://symfony.com",
-            "time": "2015-07-16 12:22:14"
+            "time": "2015-07-22 11:24:41"
         },
         {
             "name": "symfony/http-kernel",
@@ -488,19 +488,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/HttpKernel.git",
-                "reference": "f24d2cb4778ecc5f6c8e8f7f31bc4691099a920d"
+                "reference": "668496267b624cfe4c6bb1ad2bbb592ce2c11c24"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/HttpKernel/zipball/f24d2cb4778ecc5f6c8e8f7f31bc4691099a920d",
-                "reference": "f24d2cb4778ecc5f6c8e8f7f31bc4691099a920d",
+                "url": "https://api.github.com/repos/symfony/HttpKernel/zipball/668496267b624cfe4c6bb1ad2bbb592ce2c11c24",
+                "reference": "668496267b624cfe4c6bb1ad2bbb592ce2c11c24",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.9",
                 "psr/log": "~1.0",
                 "symfony/debug": "~2.6,>=2.6.2",
-                "symfony/event-dispatcher": "~2.5.9|~2.6,>=2.6.2|~3.0.0",
+                "symfony/event-dispatcher": "~2.6,>=2.6.7|~3.0.0",
                 "symfony/http-foundation": "~2.5,>=2.5.4|~3.0.0"
             },
             "conflict": {
@@ -512,7 +512,7 @@
                 "symfony/config": "~2.7",
                 "symfony/console": "~2.3|~3.0.0",
                 "symfony/css-selector": "~2.0,>=2.0.5|~3.0.0",
-                "symfony/dependency-injection": "~2.2|~3.0.0",
+                "symfony/dependency-injection": "~2.8|~3.0.0",
                 "symfony/dom-crawler": "~2.0,>=2.0.5|~3.0.0",
                 "symfony/expression-language": "~2.4|~3.0.0",
                 "symfony/finder": "~2.0,>=2.0.5|~3.0.0",
@@ -560,7 +560,7 @@
             ],
             "description": "Symfony HttpKernel Component",
             "homepage": "https://symfony.com",
-            "time": "2015-07-09 16:11:14"
+            "time": "2015-07-24 08:37:00"
         },
         {
             "name": "symfony/routing",
@@ -632,6 +632,55 @@
                 "url"
             ],
             "time": "2015-07-09 16:11:14"
+        },
+        {
+            "name": "willdurand/negotiation",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/willdurand/Negotiation.git",
+                "reference": "540434b453473e48d0c12de9db4607cbca8e112b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/willdurand/Negotiation/zipball/540434b453473e48d0c12de9db4607cbca8e112b",
+                "reference": "540434b453473e48d0c12de9db4607cbca8e112b",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.3-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Negotiation": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "William Durand",
+                    "email": "william.durand1@gmail.com"
+                }
+            ],
+            "description": "Content Negotiation tools for PHP provided as a standalone library.",
+            "homepage": "http://williamdurand.fr/Negotiation/",
+            "keywords": [
+                "accept",
+                "content",
+                "format",
+                "header",
+                "negotiation"
+            ],
+            "time": "2015-06-25 14:39:05"
         }
     ],
     "packages-dev": [
