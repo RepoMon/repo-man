@@ -1,0 +1,2 @@
+# RepoMan
+Manages multiple repositories
