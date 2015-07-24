@@ -1,17 +1,18 @@
 {
-    "name": "timrodger/repo-man",
+    "name": "scee/RepoMan",
     "description": "Repository management tools",
     "authors": [
         {
             "name": "Tim Rodger",
-            "email": "tim.rodger@gmail.com"
+            "email": "tim_rodger@scee.net"
         }
     ],
 
     "require" : {
       "silex/silex": "1.3",
       "monolog/monolog": "~1.15",
-      "predis/predis": "1.1.*@dev"
+      "predis/predis": "1.1.*@dev",
+      "willdurand/negotiation" : "~1.3.4"
     },
 
     "require-dev": {

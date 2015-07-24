@@ -18,7 +18,16 @@ class ViewFactory
     {
         switch ($name) {
             case 'dependency/composer':
-                return new ComposerDependencyReportCSVView();
+                switch ($type) {
+                    case 'text/csv':
+                        return new ComposerDependencyReportCSVView();
+                    case 'application/json':
+                        return new ComposerDependencyReportJSONView();
+                    case 'text/html':
+                        return new ComposerDependencyReportHTMLView();
+                    default:
+                        return new ComposerDependencyReportJSONView();
+                }
 
         }
     }
