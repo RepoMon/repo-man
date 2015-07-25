@@ -257,8 +257,8 @@ class Repository
     }
 
     /**
-     * Returns the raw output
-     * It'd be more useful to return an array of each commit
+     * Returns the raw output of lines
+     * It'd be more useful to return an array with each commit as a single element
      *
      * @return array
      */
@@ -267,17 +267,27 @@ class Repository
         return $this->execCommand('git log');
     }
 
+    /**
+     * Push commits to origin
+     *
+     * @return array
+     */
     public function push()
     {
-
+        return $this->execCommand('git push');
     }
 
     /**
      * @return array
      */
-    public function status()
+    public function status($silent = true)
     {
-        return $this->execCommand('git status -s');
+        $cmd = 'git status';
+        if ($silent) {
+            $cmd .= ' -s';
+        }
+
+        return $this->execCommand($cmd);
     }
 
     /**
@@ -304,7 +314,10 @@ class Repository
     {
         if (is_dir($this->directory . '/' . $this->name)) {
             chdir($this->directory . '/' . $this->name);
-            exec($cmd, $output);
+            exec($cmd, $output, $return);
+            if ($return !== 0) {
+                throw new ExecutionException("Return value was $return");
+            }
             return $output;
         } else {
             throw new DirectoryNotFoundException();

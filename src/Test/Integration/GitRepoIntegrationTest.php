@@ -297,7 +297,10 @@ class GitRepoIntegrationTest extends PHPUnit_Framework_TestCase
         $this->assertFileAdded(self::FILE_ONE, 0);
     }
 
-    public function testCommitWorksOnUnchangedRepo()
+    /**
+     * @expectedException \Sce\RepoMan\Domain\ExecutionException
+     */
+    public function testCommitOnUnchangedRepoThrowsException()
     {
         $this->givenACheckout();
 
@@ -315,11 +318,31 @@ class GitRepoIntegrationTest extends PHPUnit_Framework_TestCase
         $this->git_repo->setFile(self::FILE_ONE, $new_contents);
         $this->git_repo->add(self::FILE_ONE);
         $this->assertFileAdded(self::FILE_ONE, 0);
-        
+
         $this->git_repo->commit('Updates x');
 
         $this->assertNoChanges();
     }
+
+    /**
+     * If push fails The Repository will throw an exception
+     * This test asserts that the push command is successful as it does not throw an exception
+     */
+    public function testPush()
+    {
+        $name = 'feature/cool-beans';
+        $this->givenACheckout();
+        $this->git_repo->branch($name);
+        $this->git_repo->checkout($name);
+        $new_contents = 'new contents';
+
+        $this->git_repo->setFile(self::FILE_ONE, $new_contents);
+        $this->git_repo->add(self::FILE_ONE);
+        $this->git_repo->commit('Updates x');
+
+        $this->git_repo->push();
+    }
+
 
     private function assertNoChanges()
     {
