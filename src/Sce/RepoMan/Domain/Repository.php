@@ -200,10 +200,11 @@ class Repository
     /**
      * Create a new branch
      * @param $name
+     * @param null $from
      */
     public function branch($name)
     {
-
+        $this->execGitCommand("git branch $name");
     }
 
     /**
