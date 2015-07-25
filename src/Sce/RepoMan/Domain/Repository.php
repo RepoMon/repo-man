@@ -298,7 +298,7 @@ class Repository
     {
         if (!is_null($this->token)){
             $parts = parse_url($this->url);
-            // format is http://token@host/path for github at least
+            // format is http://token@host/path for git hub at least
             $url = sprintf('%s://%s@%s%s', $parts['scheme'], $this->token, $parts['host'], $parts['path']);
             return $url;
         }
@@ -316,7 +316,7 @@ class Repository
             chdir($this->directory . '/' . $this->name);
             exec($cmd, $output, $return);
             if ($return !== 0) {
-                throw new CommandExecutionException("Return value was $return");
+                throw new CommandExecutionException("Exit code of '$cmd' was '$return''");
             }
             return $output;
         } else {
