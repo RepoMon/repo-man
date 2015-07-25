@@ -79,7 +79,7 @@ class Repository
             $this->execCommand('git fetch --tags origin');
             $this->execCommand('git pull origin');
             return true;
-        } catch (NoDirectoryException $ex){
+        } catch (DirectoryNotFoundException $ex){
             return false;
         }
     }
@@ -97,7 +97,7 @@ class Repository
             return array_map(function ($name) {
                 return trim($name, '* ');
             }, $branches);
-        } catch (NoDirectoryException $ex){
+        } catch (DirectoryNotFoundException $ex){
             return [];
         }
     }
@@ -134,7 +134,7 @@ class Repository
 
             return array_unique($branches);
 
-        } catch (NoDirectoryException $ex){
+        } catch (DirectoryNotFoundException $ex){
             return [];
         }
     }
@@ -264,7 +264,7 @@ class Repository
             exec($cmd, $output);
             return $output;
         } else {
-            throw new NoDirectoryException();
+            throw new DirectoryNotFoundException();
         }
     }
 
