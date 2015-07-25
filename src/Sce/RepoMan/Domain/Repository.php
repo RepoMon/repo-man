@@ -75,14 +75,15 @@ class Repository
         }
 
         try {
-            $this->execGitCommand('git remote update');
-            $this->execGitCommand('git fetch --tags origin');
-            $this->execGitCommand('git pull origin');
+            $this->execCommand('git remote update');
+            $this->execCommand('git fetch --tags origin');
+            $this->execCommand('git pull origin');
             return true;
         } catch (NoDirectoryException $ex){
             return false;
         }
     }
+
     /**
      * return a list of branch names for the local repo
      *
@@ -91,7 +92,7 @@ class Repository
     public function listLocalBranches()
     {
         try {
-            $branches = $this->execGitCommand('git branch');
+            $branches = $this->execCommand('git branch');
 
             return array_map(function ($name) {
                 return trim($name, '* ');
@@ -116,7 +117,7 @@ class Repository
     public function listAllBranches()
     {
         try {
-            $branches = $this->execGitCommand('git branch -a');
+            $branches = $this->execCommand('git branch -a');
 
             $branches = array_map(function ($name) {
                 return trim($name, '* ');
@@ -144,7 +145,7 @@ class Repository
      */
     public function listTags()
     {
-        return $this->execGitCommand('git tag -l');
+        return $this->execCommand('git tag -l');
     }
 
     /**
@@ -174,7 +175,7 @@ class Repository
      */
     public function checkout($name)
     {
-
+        $this->execCommand("git checkout $name");
     }
 
     /**
@@ -204,7 +205,7 @@ class Repository
      */
     public function branch($name)
     {
-        $this->execGitCommand("git branch $name");
+        $this->execCommand("git branch $name");
     }
 
     /**
@@ -256,7 +257,7 @@ class Repository
      * @param $cmd string
      * @return array
      */
-    private function execGitCommand($cmd)
+    private function execCommand($cmd)
     {
         if (is_dir($this->directory . '/' . $this->name)) {
             chdir($this->directory . '/' . $this->name);

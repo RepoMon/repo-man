@@ -205,6 +205,16 @@ class GitRepoIntegrationTest extends PHPUnit_Framework_TestCase
 
         $result = $git_repo->isLocalBranch($name);
         $this->assertTrue($result);
+    }
+
+    public function testCheckout()
+    {
+        $name = 'feature/special-sauce';
+        $git_repo = new GitRepo($this->url, $this->directory);
+        $git_repo->update();
+
+        $git_repo->branch($name);
+        $git_repo->checkout($name);
 
     }
 
