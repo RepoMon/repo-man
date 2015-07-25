@@ -219,7 +219,7 @@ class GitRepoIntegrationTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($exists);
     }
 
-    public function testRemoveFileWorksIfFileDoesntExist()
+    public function testRemoveFileWorksIfFileDoesNotExist()
     {
         $git_repo = new GitRepo($this->url, $this->directory);
         $git_repo->update();
@@ -273,6 +273,11 @@ class GitRepoIntegrationTest extends PHPUnit_Framework_TestCase
 
         $git_repo->branch($name);
         $git_repo->checkout($name);
+
+    }
+
+    public function testAddFile()
+    {
 
     }
 
