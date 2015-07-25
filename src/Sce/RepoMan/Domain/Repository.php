@@ -199,6 +199,16 @@ class Repository
     }
 
     /**
+     * Write or overwrite file's contents
+     * @param $name
+     * @param $contents
+     */
+    public function setFile($name, $contents)
+    {
+        file_put_contents($this->directory . '/' . $this->name . '/' . $name, $contents);
+    }
+
+    /**
      * Create a new branch
      * @param $name
      * @param null $from
