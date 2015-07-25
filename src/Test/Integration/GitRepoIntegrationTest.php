@@ -278,7 +278,24 @@ class GitRepoIntegrationTest extends PHPUnit_Framework_TestCase
 
     public function testAddFile()
     {
+        $git_repo = new GitRepo($this->url, $this->directory);
+        $git_repo->update();
 
+        $status = $git_repo->status();
+        $this->assertSame([], $status);
+
+        $new_contents = 'new contents';
+        $git_repo->setFile('one.txt', $new_contents);
+
+        $status = $git_repo->status();
+
+        $this->assertSame(' M one.txt', $status[0]);
+
+        $git_repo->add('one.txt');
+
+        $status = $git_repo->status();
+
+        $this->assertSame('M  one.txt', $status[0]);
     }
 
     private function createGitRepo()

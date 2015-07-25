@@ -244,7 +244,8 @@ class Repository
      */
     public function add($name)
     {
-
+        $file = $this->getFilePath($name);
+        $this->execCommand('git add ' . $file);
     }
 
     public function commit()
@@ -255,6 +256,14 @@ class Repository
     public function push()
     {
 
+    }
+
+    /**
+     * @return array
+     */
+    public function status()
+    {
+        return $this->execCommand('git status -s');
     }
 
     /**
