@@ -13,6 +13,16 @@ class GitRepoIntegrationTest extends PHPUnit_Framework_TestCase
 {
 
     /**
+     * name of file in repo
+     */
+    const FILE_ONE = 'one.txt';
+
+    /**
+     * Other file name
+     */
+    const FILE_TWO = 'two.txt';
+
+    /**
      * @var string
      */
     private $url;
@@ -140,7 +150,7 @@ class GitRepoIntegrationTest extends PHPUnit_Framework_TestCase
         $git_repo = new GitRepo($this->url, $this->directory);
         $git_repo->update();
 
-        $contents = $git_repo->getFile('one.txt');
+        $contents = $git_repo->getFile(self::FILE_ONE);
 
         $this->assertSame('one contents', $contents);
     }
@@ -161,9 +171,9 @@ class GitRepoIntegrationTest extends PHPUnit_Framework_TestCase
         $git_repo->update();
 
         $new_contents = 'new contents';
-        $git_repo->setFile('one.txt', $new_contents);
+        $git_repo->setFile(self::FILE_ONE, $new_contents);
 
-        $actual = $git_repo->getFile('one.txt');
+        $actual = $git_repo->getFile(self::FILE_ONE);
 
         $this->assertSame($new_contents, $actual);
     }
@@ -190,7 +200,7 @@ class GitRepoIntegrationTest extends PHPUnit_Framework_TestCase
         $git_repo = new GitRepo($this->url, $this->directory);
         $git_repo->update();
 
-        $result = $git_repo->hasFile('one.txt');
+        $result = $git_repo->hasFile(self::FILE_ONE);
 
         $this->assertTrue($result);
     }
@@ -210,12 +220,12 @@ class GitRepoIntegrationTest extends PHPUnit_Framework_TestCase
         $git_repo = new GitRepo($this->url, $this->directory);
         $git_repo->update();
 
-        $exists = $git_repo->hasFile('one.txt');
+        $exists = $git_repo->hasFile(self::FILE_ONE);
         $this->assertTrue($exists);
 
-        $git_repo->removeFile('one.txt');
+        $git_repo->removeFile(self::FILE_ONE);
 
-        $exists = $git_repo->hasFile('one.txt');
+        $exists = $git_repo->hasFile(self::FILE_ONE);
         $this->assertFalse($exists);
     }
 
@@ -285,13 +295,13 @@ class GitRepoIntegrationTest extends PHPUnit_Framework_TestCase
         $this->assertSame([], $status);
 
         $new_contents = 'new contents';
-        $git_repo->setFile('one.txt', $new_contents);
+        $git_repo->setFile(self::FILE_ONE, $new_contents);
 
         $status = $git_repo->status();
 
         $this->assertSame(' M one.txt', $status[0]);
 
-        $git_repo->add('one.txt');
+        $git_repo->add(self::FILE_ONE);
 
         $status = $git_repo->status();
 
@@ -306,8 +316,8 @@ class GitRepoIntegrationTest extends PHPUnit_Framework_TestCase
 
         chdir($this->url);
 
-        file_put_contents('one.txt', 'one contents');
-        file_put_contents('two.txt', 'two contents');
+        file_put_contents(self::FILE_ONE, 'one contents');
+        file_put_contents(self::FILE_TWO, 'two contents');
 
         exec("git init .");
         exec("git add .");
