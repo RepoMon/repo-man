@@ -182,7 +182,7 @@ class Repository
      */
     public function hasFile($name)
     {
-        return file_exists($this->directory . '/' . $this->name . '/' . $name);
+        return file_exists($this->getFilePath($name));
     }
 
     /**
@@ -192,7 +192,7 @@ class Repository
     public function getFile($name)
     {
         if ($this->hasFile($name)) {
-            return file_get_contents($this->directory . '/' . $this->name . '/' . $name);
+            return file_get_contents($this->getFilePath($name));
         }
     }
 
@@ -203,7 +203,19 @@ class Repository
      */
     public function setFile($name, $contents)
     {
-        file_put_contents($this->directory . '/' . $this->name . '/' . $name, $contents);
+        file_put_contents($this->getFilePath($name), $contents);
+    }
+
+    /**
+     * @param $name string
+     */
+    public function removeFile($name)
+    {
+        $file = $this->getFilePath($name);
+
+        if (is_file($file)) {
+            unlink($file);
+        }
     }
 
     /**
@@ -276,4 +288,12 @@ class Repository
         }
     }
 
+    /**
+     * @param $name string
+     * @return string
+     */
+    private function getFilePath($name)
+    {
+        return $this->directory . '/' . $this->name . '/' . $name;
+    }
 }
