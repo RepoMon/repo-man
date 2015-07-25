@@ -248,9 +248,23 @@ class Repository
         $this->execCommand('git add ' . $file);
     }
 
-    public function commit()
+    /**
+     * Commit added files
+     */
+    public function commit($msg)
     {
+        $this->execCommand("git commit -m '$msg'");
+    }
 
+    /**
+     * Returns the raw output
+     * It'd be more useful to return an array of each commit
+     *
+     * @return array
+     */
+    public function log()
+    {
+        return $this->execCommand('git log');
     }
 
     public function push()

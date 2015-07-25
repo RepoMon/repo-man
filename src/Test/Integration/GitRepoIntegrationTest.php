@@ -47,6 +47,14 @@ class GitRepoIntegrationTest extends PHPUnit_Framework_TestCase
      */
     private $tags = ['v0.1.0', 'v.1.3.4'];
 
+    /**
+     * @var GitRepo
+     */
+    private $git_repo;
+
+    /**
+     * 
+     */
     public function setUp()
     {
         parent::setUp();
@@ -69,10 +77,15 @@ class GitRepoIntegrationTest extends PHPUnit_Framework_TestCase
         parent::tearDown();
     }
 
+    protected function givenACheckout()
+    {
+        $this->git_repo = new GitRepo($this->url, $this->directory);
+        $this->git_repo->update();
+    }
+
     public function testUpdate()
     {
-        $git_repo = new GitRepo($this->url, $this->directory);
-        $git_repo->update();
+        $this->givenACheckout();
 
         $parts = explode('/', $this->url);
         $name = array_pop($parts);
@@ -82,10 +95,9 @@ class GitRepoIntegrationTest extends PHPUnit_Framework_TestCase
 
     public function testListLocalBranches()
     {
-        $git_repo = new GitRepo($this->url, $this->directory);
-        $git_repo->update();
+        $this->givenACheckout();
 
-        $local_branches = $git_repo->listLocalBranches();
+        $local_branches = $this->git_repo->listLocalBranches();
 
         $this->assertSame(1, count($local_branches));
         $this->assertSame(['master'], $local_branches);
@@ -93,25 +105,23 @@ class GitRepoIntegrationTest extends PHPUnit_Framework_TestCase
 
     public function testIsLocalBranch()
     {
-        $git_repo = new GitRepo($this->url, $this->directory);
-        $git_repo->update();
+        $this->givenACheckout();
 
-        $result = $git_repo->isLocalBranch('master');
+        $result = $this->git_repo->isLocalBranch('master');
         $this->assertTrue($result);
 
-        $result = $git_repo->isLocalBranch('not-a-branch');
+        $result = $this->git_repo->isLocalBranch('not-a-branch');
         $this->assertFalse($result);
 
-        $result = $git_repo->isLocalBranch('feature/new-stuff');
+        $result = $this->git_repo->isLocalBranch('feature/new-stuff');
         $this->assertFalse($result);
     }
 
     public function testListTags()
     {
-        $git_repo = new GitRepo($this->url, $this->directory);
-        $git_repo->update();
+        $this->givenACheckout();
 
-        $tags = $git_repo->listTags();
+        $tags = $this->git_repo->listTags();
 
         $this->assertSame(count($this->tags), count($tags));
 
@@ -122,19 +132,17 @@ class GitRepoIntegrationTest extends PHPUnit_Framework_TestCase
 
     public function testGetLatestTag()
     {
-        $git_repo = new GitRepo($this->url, $this->directory);
-        $git_repo->update();
+        $this->givenACheckout();
 
-        $latest_tag = $git_repo->getLatestTag();
+        $latest_tag = $this->git_repo->getLatestTag();
         $this->assertSame('v.1.3.4', (string) $latest_tag);
     }
 
     public function testListAllBranches()
     {
-        $git_repo = new GitRepo($this->url, $this->directory);
-        $git_repo->update();
+        $this->givenACheckout();
 
-        $branches = $git_repo->listAllBranches();
+        $branches = $this->git_repo->listAllBranches();
 
         $this->assertSame(3, count($branches));
 
@@ -147,106 +155,95 @@ class GitRepoIntegrationTest extends PHPUnit_Framework_TestCase
 
     public function testGetFile()
     {
-        $git_repo = new GitRepo($this->url, $this->directory);
-        $git_repo->update();
+        $this->givenACheckout();
 
-        $contents = $git_repo->getFile(self::FILE_ONE);
+        $contents = $this->git_repo->getFile(self::FILE_ONE);
 
         $this->assertSame('one contents', $contents);
     }
 
     public function testGetFileReturnsNullForMissingFile()
     {
-        $git_repo = new GitRepo($this->url, $this->directory);
-        $git_repo->update();
+        $this->givenACheckout();
 
-        $contents = $git_repo->getFile('not-there');
+        $contents = $this->git_repo->getFile('not-there');
 
         $this->assertSame(null, $contents);
     }
 
     public function testSetFileOverwritesExisting()
     {
-        $git_repo = new GitRepo($this->url, $this->directory);
-        $git_repo->update();
+        $this->givenACheckout();
 
         $new_contents = 'new contents';
-        $git_repo->setFile(self::FILE_ONE, $new_contents);
+        $this->git_repo->setFile(self::FILE_ONE, $new_contents);
 
-        $actual = $git_repo->getFile(self::FILE_ONE);
+        $actual = $this->git_repo->getFile(self::FILE_ONE);
 
         $this->assertSame($new_contents, $actual);
     }
 
     public function testSetFileCreatesNewFile()
     {
-        $git_repo = new GitRepo($this->url, $this->directory);
-        $git_repo->update();
+        $this->givenACheckout();
 
         $new_contents = 'new contents';
         $new_file = 'a-new-file.txt';
-        $this->assertFalse($git_repo->hasFile($new_file));
+        $this->assertFileDoesNotExistInRepo($new_file);
 
-        $git_repo->setFile($new_file, $new_contents);
+        $this->git_repo->setFile($new_file, $new_contents);
 
-        $this->assertTrue($git_repo->hasFile($new_file));
+        $this->assertFileExistsInRepo($new_file);
 
-        $actual = $git_repo->getFile($new_file);
+        $actual = $this->git_repo->getFile($new_file);
         $this->assertSame($new_contents, $actual);
     }
 
     public function testHasFile()
     {
-        $git_repo = new GitRepo($this->url, $this->directory);
-        $git_repo->update();
+        $this->givenACheckout();
 
-        $result = $git_repo->hasFile(self::FILE_ONE);
+        $result = $this->git_repo->hasFile(self::FILE_ONE);
 
         $this->assertTrue($result);
     }
 
     public function testHasFileReturnsFalseForMissingFile()
     {
-        $git_repo = new GitRepo($this->url, $this->directory);
-        $git_repo->update();
+        $this->givenACheckout();
 
-        $result = $git_repo->hasFile('not-there');
+        $result = $this->git_repo->hasFile('not-there');
 
         $this->assertFalse($result);
     }
 
     public function testRemoveFile()
     {
-        $git_repo = new GitRepo($this->url, $this->directory);
-        $git_repo->update();
+        $this->givenACheckout();
 
-        $exists = $git_repo->hasFile(self::FILE_ONE);
-        $this->assertTrue($exists);
+        $this->assertFileExistsInRepo(self::FILE_ONE);
 
-        $git_repo->removeFile(self::FILE_ONE);
+        $this->git_repo->removeFile(self::FILE_ONE);
 
-        $exists = $git_repo->hasFile(self::FILE_ONE);
-        $this->assertFalse($exists);
+        $this->assertFileDoesNotExistInRepo(self::FILE_ONE);
     }
 
     public function testRemoveFileWorksIfFileDoesNotExist()
     {
-        $git_repo = new GitRepo($this->url, $this->directory);
-        $git_repo->update();
+        $this->givenACheckout();
 
-        $exists = $git_repo->hasFile('four.txt');
-        $this->assertFalse($exists);
+        $this->assertFileDoesNotExistInRepo('four.txt');
 
-        $git_repo->removeFile('four.txt');
+        $this->git_repo->removeFile('four.txt');
 
-        $exists = $git_repo->hasFile('four.txt');
-        $this->assertFalse($exists);
+        $this->assertFileDoesNotExistInRepo('four.txt');
     }
 
     public function testGetUrl()
     {
-        $git_repo = new GitRepo($this->url, $this->directory);
-        $result = $git_repo->getUrl();
+        $this->git_repo = new GitRepo($this->url, $this->directory);
+
+        $result = $this->git_repo->getUrl();
         $this->assertSame($this->url, $result);
     }
 
@@ -254,8 +251,9 @@ class GitRepoIntegrationTest extends PHPUnit_Framework_TestCase
     {
         $expected = base64_encode($this->url);
 
-        $git_repo = new GitRepo($this->url, $this->directory);
-        $result = $git_repo->getId();
+        $this->git_repo = new GitRepo($this->url, $this->directory);
+
+        $result = $this->git_repo->getId();
 
         $this->assertSame($expected, $result);
     }
@@ -263,49 +261,94 @@ class GitRepoIntegrationTest extends PHPUnit_Framework_TestCase
     public function testBranch()
     {
         $name = 'feature/special-sauce';
-        $git_repo = new GitRepo($this->url, $this->directory);
-        $git_repo->update();
+        $this->givenACheckout();
 
-        $result = $git_repo->isLocalBranch($name);
+        $result = $this->git_repo->isLocalBranch($name);
         $this->assertFalse($result);
 
-        $git_repo->branch($name);
+        $this->git_repo->branch($name);
 
-        $result = $git_repo->isLocalBranch($name);
+        $result = $this->git_repo->isLocalBranch($name);
         $this->assertTrue($result);
     }
 
     public function testCheckout()
     {
         $name = 'feature/special-sauce';
-        $git_repo = new GitRepo($this->url, $this->directory);
-        $git_repo->update();
+        $this->givenACheckout();
 
-        $git_repo->branch($name);
-        $git_repo->checkout($name);
-
+        $this->git_repo->branch($name);
+        $this->git_repo->checkout($name);
     }
 
     public function testAddFile()
     {
-        $git_repo = new GitRepo($this->url, $this->directory);
-        $git_repo->update();
+        $this->givenACheckout();
 
-        $status = $git_repo->status();
-        $this->assertSame([], $status);
+        $this->assertNoChanges();
 
         $new_contents = 'new contents';
-        $git_repo->setFile(self::FILE_ONE, $new_contents);
+        $this->git_repo->setFile(self::FILE_ONE, $new_contents);
 
-        $status = $git_repo->status();
+        $this->assertFileModified(self::FILE_ONE, 0);
 
-        $this->assertSame(' M one.txt', $status[0]);
+        $this->git_repo->add(self::FILE_ONE);
 
-        $git_repo->add(self::FILE_ONE);
+        $this->assertFileAdded(self::FILE_ONE, 0);
+    }
 
-        $status = $git_repo->status();
+    public function testCommitWorksOnUnchangedRepo()
+    {
+        $this->givenACheckout();
 
-        $this->assertSame('M  one.txt', $status[0]);
+        $this->assertNoChanges();
+
+        $this->git_repo->commit('No changes');
+
+        $this->assertNoChanges();
+    }
+
+    public function testCommit()
+    {
+        $this->givenACheckout();
+        $new_contents = 'new contents';
+        $this->git_repo->setFile(self::FILE_ONE, $new_contents);
+        $this->git_repo->add(self::FILE_ONE);
+        $this->assertFileAdded(self::FILE_ONE, 0);
+        
+        $this->git_repo->commit('Updates x');
+
+        $this->assertNoChanges();
+    }
+
+    private function assertNoChanges()
+    {
+        $status = $this->git_repo->status();
+        $this->assertSame([], $status);
+    }
+
+    protected function assertFileModified($name, $index)
+    {
+        $status = $this->git_repo->status();
+        $this->assertSame(' M ' . $name, $status[$index]);
+    }
+
+    protected function assertFileAdded($name, $index)
+    {
+        $status = $this->git_repo->status();
+        $this->assertSame('M  ' . $name, $status[$index]);
+    }
+
+    protected function assertFileExistsInRepo($name)
+    {
+        $exists = $this->git_repo->hasFile($name);
+        $this->assertTrue($exists);
+    }
+
+    protected function assertFileDoesNotExistInRepo($name)
+    {
+        $exists = $this->git_repo->hasFile($name);
+        $this->assertFalse($exists);
     }
 
     private function createGitRepo()
