@@ -163,6 +163,21 @@ class ComposerUnitTest extends PHPUnit_Framework_TestCase
         $this->assertSame($new_version, $actual);
     }
 
+    public function testSetRequireVersionAddsRequireIfMissing()
+    {
+        $lock = [];
+        $name = 'company/repo';
+        $config = [];
+        $composer = new Composer($config, $lock);
+
+        $new_version = '2.8.2';
+        $composer->setRequireVersion($name, $new_version);
+
+        $actual = $composer->getDependencyVersion($name);
+
+        $this->assertSame($new_version, $actual);
+    }
+
     public function testSetRequireVersionAddsVersion()
     {
         $lock = [];
@@ -175,8 +190,56 @@ class ComposerUnitTest extends PHPUnit_Framework_TestCase
         $new_version = '2.8.2';
         $exists = $composer->hasDependency($new_name);
         $this->assertFalse($exists);
-        
+
         $composer->setRequireVersion($new_name, $new_version);
+
+        $actual = $composer->getDependencyVersion($new_name);
+
+        $this->assertSame($new_version, $actual);
+    }
+
+    public function testSetRequireDevVersionOverwritesExistingVersion()
+    {
+        $lock = [];
+        $name = 'company/repo';
+        $version = '1.0.0';
+        $config = ['require-dev' => [$name => $version]];
+        $composer = new Composer($config, $lock);
+
+        $new_version = '2.8.2';
+        $composer->setRequireDevVersion($name, $new_version);
+
+        $actual = $composer->getDependencyVersion($name);
+
+        $this->assertSame($new_version, $actual);
+    }
+
+    public function testSetRequireDevVersionAddsRequireDevIfMissing()
+    {
+        $lock = [];
+        $name = 'company/repo';
+        $config = [];
+        $composer = new Composer($config, $lock);
+
+        $new_version = '2.8.2';
+        $composer->setRequireDevVersion($name, $new_version);
+
+        $actual = $composer->getDependencyVersion($name);
+
+        $this->assertSame($new_version, $actual);
+    }
+
+    public function testSetRequireDevVersionAddsVersion()
+    {
+        $lock = [];
+        $name = 'company/repo';
+        $version = '1.0.0';
+        $config = ['require-dev' => [$name => $version]];
+        $composer = new Composer($config, $lock);
+
+        $new_name = 'company-a/repo-x';
+        $new_version = '2.8.2';
+        $composer->setRequireDevVersion($new_name, $new_version);
 
         $actual = $composer->getDependencyVersion($new_name);
 
