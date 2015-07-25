@@ -1,9 +1,7 @@
 <?php namespace Sce\RepoMan\Domain;
 
 /**
- * Class GitRepo
- * @package Sce\Repo
- * Represents a git repo
+ * Represents a git repository
  */
 class Repository
 {

@@ -56,6 +56,17 @@ class Composer
     }
 
     /**
+     * @param $name string name of dependency
+     * @param $version string version value
+     */
+    public function setRequireVersion($name, $version)
+    {
+        if (isset($this->config['require'])){
+            $this->config['require'][$name] = $version;
+        }
+    }
+
+    /**
      * @param $name
      * @return mixed
      */
