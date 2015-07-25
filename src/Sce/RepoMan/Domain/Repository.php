@@ -316,7 +316,7 @@ class Repository
             chdir($this->directory . '/' . $this->name);
             exec($cmd, $output, $return);
             if ($return !== 0) {
-                throw new ExecutionException("Return value was $return");
+                throw new CommandExecutionException("Return value was $return");
             }
             return $output;
         } else {

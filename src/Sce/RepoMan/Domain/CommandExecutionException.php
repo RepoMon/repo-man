@@ -3,4 +3,4 @@
 /**
  * Thrown when executing a command returns a non-zero exit code
  */
-class ExecutionException extends \RuntimeException {}
+class CommandExecutionException extends \RuntimeException {}
