@@ -27,6 +27,11 @@ class Repository
     private $token;
 
     /**
+     * @var Commandline
+     */
+    private $command_line;
+
+    /**
      * @param $url string location of remote repo
      * @param $directory string directory location to clone repo into
      * @param null $token authentication token
@@ -38,6 +43,7 @@ class Repository
         $parts = explode('/', $this->url);
         $this->name = array_pop($parts);
         $this->token = $token;
+        $this->command_line = new CommandLine($this->directory .'/' . $this->name);
     }
 
     /**
@@ -73,9 +79,9 @@ class Repository
         }
 
         try {
-            $this->execCommand('git remote update');
-            $this->execCommand('git fetch --tags origin');
-            $this->execCommand('git pull origin');
+            $this->command_line->exec('git remote update');
+            $this->command_line->exec('git fetch --tags origin');
+            $this->command_line->exec('git pull origin');
             return true;
         } catch (DirectoryNotFoundException $ex){
             return false;
@@ -90,7 +96,7 @@ class Repository
     public function listLocalBranches()
     {
         try {
-            $branches = $this->execCommand('git branch');
+            $branches = $this->command_line->exec('git branch');
 
             return array_map(function ($name) {
                 return trim($name, '* ');
@@ -115,7 +121,7 @@ class Repository
     public function listAllBranches()
     {
         try {
-            $branches = $this->execCommand('git branch -a');
+            $branches = $this->command_line->exec('git branch -a');
 
             $branches = array_map(function ($name) {
                 return trim($name, '* ');
@@ -143,7 +149,7 @@ class Repository
      */
     public function listTags()
     {
-        return $this->execCommand('git tag -l');
+        return $this->command_line->exec('git tag -l');
     }
 
     /**
@@ -173,7 +179,7 @@ class Repository
      */
     public function checkout($name)
     {
-        $this->execCommand("git checkout $name");
+        $this->command_line->exec("git checkout $name");
     }
 
     /**
@@ -225,7 +231,7 @@ class Repository
      */
     public function branch($name, $from = null)
     {
-        $this->execCommand("git branch $name $from");
+        $this->command_line->exec("git branch $name $from");
     }
 
     /**
@@ -245,7 +251,7 @@ class Repository
     public function add($name)
     {
         $file = $this->getFilePath($name);
-        $this->execCommand('git add ' . $file);
+        $this->command_line->exec('git add ' . $file);
     }
 
     /**
@@ -253,7 +259,7 @@ class Repository
      */
     public function commit($msg)
     {
-        $this->execCommand("git commit -m '$msg'");
+        $this->command_line->exec("git commit -m '$msg'");
     }
 
     /**
@@ -264,7 +270,7 @@ class Repository
      */
     public function log()
     {
-        return $this->execCommand('git log');
+        return $this->command_line->exec('git log');
     }
 
     /**
@@ -274,7 +280,7 @@ class Repository
      */
     public function push()
     {
-        return $this->execCommand('git push');
+        return $this->command_line->exec('git push');
     }
 
     /**
@@ -287,7 +293,7 @@ class Repository
             $cmd .= ' -s';
         }
 
-        return $this->execCommand($cmd);
+        return $this->command_line->exec($cmd);
     }
 
     /**
@@ -304,24 +310,6 @@ class Repository
         }
 
         return $this->url;
-    }
-
-    /**
-     * @param $cmd string
-     * @return array
-     */
-    private function execCommand($cmd)
-    {
-        if (is_dir($this->directory . '/' . $this->name)) {
-            chdir($this->directory . '/' . $this->name);
-            exec($cmd, $output, $return);
-            if ($return !== 0) {
-                throw new CommandExecutionException("Exit code of '$cmd' was '$return''");
-            }
-            return $output;
-        } else {
-            throw new DirectoryNotFoundException();
-        }
     }
 
     /**
