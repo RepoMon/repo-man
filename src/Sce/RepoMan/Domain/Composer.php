@@ -149,4 +149,20 @@ class Composer
 
         return $dependencies;
     }
+
+    /**
+     * @return array
+     */
+    public function getComposerJson()
+    {
+        return $this->config;
+    }
+
+    /**
+     * @return array
+     */
+    public function getComposerLock()
+    {
+        return $this->lock;
+    }
 }
