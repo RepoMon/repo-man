@@ -1,5 +1,6 @@
 <?php namespace Sce\RepoMan\Command;
 
+use Sce\RepoMan\Domain\CommandLine;
 use Sce\RepoMan\Domain\Composer;
 use Sce\RepoMan\Domain\Repository;
 
@@ -29,6 +30,7 @@ class UpdateComposerDependencies implements CommandInterface
     public function execute($data)
     {
         $success = $this->repository->update();
+
         if (!$success) {
             return false;
         }
@@ -53,6 +55,7 @@ class UpdateComposerDependencies implements CommandInterface
         }
 
         $composer = new Composer($composer_json, []);
+
         foreach($data['require'] as $library => $version) {
             $composer->setRequireVersion($library, $version);
         }
@@ -63,11 +66,19 @@ class UpdateComposerDependencies implements CommandInterface
         $this->repository->removeFile('composer.lock');
 
         // run composer install
+        $command_line = new CommandLine($this->repository->getCheckoutDirectory());
+        if (!$command_line->exec('composer install')) {
+            return false;
+        }
 
         // Add composer.json and composer.lock to git branch
+        $this->repository->add('composer.json');
+        $this->repository->add('composer.lock');
 
         // run git commit
+        $this->repository->commit('Updates composer dependencies');
 
         // run git push origin $branch
+        $this->repository->push();
     }
 }

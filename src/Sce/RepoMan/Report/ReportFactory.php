@@ -9,7 +9,7 @@ use Sce\RepoMan\Store\StoreInterface;
 class ReportFactory
 {
     /**
-     * @var \Sce\Repoman\Store\StoreInterface
+     * @var StoreInterface
      */
     private $store;
 

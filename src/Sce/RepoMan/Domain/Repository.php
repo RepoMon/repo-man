@@ -47,6 +47,16 @@ class Repository
     }
 
     /**
+     * Return the director location of the checkout
+     *
+     * @return string
+     */
+    public function getCheckoutDirectory()
+    {
+        return $this->directory .'/' . $this->name;
+    }
+
+    /**
      * @return string
      */
     public function getUrl()
