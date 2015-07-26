@@ -19,9 +19,15 @@ class UpdateComposerDependencies implements CommandInterface
      */
     private $repository;
 
-    public function __construct(Repository $repository)
+    /**
+     * @var CommandLine
+     */
+    private $command_line;
+
+    public function __construct(Repository $repository, CommandLine $command_line)
     {
         $this->repository = $repository;
+        $this->command_line = $command_line;
     }
 
     /**
@@ -66,8 +72,7 @@ class UpdateComposerDependencies implements CommandInterface
         $this->repository->removeFile('composer.lock');
 
         // run composer install
-        $command_line = new CommandLine($this->repository->getCheckoutDirectory());
-        if (!$command_line->exec('composer install')) {
+        if (!$this->command_line->exec('composer install')) {
             return false;
         }
 
@@ -80,5 +85,7 @@ class UpdateComposerDependencies implements CommandInterface
 
         // run git push origin $branch
         $this->repository->push();
+
+        return true;
     }
 }
