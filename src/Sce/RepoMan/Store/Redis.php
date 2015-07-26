@@ -58,19 +58,45 @@ class Redis implements StoreInterface
             return $this->repositories;
         }
 
+        $keys = $this->getRepositories();
+
+         // get the repository data from redis
+        if (is_array($keys)) {
+            foreach ($keys as $key) {
+                // insert token into the repo url here
+                $this->repositories [] = $this->createRepository($key);
+            }
+        }
+        return $this->repositories;
+    }
+
+    /**
+     * @return array
+     * @throws UnavailableException
+     */
+    private function getRepositories()
+    {
         try {
             // get the repository data from redis
-            $keys = $this->client->smembers(SELF::REPO_SET_NAME);
-            if (is_array($keys)) {
-                foreach ($keys as $key) {
-                    // insert token into the repo url here
-                    $this->repositories [] = $this->createRepository($key);
-                }
-            }
-            return $this->repositories;
-
+            return $this->client->smembers(SELF::REPO_SET_NAME);
         } catch (ServerException $ex) {
             throw new UnavailableException($ex->getMessage());
+        }
+    }
+
+    /**
+     * @param $url
+     * @return Repository
+     * @throws UnavailableException
+     */
+    public function get($url)
+    {
+        $keys = $this->getRepositories();
+
+        if (is_array($keys) && in_array($url, $keys)){
+            return $this->createRepository($url);
+        } else {
+            throw new UnavailableException("Can't get '$url'");
         }
     }
 

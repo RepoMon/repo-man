@@ -97,7 +97,7 @@ class AppIntegrationTest extends WebTestCase
         $this->thenTheResponseIs400();
     }
 
-    public function testAddTokenFailsWhenTokenIsMssing()
+    public function testAddTokenFailsWhenTokenIsMissing()
     {
         $host =  'github.com';
 
@@ -150,6 +150,18 @@ class AppIntegrationTest extends WebTestCase
         $this->assertResponseContents(json_encode([]));
     }
 
+    public function testUpdateComposerDependenciesFailsForMissingRepo()
+    {
+        $this->givenAClient();
+        $this->client->request(
+            'POST',
+            '/dependencies/composer',
+            ['require' => json_encode(['lib/www' => 'v0.3.4']), 'url' => 'https://github.com/user/repo']
+        );
+
+        $this->thenTheResponseIs500();
+    }
+
     private function givenAClient()
     {
         $this->client = $this->createClient();
@@ -163,6 +175,11 @@ class AppIntegrationTest extends WebTestCase
     private function thenTheResponseIs400()
     {
         $this->assertSame(400, $this->client->getResponse()->getStatusCode());
+    }
+
+    private function thenTheResponseIs500()
+    {
+        $this->assertSame(500, $this->client->getResponse()->getStatusCode());
     }
 
     protected function assertResponseContents($expected_body)

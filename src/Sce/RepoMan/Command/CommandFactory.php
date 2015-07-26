@@ -1,5 +1,6 @@
 <?php namespace Sce\RepoMan\Command;
 
+use Sce\RepoMan\Domain\CommandLine;
 use Sce\RepoMan\Store\StoreInterface;
 
 /**
@@ -8,7 +9,6 @@ use Sce\RepoMan\Store\StoreInterface;
  */
 class CommandFactory
 {
-
     /**
      * @var StoreInterface
      */
@@ -27,6 +27,12 @@ class CommandFactory
      */
     public function create($type, $repository_url)
     {
+        switch ($type) {
 
+            case "dependencies/composer":
+                $repository = $this->store->get($repository_url);
+                $command_line = new CommandLine($repository->getCheckoutDirectory());
+                return new UpdateComposerDependencies($repository, $command_line);
+        }
     }
 }
