@@ -98,7 +98,7 @@ class UpdateComposerDependenciesUnitTest extends PHPUnit_Framework_TestCase
             ->method('checkout')
             ->with($new_branch);
 
-        $json = json_encode([]);
+        $json = json_encode(['require' => ['company/libx' => '1.0.0']]);
 
         $this->mock_repository->expects($this->any())
             ->method('hasFile')
@@ -108,9 +108,17 @@ class UpdateComposerDependenciesUnitTest extends PHPUnit_Framework_TestCase
             ->method('getFile')
             ->will($this->returnValue($json));
 
+        $this->mock_repository->expects($this->once())
+            ->method('setFile')
+            ->with('composer.json', json_encode(['require' => ['company/libx' => '2.0.0']]));
+
+        $this->mock_repository->expects($this->once())
+            ->method('removeFile')
+            ->with('composer.lock');
+
         $command = new UpdateComposerDependencies($this->mock_repository);
 
-        $data = [];
+        $data = ['require' => ['company/libx' => '2.0.0']];
 
         $result = $command->execute($data);
     }

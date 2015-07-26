@@ -52,14 +52,22 @@ class UpdateComposerDependencies implements CommandInterface
             return false;
         }
 
-        // if lock is not present use an empty array
-        $composer_lock = json_decode($this->repository->getFile('composer.lock'), 1);
-
-        if (!is_array($composer_lock)){
-            $composer_lock = [];
+        $composer = new Composer($composer_json, []);
+        foreach($data['require'] as $library => $version) {
+            $composer->setRequireVersion($library, $version);
         }
 
-        $composer = new Composer($composer_json, $composer_lock);
+        // write the new composer config back to the file
+        $this->repository->setFile('composer.json', json_encode($composer->getComposerJson()));
 
+        $this->repository->removeFile('composer.lock');
+
+        // run composer install
+
+        // Add composer.json and composer.lock to git branch
+
+        // run git commit
+
+        // run git push origin $branch
     }
 }
