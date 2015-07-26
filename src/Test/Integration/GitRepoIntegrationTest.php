@@ -135,7 +135,7 @@ class GitRepoIntegrationTest extends PHPUnit_Framework_TestCase
         $this->givenACheckout();
 
         $latest_tag = $this->git_repo->getLatestTag();
-        $this->assertSame('v.1.3.4', (string) $latest_tag);
+        $this->assertSame('v.1.3.4', $latest_tag);
     }
 
     public function testListAllBranches()
@@ -267,6 +267,20 @@ class GitRepoIntegrationTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($result);
 
         $this->git_repo->branch($name);
+
+        $result = $this->git_repo->isLocalBranch($name);
+        $this->assertTrue($result);
+    }
+
+    public function testBranchFromTag()
+    {
+        $name = 'feature/special-sauce';
+        $this->givenACheckout();
+
+        $result = $this->git_repo->isLocalBranch($name);
+        $this->assertFalse($result);
+
+        $this->git_repo->branch($name, $this->tags[1]);
 
         $result = $this->git_repo->isLocalBranch($name);
         $this->assertTrue($result);

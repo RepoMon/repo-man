@@ -164,7 +164,7 @@ class Repository
         }
 
         usort($versions, function($a, $b) { return $a->compare($b);});
-        return array_pop($versions);
+        return (string) array_pop($versions);
     }
 
     /**
@@ -220,12 +220,12 @@ class Repository
 
     /**
      * Create a new branch
-     * @param $name
-     * @param null $from
+     * @param $name string
+     * @param $from mixed
      */
-    public function branch($name)
+    public function branch($name, $from = null)
     {
-        $this->execCommand("git branch $name");
+        $this->execCommand("git branch $name $from");
     }
 
     /**
