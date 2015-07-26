@@ -157,12 +157,4 @@ class Composer
     {
         return $this->config;
     }
-
-    /**
-     * @return array
-     */
-    public function getComposerLock()
-    {
-        return $this->lock;
-    }
 }

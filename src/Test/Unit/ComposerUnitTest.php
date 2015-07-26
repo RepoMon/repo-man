@@ -258,18 +258,4 @@ class ComposerUnitTest extends PHPUnit_Framework_TestCase
         $this->assertSame($config, $composer->getComposerJson());
     }
 
-    public function testGetComposerLock()
-    {
-        $config = [];
-        $name = 'company/repo';
-        $version = '1.0.0';
-        $time = "2015-07-10 06:54:46";
-        $lock = ["packages-dev" => [
-            ['name' => $name, 'version' => $version, 'time' => $time]
-        ]];
-
-        $composer = new Composer($config, $lock);
-
-        $this->assertSame($lock, $composer->getComposerLock());
-    }
 }
