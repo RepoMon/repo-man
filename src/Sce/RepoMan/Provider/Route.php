@@ -125,9 +125,9 @@ class Route implements ServiceProviderInterface
         $app->post('/dependencies/composer', function(Request $req) use ($app){
 
             $require = $req->get('require');
-            $url = $app->get('repository');
+            $repository = $app->get('repository');
 
-            $command = $app['command_factory']->create('dependencies/composer', $url);
+            $command = $app['command_factory']->create('dependencies/composer', $repository);
 
             $result = $command->execute(['require' => $require]);
 
