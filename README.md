@@ -14,6 +14,9 @@ Steps to follow
 * Add each repository's url to the service 
  
         curl -X POST /repositories -d url="repository url"
+* List the repositories being managed (as JSON)
+
+        curl -X GET /repositories
 * Update the local git repository checkouts from the remotes
 
         curl -X POST /repositories/update
@@ -40,7 +43,3 @@ Steps to follow
 4. **Configured Version** : version specified in composer.json
 5. **Last Updated** : installation date from the lock file.
 
-
-* List the repositories being managed (as JSON)
-
-        curl -X GET /repositories
