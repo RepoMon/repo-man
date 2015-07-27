@@ -85,7 +85,10 @@ class Repository
 
         // check if local repo exists
         if (!is_dir($this->directory . '/' . $this->name)) {
-            exec('git clone ' . $this->generateUrl(), $output);
+            exec('git clone ' . $this->generateUrl(), $output, $return);
+            if (0 !== $return){
+                throw new \Exception;
+            }
         }
 
         try {
@@ -288,9 +291,9 @@ class Repository
      *
      * @return array
      */
-    public function push()
+    public function push($name = null)
     {
-        return $this->command_line->exec('git push');
+        return $this->command_line->exec('git push origin ' . $name);
     }
 
     /**

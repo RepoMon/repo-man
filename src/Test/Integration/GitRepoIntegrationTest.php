@@ -93,6 +93,18 @@ class GitRepoIntegrationTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(is_dir($this->directory . '/'. $name));
     }
 
+    public function testUpdateCanBeRunMultipleTimes()
+    {
+        $this->givenACheckout();
+
+        $parts = explode('/', $this->url);
+        $name = array_pop($parts);
+
+        $this->assertTrue(is_dir($this->directory . '/'. $name));
+
+        $this->git_repo->update();
+    }
+
     public function testListLocalBranches()
     {
         $this->givenACheckout();

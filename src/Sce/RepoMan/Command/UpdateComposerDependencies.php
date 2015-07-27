@@ -35,9 +35,7 @@ class UpdateComposerDependencies implements CommandInterface
      */
     public function execute($data)
     {
-        $success = $this->repository->update();
-
-        if (!$success) {
+        if (!$this->repository->update()) {
             return false;
         }
 
@@ -72,9 +70,7 @@ class UpdateComposerDependencies implements CommandInterface
         $this->repository->removeFile('composer.lock');
 
         // run composer install
-        if (!$this->command_line->exec('composer install')) {
-            return false;
-        }
+        $this->command_line->exec('composer install');
 
         // Add composer.json and composer.lock to git branch
         $this->repository->add('composer.json');
@@ -84,7 +80,7 @@ class UpdateComposerDependencies implements CommandInterface
         $this->repository->commit('Updates composer dependencies');
 
         // run git push origin $branch
-        $this->repository->push();
+        $this->repository->push($branch);
 
         return true;
     }

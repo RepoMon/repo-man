@@ -156,7 +156,7 @@ class AppIntegrationTest extends WebTestCase
         $this->client->request(
             'POST',
             '/dependencies/composer',
-            ['require' => json_encode(['lib/www' => 'v0.3.4']), 'url' => 'https://github.com/user/repo']
+            ['require' => json_encode(['lib/www' => 'v0.3.4']), 'repository' => 'https://github.com/user/repo']
         );
 
         $this->thenTheResponseIs500();

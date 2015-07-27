@@ -18,7 +18,7 @@ class CommandLine
 
     /**
      * @param $cmd string
-     * @return array
+     * @return array of output lines
      */
     public function exec($cmd)
     {
