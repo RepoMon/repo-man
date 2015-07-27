@@ -34,7 +34,11 @@ Steps to follow
         Library	  Version	Used By                                Configured Version	Last Updated
         SCEE/ABC  v1.0.0	https://github.com/SCEE/DEF:v1.2.2     1.*	                20/04/2015 11:40
 
-1 is the name of the library, 2 is the installed version, 3 is the service or bundle depending on this library, 4 is the version specified in composer.json, 5 is the installation date from the lock file.
+1. **Library** : name of the library
+2. **Version** : installed version of that library
+3. **Used By** : name and version of the service or bundle depending on this library 
+4. **Configured Version** : version specified in composer.json
+5. **Last Updated** : installation date from the lock file.
 
 
 * List the repositories being managed (as JSON)
