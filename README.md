@@ -28,7 +28,14 @@ Steps to follow
 
         curl -X GET /reports/dependency/composer -H "Accept: text/csv"
         
-or vist with your web browser
+        
+# Format of report
+        
+        Library	  Version	Used By                                Configured Version	Last Updated
+        SCEE/ABC  v1.0.0	https://github.com/SCEE/DEF:v1.2.2     1.*	                20/04/2015 11:40
+
+1 is the name of the library, 2 is the installed version, 3 is the service or bundle depending on this library, 4 is the version specified in composer.json, 5 is the installation date from the lock file.
+
 
 * List the repositories being managed (as JSON)
 
