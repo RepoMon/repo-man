@@ -36,6 +36,7 @@ class UpdateComposerDependencies implements CommandInterface
     public function execute($data)
     {
         if (!$this->repository->update()) {
+            var_dump(__LINE__);
             return false;
         }
 
@@ -48,6 +49,7 @@ class UpdateComposerDependencies implements CommandInterface
         $this->repository->checkout($branch);
 
         if (!$this->repository->hasFile('composer.json')){
+            var_dump(__LINE__);
             return false;
         }
 
@@ -55,6 +57,7 @@ class UpdateComposerDependencies implements CommandInterface
         $composer_json = json_decode($this->repository->getFile('composer.json'), 1);
 
         if (!is_array($composer_json)){
+            var_dump(__LINE__);
             return false;
         }
 
@@ -63,6 +66,8 @@ class UpdateComposerDependencies implements CommandInterface
         foreach($data['require'] as $library => $version) {
             $composer->setRequireVersion($library, $version);
         }
+
+        var_dump(__LINE__);
 
         // write the new composer config back to the file
         $this->repository->setFile('composer.json', json_encode($composer->getComposerJson()));
@@ -81,6 +86,7 @@ class UpdateComposerDependencies implements CommandInterface
 
         // run git push origin $branch
         $this->repository->push($branch);
+        var_dump(__LINE__);
 
         return true;
     }

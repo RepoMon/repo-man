@@ -130,9 +130,10 @@ class Route implements ServiceProviderInterface
             $repository = $req->get('repository');
 
             $app['logger']->addInfo("require = '$require' repository='$repository'");
+
             $command = $app['command_factory']->create('dependencies/composer', $repository);
 
-            $result = $command->execute(['require' => $require]);
+            $result = $command->execute(['require' => json_decode($require, true)]);
 
             if ($result) {
                 return new Response('Repository updated', 200);

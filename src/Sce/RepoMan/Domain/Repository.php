@@ -87,7 +87,7 @@ class Repository
         if (!is_dir($this->directory . '/' . $this->name)) {
             exec('git clone ' . $this->generateUrl(), $output, $return);
             if (0 !== $return){
-                throw new \Exception;
+                throw new \Exception("Could not clone {$this->url}");
             }
         }
 
@@ -97,6 +97,7 @@ class Repository
             $this->command_line->exec('git pull origin');
             return true;
         } catch (DirectoryNotFoundException $ex){
+            var_dump($ex->getMessage());
             return false;
         }
     }
