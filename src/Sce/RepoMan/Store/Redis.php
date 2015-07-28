@@ -133,6 +133,19 @@ class Redis implements StoreInterface
     }
 
     /**
+     * @param $host
+     * @return string
+     */
+    public function getToken($host)
+    {
+        try {
+            return $this->client->get($this->getTokenKey($host));
+        } catch (ServerException $ex) {
+            throw new UnavailableException($ex->getMessage());
+        }
+    }
+
+    /**
      * Create a new Repository instance, pass it the token to use if one is available
      *
      * @param $url string
