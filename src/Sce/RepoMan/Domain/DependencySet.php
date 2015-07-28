@@ -6,10 +6,9 @@ use Sce\RepoMan\Domain\Repository;
 use Exception;
 
 /**
- * Class Composer
  * @package Sce\RepoMan\Domain
  */
-class Composer
+class DependencySet
 {
     /**
      * @var Repository

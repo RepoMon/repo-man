@@ -112,7 +112,7 @@ class Route implements ServiceProviderInterface
             $negotiator = new FormatNegotiator();
             $type = $negotiator->getBest($accept, $priorities);
             $value = $type ? $type->getValue() : '';
-            $view = $app['view_factory']->create('dependency/composer', $value);
+            $view = $app['view_factory']->create('dependency/report', $value);
 
             $body = $view->render($result);
 

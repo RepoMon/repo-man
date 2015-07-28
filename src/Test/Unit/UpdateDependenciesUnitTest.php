@@ -16,14 +16,14 @@ class UpdateDependenciesUnitTest extends PHPUnit_Framework_TestCase
     private $mock_repository;
 
     /**
-     * @var \Sce\RepoMan\Domain\Composer
+     * @var \Sce\RepoMan\Domain\DependencySet
      */
     private $mock_composer;
 
     public function testExecuteReturnsFalseIfUpdateFails()
     {
         $this->givenAMockRepository();
-        $this->givenAMockComposer();
+        $this->givenAMockDependencySet();
 
         $this->mock_repository->expects($this->once())
             ->method('update')
@@ -43,7 +43,7 @@ class UpdateDependenciesUnitTest extends PHPUnit_Framework_TestCase
     public function testExecuteReturnsFalseIfComposerFilesAreMissing()
     {
         $this->givenAMockRepository();
-        $this->givenAMockComposer();
+        $this->givenAMockDependencySet();
 
         $this->mock_repository->expects($this->once())
             ->method('update')
@@ -66,7 +66,7 @@ class UpdateDependenciesUnitTest extends PHPUnit_Framework_TestCase
     public function testExecuteReturnsFalseIfComposerFilesIsNotJson()
     {
         $this->givenAMockRepository();
-        $this->givenAMockComposer();
+        $this->givenAMockDependencySet();
 
         $this->mock_repository->expects($this->once())
             ->method('update')
@@ -90,7 +90,7 @@ class UpdateDependenciesUnitTest extends PHPUnit_Framework_TestCase
     public function testExecute()
     {
         $this->givenAMockRepository();
-        $this->givenAMockComposer();
+        $this->givenAMockDependencySet();
 
         $latest_tag = 'v1.3.6';
         $new_branch = 'feature/update-' . $latest_tag;
@@ -131,9 +131,9 @@ class UpdateDependenciesUnitTest extends PHPUnit_Framework_TestCase
         );
     }
 
-    private function givenAMockComposer()
+    private function givenAMockDependencySet()
     {
-        $this->mock_composer = $this->getMockBuilder('Sce\RepoMan\Domain\Composer')
+        $this->mock_composer = $this->getMockBuilder('Sce\RepoMan\Domain\DependencySet')
             ->disableOriginalConstructor()
             ->getMock();
     }

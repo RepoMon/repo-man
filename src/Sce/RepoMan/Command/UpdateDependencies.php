@@ -1,6 +1,6 @@
 <?php namespace Sce\RepoMan\Command;
 
-use Sce\RepoMan\Domain\Composer;
+use Sce\RepoMan\Domain\DependencySet;
 use Sce\RepoMan\Domain\Repository;
 
 /**
@@ -19,11 +19,11 @@ class UpdateDependencies implements CommandInterface
     private $repository;
 
     /**
-     * @var Composer
+     * @var DependencySet
      */
     private $composer;
 
-    public function __construct(Repository $repository, Composer $composer)
+    public function __construct(Repository $repository, DependencySet $composer)
     {
         $this->repository = $repository;
         $this->composer = $composer;

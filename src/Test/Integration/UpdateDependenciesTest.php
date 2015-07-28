@@ -4,7 +4,7 @@ use Sce\RepoMan\Domain\Repository as GitRepo;
 use Sce\RepoMan\Command\UpdateDependencies;
 use Sce\RepoMan\Domain\CommandLine;
 use Sce\RepoMan\Command\CommandInterface;
-use Sce\RepoMan\Domain\Composer;
+use Sce\RepoMan\Domain\DependencySet;
 
 /**
  * @group integration
@@ -87,7 +87,7 @@ class UpdateDependenciesTest extends PHPUnit_Framework_TestCase
     protected function givenACommand()
     {
         $command_line = new CommandLine($this->git_repo->getCheckoutDirectory());
-        $composer = new Composer($this->git_repo, $command_line);
+        $composer = new DependencySet($this->git_repo, $command_line);
 
         $this->command = new UpdateDependencies(
             $this->git_repo,
