@@ -1,5 +1,8 @@
 <?php namespace Sce\RepoMan\Domain;
 
+use Sce\RepoMan\Exception\CommandExecutionException;
+use Sce\RepoMan\Exception\DirectoryNotFoundException;
+
 /**
  * @author timrodger
  * Date: 26/07/15

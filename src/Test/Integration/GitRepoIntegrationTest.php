@@ -324,7 +324,7 @@ class GitRepoIntegrationTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Sce\RepoMan\Domain\CommandExecutionException
+     * @expectedException \Sce\RepoMan\Exception\CommandExecutionException
      */
     public function testCommitOnUnchangedRepoThrowsException()
     {

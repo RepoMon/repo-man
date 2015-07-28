@@ -1,12 +1,11 @@
 <?php namespace Sce\RepoMan\Command;
 
-use Sce\RepoMan\Domain\DependencySet;
 use Sce\RepoMan\Domain\Repository;
 
 /**
  * Update the dependencies of a repository
  *
- *  Branches from master (always?)
+ *  Branches from latest tag
  *  Installs the updates
  *  Commits changes
  *  Pushes new branch to origin
@@ -43,7 +42,7 @@ class DependencyUpdater implements CommandInterface
         $this->repository->getDependencySet()->setRequiredVersions($data['require']);
 
         // run git commit
-        $this->repository->commit('Updates composer dependencies');
+        $this->repository->commit('Updates dependencies');
 
         // run git push origin $branch
         $this->repository->push($branch);

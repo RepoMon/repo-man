@@ -4,6 +4,8 @@ use Sce\RepoMan\Domain\CommandLine;
 use Sce\RepoMan\Domain\ComposerConfig;
 use Sce\RepoMan\Domain\Repository;
 use Exception;
+use Sce\RepoMan\Exception\FileNotFoundException;
+use Sce\RepoMan\Exception\InvalidFileContentsException;
 
 /**
  * @todo rename ComposerDependencySet

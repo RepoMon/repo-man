@@ -38,7 +38,7 @@ class DependencyUpdaterUnitTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Sce\RepoMan\Domain\FileNotFoundException
+     * @expectedException Sce\RepoMan\Exception\FileNotFoundException
      */
     public function testExecuteReturnsFalseIfComposerFilesAreMissing()
     {
@@ -51,7 +51,7 @@ class DependencyUpdaterUnitTest extends PHPUnit_Framework_TestCase
 
         $this->mock_dependency_set->expects($this->once())
             ->method('setRequiredVersions')
-            ->will($this->throwException(new \Sce\RepoMan\Domain\FileNotFoundException()));
+            ->will($this->throwException(new \Sce\RepoMan\Exception\FileNotFoundException()));
 
         $this->givenACommand();
 

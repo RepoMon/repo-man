@@ -1,4 +1,5 @@
 <?php namespace Sce\RepoMan\Domain;
+use Sce\RepoMan\Exception\DirectoryNotFoundException;
 
 /**
  * Represents a git repository
