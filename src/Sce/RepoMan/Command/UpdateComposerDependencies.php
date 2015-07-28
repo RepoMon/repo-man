@@ -73,7 +73,7 @@ class UpdateComposerDependencies implements CommandInterface
         $this->repository->removeFile('composer.lock');
 
         // run composer install
-        $this->command_line->exec('composer install');
+        $this->command_line->exec('composer install  --prefer-dist --no-scripts');
 
         // Add composer.json and composer.lock to git branch
         $this->repository->add('composer.json');
