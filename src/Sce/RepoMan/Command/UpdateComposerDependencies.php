@@ -1,7 +1,6 @@
 <?php namespace Sce\RepoMan\Command;
 
-use Sce\RepoMan\Domain\CommandLine;
-use Sce\RepoMan\Domain\ComposerConfig;
+use Sce\RepoMan\Domain\Composer;
 use Sce\RepoMan\Domain\Repository;
 
 /**
@@ -20,14 +19,14 @@ class UpdateComposerDependencies implements CommandInterface
     private $repository;
 
     /**
-     * @var CommandLine
+     * @var Composer
      */
-    private $command_line;
+    private $composer;
 
-    public function __construct(Repository $repository, CommandLine $command_line)
+    public function __construct(Repository $repository, Composer $composer)
     {
         $this->repository = $repository;
-        $this->command_line = $command_line;
+        $this->composer = $composer;
     }
 
     /**
@@ -47,33 +46,7 @@ class UpdateComposerDependencies implements CommandInterface
 
         $this->repository->checkout($branch);
 
-        if (!$this->repository->hasFile('composer.json')){
-            return false;
-        }
-
-        // create a composer object from the files in repository
-        $composer_json = json_decode($this->repository->getFile('composer.json'), 1);
-
-        if (!is_array($composer_json)){
-            return false;
-        }
-
-        $composer = new ComposerConfig($composer_json, []);
-
-        foreach($data['require'] as $library => $version) {
-            $composer->setRequireVersion($library, $version);
-        }
-
-        // write the new composer config back to the file
-        $this->repository->setFile(
-            'composer.json',
-            json_encode($composer->getComposerJson(), JSON_PRETTY_PRINT)
-        );
-
-        $this->repository->removeFile('composer.lock');
-
-        // run composer install
-        $this->command_line->exec('composer install  --prefer-dist --no-scripts');
+        $this->composer->setRequiredVersions($data['require']);
 
         // Add composer.json and composer.lock to git branch
         $this->repository->add('composer.json');

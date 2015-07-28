@@ -1,6 +1,7 @@
 <?php
 
 use Sce\RepoMan\Command\UpdateComposerDependencies;
+use Sce\RepoMan\Domain\FileNotFoundException;
 
 /**
  * @group unit
@@ -15,14 +16,14 @@ class UpdateComposerDependenciesUnitTest extends PHPUnit_Framework_TestCase
     private $mock_repository;
 
     /**
-     * @var \Sce\RepoMan\Domain\CommandLine
+     * @var \Sce\RepoMan\Domain\Composer
      */
-    private $mock_command_line;
+    private $mock_composer;
 
     public function testExecuteReturnsFalseIfUpdateFails()
     {
         $this->givenAMockRepository();
-        $this->givenAMockCommandLine();
+        $this->givenAMockComposer();
 
         $this->mock_repository->expects($this->once())
             ->method('update')
@@ -30,37 +31,42 @@ class UpdateComposerDependenciesUnitTest extends PHPUnit_Framework_TestCase
 
         $this->givenACommand();
 
-        $data = [];
+        $data = ['require' => []];
 
         $result = $this->command->execute($data);
         $this->assertFalse($result);
     }
 
+    /**
+     * @expectedException Sce\RepoMan\Domain\FileNotFoundException
+     */
     public function testExecuteReturnsFalseIfComposerFilesAreMissing()
     {
         $this->givenAMockRepository();
-        $this->givenAMockCommandLine();
+        $this->givenAMockComposer();
 
         $this->mock_repository->expects($this->once())
             ->method('update')
             ->will($this->returnValue(true));
 
-        $this->mock_repository->expects($this->any())
-            ->method('hasFile')
-            ->will($this->returnValue(false));
+        $this->mock_composer->expects($this->once())
+            ->method('setRequiredVersions')
+            ->will($this->throwException(new \Sce\RepoMan\Domain\FileNotFoundException()));
 
         $this->givenACommand();
 
-        $data = [];
+        $data = ['require' => []];
 
-        $result = $this->command->execute($data);
-        $this->assertFalse($result);
+        $this->command->execute($data);
     }
 
+    /**
+     * @expectedException \Exception
+     */
     public function testExecuteReturnsFalseIfComposerFilesIsNotJson()
     {
         $this->givenAMockRepository();
-        $this->givenAMockCommandLine();
+        $this->givenAMockComposer();
 
         $this->mock_repository->expects($this->once())
             ->method('update')
@@ -78,14 +84,13 @@ class UpdateComposerDependenciesUnitTest extends PHPUnit_Framework_TestCase
 
         $data = [];
 
-        $result = $this->command->execute($data);
-        $this->assertFalse($result);
+        $this->command->execute($data);
     }
 
     public function testExecute()
     {
         $this->givenAMockRepository();
-        $this->givenAMockCommandLine();
+        $this->givenAMockComposer();
 
         $latest_tag = 'v1.3.6';
         $new_branch = 'feature/update-' . $latest_tag;
@@ -106,27 +111,8 @@ class UpdateComposerDependenciesUnitTest extends PHPUnit_Framework_TestCase
             ->method('checkout')
             ->with($new_branch);
 
-        $json = json_encode(['require' => ['company/libx' => '1.0.0']]);
-
-        $this->mock_repository->expects($this->any())
-            ->method('hasFile')
-            ->will($this->returnValue(true));
-
-        $this->mock_repository->expects($this->any())
-            ->method('getFile')
-            ->will($this->returnValue($json));
-
-        $this->mock_repository->expects($this->once())
-            ->method('setFile')
-            ->with('composer.json', json_encode(['require' => ['company/libx' => '2.0.0']], JSON_PRETTY_PRINT));
-
-        $this->mock_repository->expects($this->once())
-            ->method('removeFile')
-            ->with('composer.lock');
-
-        $this->mock_command_line->expects($this->once())
-            ->method('exec')
-            ->will($this->returnValue(true));
+        $this->mock_composer->expects($this->once())
+            ->method('setRequiredVersions');
 
         $this->givenACommand();
 
@@ -141,16 +127,17 @@ class UpdateComposerDependenciesUnitTest extends PHPUnit_Framework_TestCase
     {
         $this->command = new UpdateComposerDependencies(
             $this->mock_repository,
-            $this->mock_command_line
+            $this->mock_composer
         );
     }
 
-    private function givenAMockCommandLine()
+    private function givenAMockComposer()
     {
-        $this->mock_command_line = $this->getMockBuilder('Sce\RepoMan\Domain\CommandLine')
+        $this->mock_composer = $this->getMockBuilder('Sce\RepoMan\Domain\Composer')
             ->disableOriginalConstructor()
             ->getMock();
     }
+
 
     private function givenAMockRepository()
     {
