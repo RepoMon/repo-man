@@ -5,6 +5,9 @@
  */
 interface DependencySetInterface
 {
+
+    public function setGitHubToken($token);
+
     public function setRequiredVersions(array $versions);
 
 }

@@ -34,6 +34,14 @@ class DependencySet implements DependencySetInterface
     }
 
     /**
+     * @param $token
+     */
+    public function setGitHubToken($token)
+    {
+        $this->command_line->exec("composer config -g github-oauth.github.com $token");
+    }
+
+    /**
      * Update the composer config for the repository to use the parameter versions
      *
      * @param array $versions

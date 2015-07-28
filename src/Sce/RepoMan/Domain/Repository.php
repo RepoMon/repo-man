@@ -53,7 +53,14 @@ class Repository
     public function getDependencySet()
     {
         $command_line = new CommandLine($this->getCheckoutDirectory());
-        return new DependencySet($this, $command_line);
+
+        $dependency_set = new DependencySet($this, $command_line);
+        
+        // assumes the repositories token is for git hub
+        if (!is_null($this->token)) {
+            $dependency_set->setGitHubToken($this->token);
+        }
+        return $dependency_set;
     }
 
     /**
@@ -177,7 +184,7 @@ class Repository
     }
 
     /**
-     * Return the lasted tag name according to semantic versioning format
+     * Return the lasted tag name according to semantic version format
      * Ignore tags with invalid semantic version names
      *
      * @return string
