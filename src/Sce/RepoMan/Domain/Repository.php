@@ -47,6 +47,15 @@ class Repository
     }
 
     /**
+     * @return DependencySet
+     */
+    public function getDependencySet()
+    {
+        $command_line = new CommandLine($this->getCheckoutDirectory());
+        return new DependencySet($this, $command_line);
+    }
+
+    /**
      * Return the director location of the checkout
      *
      * @return string

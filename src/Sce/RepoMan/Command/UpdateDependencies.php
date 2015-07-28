@@ -18,15 +18,9 @@ class UpdateDependencies implements CommandInterface
      */
     private $repository;
 
-    /**
-     * @var DependencySet
-     */
-    private $composer;
-
-    public function __construct(Repository $repository, DependencySet $composer)
+    public function __construct(Repository $repository)
     {
         $this->repository = $repository;
-        $this->composer = $composer;
     }
 
     /**
@@ -46,11 +40,7 @@ class UpdateDependencies implements CommandInterface
 
         $this->repository->checkout($branch);
 
-        $this->composer->setRequiredVersions($data['require']);
-
-        // Add composer.json and composer.lock to git branch
-        $this->repository->add('composer.json');
-        $this->repository->add('composer.lock');
+        $this->repository->getDependencySet()->setRequiredVersions($data['require']);
 
         // run git commit
         $this->repository->commit('Updates composer dependencies');

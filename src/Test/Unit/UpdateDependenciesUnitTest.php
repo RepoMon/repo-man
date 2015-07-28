@@ -18,12 +18,12 @@ class UpdateDependenciesUnitTest extends PHPUnit_Framework_TestCase
     /**
      * @var \Sce\RepoMan\Domain\DependencySet
      */
-    private $mock_composer;
+    private $mock_dependency_set;
 
     public function testExecuteReturnsFalseIfUpdateFails()
     {
-        $this->givenAMockRepository();
         $this->givenAMockDependencySet();
+        $this->givenAMockRepository();
 
         $this->mock_repository->expects($this->once())
             ->method('update')
@@ -42,14 +42,14 @@ class UpdateDependenciesUnitTest extends PHPUnit_Framework_TestCase
      */
     public function testExecuteReturnsFalseIfComposerFilesAreMissing()
     {
-        $this->givenAMockRepository();
         $this->givenAMockDependencySet();
+        $this->givenAMockRepository();
 
         $this->mock_repository->expects($this->once())
             ->method('update')
             ->will($this->returnValue(true));
 
-        $this->mock_composer->expects($this->once())
+        $this->mock_dependency_set->expects($this->once())
             ->method('setRequiredVersions')
             ->will($this->throwException(new \Sce\RepoMan\Domain\FileNotFoundException()));
 
@@ -63,10 +63,10 @@ class UpdateDependenciesUnitTest extends PHPUnit_Framework_TestCase
     /**
      * @expectedException \Exception
      */
-    public function testExecuteReturnsFalseIfComposerFilesIsNotJson()
+    public function testExecuteReturnsFalseIfComposerFileIsNotJson()
     {
-        $this->givenAMockRepository();
         $this->givenAMockDependencySet();
+        $this->givenAMockRepository();
 
         $this->mock_repository->expects($this->once())
             ->method('update')
@@ -89,8 +89,8 @@ class UpdateDependenciesUnitTest extends PHPUnit_Framework_TestCase
 
     public function testExecute()
     {
-        $this->givenAMockRepository();
         $this->givenAMockDependencySet();
+        $this->givenAMockRepository();
 
         $latest_tag = 'v1.3.6';
         $new_branch = 'feature/update-' . $latest_tag;
@@ -111,7 +111,7 @@ class UpdateDependenciesUnitTest extends PHPUnit_Framework_TestCase
             ->method('checkout')
             ->with($new_branch);
 
-        $this->mock_composer->expects($this->once())
+        $this->mock_dependency_set->expects($this->once())
             ->method('setRequiredVersions');
 
         $this->givenACommand();
@@ -126,23 +126,25 @@ class UpdateDependenciesUnitTest extends PHPUnit_Framework_TestCase
     private function givenACommand()
     {
         $this->command = new UpdateDependencies(
-            $this->mock_repository,
-            $this->mock_composer
+            $this->mock_repository
         );
     }
 
     private function givenAMockDependencySet()
     {
-        $this->mock_composer = $this->getMockBuilder('Sce\RepoMan\Domain\DependencySet')
+        $this->mock_dependency_set = $this->getMockBuilder('Sce\RepoMan\Domain\DependencySet')
             ->disableOriginalConstructor()
             ->getMock();
     }
-
 
     private function givenAMockRepository()
     {
         $this->mock_repository = $this->getMockBuilder('Sce\RepoMan\Domain\Repository')
             ->disableOriginalConstructor()
             ->getMock();
+
+        $this->mock_repository->expects($this->any())
+            ->method('getDependencySet')
+            ->will($this->returnValue($this->mock_dependency_set));
     }
 }
