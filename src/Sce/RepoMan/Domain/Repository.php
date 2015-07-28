@@ -44,7 +44,7 @@ class Repository
         $parts = explode('/', $this->url);
         $this->name = array_pop($parts);
         $this->token = $token;
-        $this->command_line = new CommandLine($this->directory .'/' . $this->name);
+        $this->command_line = new CommandLine($this->getCheckoutDirectory());
     }
 
     /**
@@ -61,7 +61,7 @@ class Repository
      *
      * @return string
      */
-    public function getCheckoutDirectory()
+    private function getCheckoutDirectory()
     {
         return $this->directory .'/' . $this->name;
     }
