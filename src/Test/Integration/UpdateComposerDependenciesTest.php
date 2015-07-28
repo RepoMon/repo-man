@@ -7,6 +7,7 @@ use Sce\RepoMan\Command\CommandInterface;
 
 /**
  * @group integration
+ * @group filesystem
  * @author timrodger
  * Date: 27/07/15
  */
@@ -60,21 +61,19 @@ class UpdateComposerDependenciesTest extends PHPUnit_Framework_TestCase
         parent::setUp();
 
         $this->directory = TEMP_DIR;
-        //$this->url = $this->directory . '/Fixtures/' . $this->repo_name;
-
-        $this->url = 'https://github.com/timothy-r/testing';
+        $this->url = $this->directory . '/Fixtures/' . $this->repo_name;
 
         if (!is_dir($this->directory)) {
             mkdir($this->directory);
         }
 
-        //$this->createGitRepo();
+        $this->createGitRepo();
     }
 
     public function tearDown()
     {
         // don't use broken built in rmdir function
-        //exec("rm -rf " . $this->directory);
+        exec("rm -rf " . $this->directory);
 
         parent::tearDown();
     }

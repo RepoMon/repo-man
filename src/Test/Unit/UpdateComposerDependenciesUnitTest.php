@@ -118,7 +118,7 @@ class UpdateComposerDependenciesUnitTest extends PHPUnit_Framework_TestCase
 
         $this->mock_repository->expects($this->once())
             ->method('setFile')
-            ->with('composer.json', json_encode(['require' => ['company/libx' => '2.0.0']]));
+            ->with('composer.json', json_encode(['require' => ['company/libx' => '2.0.0']], JSON_PRETTY_PRINT));
 
         $this->mock_repository->expects($this->once())
             ->method('removeFile')
