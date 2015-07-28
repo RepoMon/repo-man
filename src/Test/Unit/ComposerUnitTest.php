@@ -1,6 +1,6 @@
 <?php
 
-use Sce\RepoMan\Domain\Composer;
+use Sce\RepoMan\Domain\ComposerConfig;
 
 /**
  * @group unit
@@ -15,7 +15,7 @@ class ComposerUnitTest extends PHPUnit_Framework_TestCase
         $config = [];
         $lock = [];
         $name = 'company/repo';
-        $composer = new Composer($config, $lock);
+        $composer = new ComposerConfig($config, $lock);
 
         $result = $composer->hasDependency($name);
 
@@ -28,7 +28,7 @@ class ComposerUnitTest extends PHPUnit_Framework_TestCase
         $config = ['require' => [$name => '1.0.0']];
         $lock = [];
 
-        $composer = new Composer($config, $lock);
+        $composer = new ComposerConfig($config, $lock);
 
         $result = $composer->hasDependency($name);
 
@@ -41,7 +41,7 @@ class ComposerUnitTest extends PHPUnit_Framework_TestCase
         $config = ['require-dev' => [$name => '1.0.0']];
         $lock = [];
 
-        $composer = new Composer($config, $lock);
+        $composer = new ComposerConfig($config, $lock);
 
         $result = $composer->hasDependency($name);
 
@@ -53,7 +53,7 @@ class ComposerUnitTest extends PHPUnit_Framework_TestCase
         $config = [];
         $lock = [];
         $name = 'company/repo';
-        $composer = new Composer($config, $lock);
+        $composer = new ComposerConfig($config, $lock);
 
         $result = $composer->getDependencyVersion($name);
 
@@ -66,7 +66,7 @@ class ComposerUnitTest extends PHPUnit_Framework_TestCase
         $name = 'company/repo';
         $version = '1.0.0';
         $config = ['require' => [$name => $version]];
-        $composer = new Composer($config, $lock);
+        $composer = new ComposerConfig($config, $lock);
 
         $result = $composer->getDependencyVersion($name);
 
@@ -79,7 +79,7 @@ class ComposerUnitTest extends PHPUnit_Framework_TestCase
         $name = 'company/repo';
         $version = '1.0.0';
         $config = ['require-dev' => [$name => $version]];
-        $composer = new Composer($config, $lock);
+        $composer = new ComposerConfig($config, $lock);
 
         $result = $composer->getDependencyVersion($name);
 
@@ -91,7 +91,7 @@ class ComposerUnitTest extends PHPUnit_Framework_TestCase
         $config = [];
         $lock = [];
         $name = 'company/repo';
-        $composer = new Composer($config, $lock);
+        $composer = new ComposerConfig($config, $lock);
 
         $result = $composer->getLockVersion($name);
 
@@ -107,7 +107,7 @@ class ComposerUnitTest extends PHPUnit_Framework_TestCase
             ['name' => $name, 'version' => $version, 'time' => "2015-07-10 06:54:46"]
         ]];
 
-        $composer = new Composer($config, $lock);
+        $composer = new ComposerConfig($config, $lock);
 
         $result = $composer->getLockVersion($name);
 
@@ -123,7 +123,7 @@ class ComposerUnitTest extends PHPUnit_Framework_TestCase
             ['name' => $name, 'version' => $version, 'time' => "2015-07-10 06:54:46"]
         ]];
 
-        $composer = new Composer($config, $lock);
+        $composer = new ComposerConfig($config, $lock);
 
         $result = $composer->getLockVersion($name);
 
@@ -140,7 +140,7 @@ class ComposerUnitTest extends PHPUnit_Framework_TestCase
             ['name' => $name, 'version' => $version, 'time' => $time]
         ]];
 
-        $composer = new Composer($config, $lock);
+        $composer = new ComposerConfig($config, $lock);
 
         $result = $composer->getLockDate($name);
 
@@ -153,7 +153,7 @@ class ComposerUnitTest extends PHPUnit_Framework_TestCase
         $name = 'company/repo';
         $version = '1.0.0';
         $config = ['require' => [$name => $version]];
-        $composer = new Composer($config, $lock);
+        $composer = new ComposerConfig($config, $lock);
 
         $new_version = '2.8.2';
         $composer->setRequireVersion($name, $new_version);
@@ -168,7 +168,7 @@ class ComposerUnitTest extends PHPUnit_Framework_TestCase
         $lock = [];
         $name = 'company/repo';
         $config = [];
-        $composer = new Composer($config, $lock);
+        $composer = new ComposerConfig($config, $lock);
 
         $new_version = '2.8.2';
         $composer->setRequireVersion($name, $new_version);
@@ -184,7 +184,7 @@ class ComposerUnitTest extends PHPUnit_Framework_TestCase
         $name = 'company/repo';
         $version = '1.0.0';
         $config = ['require' => [$name => $version]];
-        $composer = new Composer($config, $lock);
+        $composer = new ComposerConfig($config, $lock);
 
         $new_name = 'company-a/repo-x';
         $new_version = '2.8.2';
@@ -204,7 +204,7 @@ class ComposerUnitTest extends PHPUnit_Framework_TestCase
         $name = 'company/repo';
         $version = '1.0.0';
         $config = ['require-dev' => [$name => $version]];
-        $composer = new Composer($config, $lock);
+        $composer = new ComposerConfig($config, $lock);
 
         $new_version = '2.8.2';
         $composer->setRequireDevVersion($name, $new_version);
@@ -219,7 +219,7 @@ class ComposerUnitTest extends PHPUnit_Framework_TestCase
         $lock = [];
         $name = 'company/repo';
         $config = [];
-        $composer = new Composer($config, $lock);
+        $composer = new ComposerConfig($config, $lock);
 
         $new_version = '2.8.2';
         $composer->setRequireDevVersion($name, $new_version);
@@ -235,7 +235,7 @@ class ComposerUnitTest extends PHPUnit_Framework_TestCase
         $name = 'company/repo';
         $version = '1.0.0';
         $config = ['require-dev' => [$name => $version]];
-        $composer = new Composer($config, $lock);
+        $composer = new ComposerConfig($config, $lock);
 
         $new_name = 'company-a/repo-x';
         $new_version = '2.8.2';
@@ -253,7 +253,7 @@ class ComposerUnitTest extends PHPUnit_Framework_TestCase
         $name = 'company/repo';
         $version = '1.0.0';
         $config = ['require-dev' => [$name => $version]];
-        $composer = new Composer($config, $lock);
+        $composer = new ComposerConfig($config, $lock);
 
         $this->assertSame($config, $composer->getComposerJson());
     }

@@ -1,7 +1,7 @@
 <?php namespace Sce\RepoMan\Command;
 
 use Sce\RepoMan\Domain\CommandLine;
-use Sce\RepoMan\Domain\Composer;
+use Sce\RepoMan\Domain\ComposerConfig;
 use Sce\RepoMan\Domain\Repository;
 
 /**
@@ -58,7 +58,7 @@ class UpdateComposerDependencies implements CommandInterface
             return false;
         }
 
-        $composer = new Composer($composer_json, []);
+        $composer = new ComposerConfig($composer_json, []);
 
         foreach($data['require'] as $library => $version) {
             $composer->setRequireVersion($library, $version);

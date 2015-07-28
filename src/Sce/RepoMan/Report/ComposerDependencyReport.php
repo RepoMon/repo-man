@@ -1,7 +1,7 @@
 <?php namespace Sce\RepoMan\Report;
 
 use Sce\RepoMan\Store\StoreInterface;
-use Sce\RepoMan\Domain\Composer;
+use Sce\RepoMan\Domain\ComposerConfig;
 
 /**
  * @author timrodger
@@ -36,7 +36,7 @@ class ComposerDependencyReport implements ReportInterface
             $composer_json = $repository->getFile('composer.json');
             $composer_lock = $repository->getFile('composer.lock');
 
-            $composer = new Composer(json_decode($composer_json, true), json_decode($composer_lock, true));
+            $composer = new ComposerConfig(json_decode($composer_json, true), json_decode($composer_lock, true));
 
             $lock_dependencies = $composer->getLockDependencies();
 
