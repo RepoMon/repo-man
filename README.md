@@ -11,12 +11,15 @@ Steps to follow
 * Add your authentication token for a git repository host to the service (if required to access its repositories)
 
         curl -X POST /tokens "host name" "token string"
+        
 * Add each repository's url to the service 
  
         curl -X POST /repositories -d url="repository url"
+
 * List the repositories being managed (as JSON)
 
         curl -X GET /repositories
+
 * Update the local git repository checkouts from the remotes
 
         curl -X POST /repositories/update
@@ -24,9 +27,11 @@ Steps to follow
 * GET the report on composer dependencies (default content-type is application/json)
 
         curl -X GET /reports/dependency/composer
+        
 * GET a HTML representation of the report
         
         curl -X GET /reports/dependency/composer -H "Accept: text/html"
+        
 * GET a CSV representation of the report
 
         curl -X GET /reports/dependency/composer -H "Accept: text/csv"
@@ -34,8 +39,9 @@ Steps to follow
         
 # Format of report
         
-        Library	  Version	Used By                                Configured Version	Last Updated
+        Library	  Version	Used By                                Configured Version	 Last Updated
         SCEE/ABC  v1.0.0	https://github.com/SCEE/DEF:v1.2.2     1.*	                20/04/2015 11:40
+
 
 1. **Library** : name of the library
 2. **Version** : installed version of that library
@@ -43,3 +49,9 @@ Steps to follow
 4. **Configured Version** : version specified in composer.json
 5. **Last Updated** : installation date from the lock file.
 
+
+# Composer update dependencies tool
+
+Update 1 or more required libraries in a repositories composer config. Require parameter is a json object with the key equal to the library name and the value equal to the version to update to.
+
+        curl -X POST /dependencies/composer -d repository='url' -d require='{"lib/name":"version"}'

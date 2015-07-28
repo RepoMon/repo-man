@@ -1,9 +1,7 @@
 <?php namespace Sce\RepoMan\Domain;
 
 /**
- * Class GitRepo
- * @package Sce\Repo
- * Represents a git repo
+ * Represents a git repository
  */
 class Repository
 {
@@ -29,6 +27,11 @@ class Repository
     private $token;
 
     /**
+     * @var Commandline
+     */
+    private $command_line;
+
+    /**
      * @param $url string location of remote repo
      * @param $directory string directory location to clone repo into
      * @param null $token authentication token
@@ -40,6 +43,17 @@ class Repository
         $parts = explode('/', $this->url);
         $this->name = array_pop($parts);
         $this->token = $token;
+        $this->command_line = new CommandLine($this->directory .'/' . $this->name);
+    }
+
+    /**
+     * Return the director location of the checkout
+     *
+     * @return string
+     */
+    public function getCheckoutDirectory()
+    {
+        return $this->directory .'/' . $this->name;
     }
 
     /**
@@ -71,18 +85,23 @@ class Repository
 
         // check if local repo exists
         if (!is_dir($this->directory . '/' . $this->name)) {
-            exec('git clone ' . $this->generateUrl(), $output);
+            exec('git clone ' . $this->generateUrl(), $output, $return);
+            if (0 !== $return){
+                throw new \Exception("Could not clone {$this->url}");
+            }
         }
 
         try {
-            $this->execGitCommand('git remote update');
-            $this->execGitCommand('git fetch --tags origin');
-            $this->execGitCommand('git pull origin');
+            $this->command_line->exec('git remote update');
+            $this->command_line->exec('git fetch --tags origin');
+            $this->command_line->exec('git pull origin');
             return true;
-        } catch (NoDirectoryException $ex){
+        } catch (DirectoryNotFoundException $ex){
+            var_dump($ex->getMessage());
             return false;
         }
     }
+
     /**
      * return a list of branch names for the local repo
      *
@@ -91,12 +110,12 @@ class Repository
     public function listLocalBranches()
     {
         try {
-            $branches = $this->execGitCommand('git branch');
+            $branches = $this->command_line->exec('git branch');
 
             return array_map(function ($name) {
                 return trim($name, '* ');
             }, $branches);
-        } catch (NoDirectoryException $ex){
+        } catch (DirectoryNotFoundException $ex){
             return [];
         }
     }
@@ -116,7 +135,7 @@ class Repository
     public function listAllBranches()
     {
         try {
-            $branches = $this->execGitCommand('git branch -a');
+            $branches = $this->command_line->exec('git branch -a');
 
             $branches = array_map(function ($name) {
                 return trim($name, '* ');
@@ -133,7 +152,7 @@ class Repository
 
             return array_unique($branches);
 
-        } catch (NoDirectoryException $ex){
+        } catch (DirectoryNotFoundException $ex){
             return [];
         }
     }
@@ -144,7 +163,7 @@ class Repository
      */
     public function listTags()
     {
-        return $this->execGitCommand('git tag -l');
+        return $this->command_line->exec('git tag -l');
     }
 
     /**
@@ -165,7 +184,7 @@ class Repository
         }
 
         usort($versions, function($a, $b) { return $a->compare($b);});
-        return array_pop($versions);
+        return (string) array_pop($versions);
     }
 
     /**
@@ -174,7 +193,7 @@ class Repository
      */
     public function checkout($name)
     {
-
+        $this->command_line->exec("git checkout $name");
     }
 
     /**
@@ -183,7 +202,7 @@ class Repository
      */
     public function hasFile($name)
     {
-        return file_exists($this->directory . '/' . $this->name . '/' . $name);
+        return file_exists($this->getFilePath($name));
     }
 
     /**
@@ -193,17 +212,40 @@ class Repository
     public function getFile($name)
     {
         if ($this->hasFile($name)) {
-            return file_get_contents($this->directory . '/' . $this->name . '/' . $name);
+            return file_get_contents($this->getFilePath($name));
+        }
+    }
+
+    /**
+     * Write or overwrite file's contents
+     * @param $name
+     * @param $contents
+     */
+    public function setFile($name, $contents)
+    {
+        file_put_contents($this->getFilePath($name), $contents);
+    }
+
+    /**
+     * @param $name string
+     */
+    public function removeFile($name)
+    {
+        $file = $this->getFilePath($name);
+
+        if (is_file($file)) {
+            unlink($file);
         }
     }
 
     /**
      * Create a new branch
-     * @param $name
+     * @param $name string
+     * @param $from mixed
      */
-    public function branch($name)
+    public function branch($name, $from = null)
     {
-
+        $this->command_line->exec("git branch $name $from");
     }
 
     /**
@@ -222,17 +264,50 @@ class Repository
      */
     public function add($name)
     {
-
+        $file = $this->getFilePath($name);
+        $this->command_line->exec('git add ' . $file);
     }
 
-    public function commit()
+    /**
+     * Commit added files
+     */
+    public function commit($msg)
     {
-
+        $this->command_line->exec("git commit -m '$msg'");
     }
 
-    public function push()
+    /**
+     * Returns the raw output of lines
+     * It'd be more useful to return an array with each commit as a single element
+     *
+     * @return array
+     */
+    public function log()
     {
+        return $this->command_line->exec('git log');
+    }
 
+    /**
+     * Push commits to origin
+     *
+     * @return array
+     */
+    public function push($name = null)
+    {
+        return $this->command_line->exec('git push origin ' . $name);
+    }
+
+    /**
+     * @return array
+     */
+    public function status($silent = true)
+    {
+        $cmd = 'git status';
+        if ($silent) {
+            $cmd .= ' -s';
+        }
+
+        return $this->command_line->exec($cmd);
     }
 
     /**
@@ -243,7 +318,7 @@ class Repository
     {
         if (!is_null($this->token)){
             $parts = parse_url($this->url);
-            // format is http://token@host/path for github at least
+            // format is http://token@host/path for git hub at least
             $url = sprintf('%s://%s@%s%s', $parts['scheme'], $this->token, $parts['host'], $parts['path']);
             return $url;
         }
@@ -252,18 +327,11 @@ class Repository
     }
 
     /**
-     * @param $cmd string
-     * @return array
+     * @param $name string
+     * @return string
      */
-    private function execGitCommand($cmd)
+    private function getFilePath($name)
     {
-        if (is_dir($this->directory . '/' . $this->name)) {
-            chdir($this->directory . '/' . $this->name);
-            exec($cmd, $output);
-            return $output;
-        } else {
-            throw new NoDirectoryException();
-        }
+        return $this->directory . '/' . $this->name . '/' . $name;
     }
-
 }

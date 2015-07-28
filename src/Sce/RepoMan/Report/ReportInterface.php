@@ -1,4 +1,5 @@
-<?php namespace Sce\RepoMan\Report; 
+<?php namespace Sce\RepoMan\Report;
+
 /**
  * @author timrodger
  * Date: 20/07/15

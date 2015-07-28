@@ -120,5 +120,26 @@ class Route implements ServiceProviderInterface
             return new Response($body, 200, ['Content-Type' => $type]);
 
         });
+
+        /**
+         * Add an endpoint to update a repositories dependencies
+         */
+        $app->post('/dependencies/composer', function(Request $req) use ($app){
+
+            $require = $req->get('require');
+            $repository = $req->get('repository');
+
+            $app['logger']->addInfo("require = '$require' repository='$repository'");
+
+            $command = $app['command_factory']->create('dependencies/composer', $repository);
+
+            $result = $command->execute(['require' => json_decode($require, true)]);
+
+            if ($result) {
+                return new Response('Repository updated', 200);
+            } else {
+                return new Response('Executing command failed', 500);
+            }
+        });
     }
 }

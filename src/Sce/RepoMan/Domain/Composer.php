@@ -56,6 +56,30 @@ class Composer
     }
 
     /**
+     * @param $name string name of dependency
+     * @param $version string version value
+     */
+    public function setRequireVersion($name, $version)
+    {
+        if (!isset($this->config['require'])) {
+            $this->config['require'] = [];
+        }
+        $this->config['require'][$name] = $version;
+    }
+
+    /**
+     * @param $name string name of dependency
+     * @param $version string version value
+     */
+    public function setRequireDevVersion($name, $version)
+    {
+        if (!isset($this->config['require-dev'])) {
+            $this->config['require-dev'] = [];
+        }
+        $this->config['require-dev'][$name] = $version;
+    }
+
+    /**
      * @param $name
      * @return mixed
      */
@@ -124,5 +148,13 @@ class Composer
         }
 
         return $dependencies;
+    }
+
+    /**
+     * @return array
+     */
+    public function getComposerJson()
+    {
+        return $this->config;
     }
 }

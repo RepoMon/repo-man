@@ -30,6 +30,15 @@ class Memory implements StoreInterface
         $this->data []= $url;
     }
 
+    public function get($url)
+    {
+        if (in_array($url, $this->data)){
+            return new Repository($url, $this->config->getRepoDir());
+        } else {
+            throw new UnavailableException;
+        }
+    }
+
     /**
      * Return the template contents for $path
      * @param $path
