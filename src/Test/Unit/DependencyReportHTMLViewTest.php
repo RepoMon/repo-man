@@ -1,6 +1,6 @@
 <?php
 
-use Sce\RepoMan\View\ComposerDependencyReportHTMLView;
+use Sce\RepoMan\View\DependencyReportHTMLView;
 
 /**
  * @group unit
@@ -16,7 +16,7 @@ class ComposerDependencyReportHTMLViewTest extends PHPUnit_Framework_TestCase
 
     public function testRenderReturnsHeaderForNoData()
     {
-        $view = new ComposerDependencyReportHTMLView();
+        $view = new DependencyReportHTMLView();
         $data = [];
         $body = $view->render($data);
 
@@ -25,7 +25,7 @@ class ComposerDependencyReportHTMLViewTest extends PHPUnit_Framework_TestCase
 
     public function testRenderReturnsHTMLWithOneBlock()
     {
-        $view = new ComposerDependencyReportHTMLView();
+        $view = new DependencyReportHTMLView();
 
         $data = [];
         $data['user/repo-a'] = [];
@@ -48,7 +48,7 @@ class ComposerDependencyReportHTMLViewTest extends PHPUnit_Framework_TestCase
 
     public function testRenderReturnsHTMLWithTwoBlocks()
     {
-        $view = new ComposerDependencyReportHTMLView();
+        $view = new DependencyReportHTMLView();
 
         $data = [];
         $data['user/repo-a'] = [];

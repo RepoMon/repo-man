@@ -1,18 +1,18 @@
 <?php
 
-use Sce\RepoMan\View\ComposerDependencyReportJSONView;
+use Sce\RepoMan\View\DependencyReportJSONView;
 
 /**
  * @group unit
  * @author timrodger
  * Date: 22/07/15
  */
-class ComposerDependencyReportJSONViewTest extends PHPUnit_Framework_TestCase
+class DependencyReportJSONViewTest extends PHPUnit_Framework_TestCase
 {
 
     public function testRenderReturnsEmptyDocumentForNoData()
     {
-        $view = new ComposerDependencyReportJSONView();
+        $view = new DependencyReportJSONView();
         $data = [];
         $body = $view->render($data);
 
@@ -21,7 +21,7 @@ class ComposerDependencyReportJSONViewTest extends PHPUnit_Framework_TestCase
 
     public function testRenderReturnsJSONWithOneBlock()
     {
-        $view = new ComposerDependencyReportJSONView();
+        $view = new DependencyReportJSONView();
 
         $data = [];
         $data['user/repo-a'] = [];
@@ -38,7 +38,7 @@ class ComposerDependencyReportJSONViewTest extends PHPUnit_Framework_TestCase
 
     public function testRenderReturnsJSONWithTwoBlocks()
     {
-        $view = new ComposerDependencyReportJSONView();
+        $view = new DependencyReportJSONView();
 
         $data = [];
         $data['user/repo-a'] = [];
