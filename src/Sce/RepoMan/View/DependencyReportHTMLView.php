@@ -4,14 +4,14 @@
  * @author timrodger
  * Date: 22/07/15
  */
-class ComposerDependencyReportHTMLView implements ViewInterface
+class DependencyReportHTMLView implements ViewInterface
 {
     /**
      * @param $data
      */
     public function render($data)
     {
-        $helper = new ComposerDependencyViewHelper();
+        $helper = new DependencyViewHelper();
         $lines = $helper->formatDataAsLines($data);
         $headers = array_shift($lines);
 

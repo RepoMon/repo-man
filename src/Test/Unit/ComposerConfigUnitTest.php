@@ -7,7 +7,7 @@ use Sce\RepoMan\Domain\ComposerConfig;
  * @author timrodger
  * Date: 10/07/15
  */
-class ComposerUnitTest extends PHPUnit_Framework_TestCase
+class ComposerConfigUnitTest extends PHPUnit_Framework_TestCase
 {
 
     public function testHasDependencyReturnsFalseWhenItsNotThere()

@@ -1,7 +1,7 @@
 <?php
 
 use Sce\RepoMan\Domain\Repository as GitRepo;
-use Sce\RepoMan\Command\UpdateComposerDependencies;
+use Sce\RepoMan\Command\UpdateDependencies;
 use Sce\RepoMan\Domain\CommandLine;
 use Sce\RepoMan\Command\CommandInterface;
 use Sce\RepoMan\Domain\Composer;
@@ -12,7 +12,7 @@ use Sce\RepoMan\Domain\Composer;
  * @author timrodger
  * Date: 27/07/15
  */
-class UpdateComposerDependenciesTest extends PHPUnit_Framework_TestCase
+class UpdateDependenciesTest extends PHPUnit_Framework_TestCase
 {
     /**
      * name of file in repo
@@ -89,7 +89,7 @@ class UpdateComposerDependenciesTest extends PHPUnit_Framework_TestCase
         $command_line = new CommandLine($this->git_repo->getCheckoutDirectory());
         $composer = new Composer($this->git_repo, $command_line);
 
-        $this->command = new UpdateComposerDependencies(
+        $this->command = new UpdateDependencies(
             $this->git_repo,
             $composer
         );

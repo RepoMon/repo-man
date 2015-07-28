@@ -32,6 +32,8 @@ class Composer
     }
 
     /**
+     * Update the composer config for the repository to use the parameter versions
+     *
      * @param array $versions
      */
     public function setRequiredVersions(array $versions)

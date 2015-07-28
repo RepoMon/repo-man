@@ -4,14 +4,14 @@ use Sce\RepoMan\Domain\Composer;
 use Sce\RepoMan\Domain\Repository;
 
 /**
- * Update the dependencies of a composer configuration
+ * Update the dependencies of a repository
  *
  *  Branches from master (always?)
  *  Installs the updates
  *  Commits changes
  *  Pushes new branch to origin
  */
-class UpdateComposerDependencies implements CommandInterface
+class UpdateDependencies implements CommandInterface
 {
     /**
      * @var Repository

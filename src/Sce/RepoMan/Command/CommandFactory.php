@@ -29,10 +29,11 @@ class CommandFactory
     {
         switch ($type) {
 
-            case "dependencies/composer":
+            case "dependencies/update":
                 $repository = $this->store->get($repository_url);
                 $command_line = new CommandLine($repository->getCheckoutDirectory());
-                return new UpdateComposerDependencies($repository, $command_line);
+                
+                return new UpdateDependencies($repository, $command_line);
         }
     }
 }

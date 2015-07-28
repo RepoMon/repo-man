@@ -7,7 +7,7 @@ use Sce\RepoMan\Store\Redis as RedisStore;
  * @author timrodger
  * Date: 18/07/15
  */
-class GitStoreUnitTest extends PHPUnit_Framework_TestCase
+class RedisStoreUnitTest extends PHPUnit_Framework_TestCase
 {
 
     /**

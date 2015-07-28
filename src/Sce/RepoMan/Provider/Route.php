@@ -99,9 +99,9 @@ class Route implements ServiceProviderInterface
         /**
          * Generate a composer dependency report on the repositories
          */
-        $app->get('/reports/dependency/composer', function(Request $req) use ($app){
+        $app->get('/dependency/report', function(Request $req) use ($app) {
 
-            $report = $app['report_factory']->create('dependency/composer');
+            $report = $app['report_factory']->create('dependency/report');
 
             // respond with the report output
             $result = $report->generate();
@@ -124,14 +124,14 @@ class Route implements ServiceProviderInterface
         /**
          * Add an endpoint to update a repositories dependencies
          */
-        $app->post('/dependencies/composer', function(Request $req) use ($app){
+        $app->post('/dependencies', function(Request $req) use ($app) {
 
             $require = $req->get('require');
             $repository = $req->get('repository');
 
             $app['logger']->addInfo("require = '$require' repository='$repository'");
 
-            $command = $app['command_factory']->create('dependencies/composer', $repository);
+            $command = $app['command_factory']->create('dependencies/update', $repository);
 
             $result = $command->execute(['require' => json_decode($require, true)]);
 
