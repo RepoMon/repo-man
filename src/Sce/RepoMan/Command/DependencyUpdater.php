@@ -11,7 +11,7 @@ use Sce\RepoMan\Domain\Repository;
  *  Commits changes
  *  Pushes new branch to origin
  */
-class UpdateDependencies implements CommandInterface
+class DependencyUpdater implements CommandInterface
 {
     /**
      * @var Repository

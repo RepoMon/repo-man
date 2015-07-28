@@ -10,7 +10,7 @@ use Sce\RepoMan\Domain\ComposerConfig;
 class ComposerDependencyReport implements ReportInterface
 {
     /**
-     * @var \Sce\Repoman\Store\StoreInterface
+     * @var StoreInterface
      */
     private $store;
 

@@ -6,9 +6,10 @@ use Sce\RepoMan\Domain\Repository;
 use Exception;
 
 /**
+ * @todo rename ComposerDependencySet
  * @package Sce\RepoMan\Domain
  */
-class DependencySet
+class DependencySet implements DependencySetInterface
 {
     /**
      * @var Repository
@@ -45,7 +46,7 @@ class DependencySet
         $composer_json = json_decode($this->repository->getFile('composer.json'), 1);
 
         if (!is_array($composer_json)){
-            throw new Exception("'composer.json' is invalid");
+            throw new InvalidFileContentsException("'composer.json' is invalid");
         }
 
         $composer = new ComposerConfig($composer_json, []);

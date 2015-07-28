@@ -1,7 +1,7 @@
 <?php
 
 use Sce\RepoMan\Domain\Repository as GitRepo;
-use Sce\RepoMan\Command\UpdateDependencies;
+use Sce\RepoMan\Command\DependencyUpdater;
 use Sce\RepoMan\Domain\CommandLine;
 use Sce\RepoMan\Command\CommandInterface;
 use Sce\RepoMan\Domain\DependencySet;
@@ -12,7 +12,7 @@ use Sce\RepoMan\Domain\DependencySet;
  * @author timrodger
  * Date: 27/07/15
  */
-class UpdateDependenciesTest extends PHPUnit_Framework_TestCase
+class DependencyUpdaterTest extends PHPUnit_Framework_TestCase
 {
     /**
      * name of file in repo
@@ -86,12 +86,8 @@ class UpdateDependenciesTest extends PHPUnit_Framework_TestCase
 
     protected function givenACommand()
     {
-        $command_line = new CommandLine($this->git_repo->getCheckoutDirectory());
-        $composer = new DependencySet($this->git_repo, $command_line);
-
-        $this->command = new UpdateDependencies(
-            $this->git_repo,
-            $composer
+        $this->command = new DependencyUpdater(
+            $this->git_repo
         );
     }
 

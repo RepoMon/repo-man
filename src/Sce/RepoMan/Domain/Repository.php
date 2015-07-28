@@ -47,7 +47,7 @@ class Repository
     }
 
     /**
-     * @return DependencySet
+     * @return DependencySetInterface
      */
     public function getDependencySet()
     {

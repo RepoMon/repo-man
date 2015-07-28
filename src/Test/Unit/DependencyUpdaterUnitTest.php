@@ -1,6 +1,6 @@
 <?php
 
-use Sce\RepoMan\Command\UpdateDependencies;
+use Sce\RepoMan\Command\DependencyUpdater;
 use Sce\RepoMan\Domain\FileNotFoundException;
 
 /**
@@ -8,7 +8,7 @@ use Sce\RepoMan\Domain\FileNotFoundException;
  * @author timrodger
  * Date: 26/07/15
  */
-class UpdateDependenciesUnitTest extends PHPUnit_Framework_TestCase
+class DependencyUpdaterUnitTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var \Sce\RepoMan\Domain\Repository
@@ -125,7 +125,7 @@ class UpdateDependenciesUnitTest extends PHPUnit_Framework_TestCase
 
     private function givenACommand()
     {
-        $this->command = new UpdateDependencies(
+        $this->command = new DependencyUpdater(
             $this->mock_repository
         );
     }
