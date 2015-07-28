@@ -187,7 +187,7 @@ class Repository
         $versions = [];
 
         foreach ($this->listTags() as $tag) {
-            $version = new SemVer($tag);
+            $version = new SemanticVersion($tag);
             if ($version->isValid()){
                 $versions []= $version;
             }

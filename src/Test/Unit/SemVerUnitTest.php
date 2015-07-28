@@ -1,6 +1,6 @@
 <?php
 
-use Sce\RepoMan\Domain\SemVer;
+use Sce\RepoMan\Domain\SemanticVersion;
 
 /**
  * @group unit
@@ -29,7 +29,7 @@ class SemVerUnitTest extends PHPUnit_Framework_TestCase
      */
     public function testGetMajorVersion($value, $major, $minor, $patch)
     {
-        $sem_ver = new SemVer($value);
+        $sem_ver = new SemanticVersion($value);
         $this->assertSame($major, $sem_ver->getMajorVersion());
     }
 
@@ -42,7 +42,7 @@ class SemVerUnitTest extends PHPUnit_Framework_TestCase
      */
     public function testGetMinorVersion($value, $major, $minor, $patch)
     {
-        $sem_ver = new SemVer($value);
+        $sem_ver = new SemanticVersion($value);
         $this->assertSame($minor, $sem_ver->getMinorVersion());
     }
 
@@ -55,7 +55,7 @@ class SemVerUnitTest extends PHPUnit_Framework_TestCase
      */
     public function testGetPatchVersion($value, $major, $minor, $patch)
     {
-        $sem_ver = new SemVer($value);
+        $sem_ver = new SemanticVersion($value);
         $this->assertSame($patch, $sem_ver->getPatchVersion());
     }
 
@@ -75,7 +75,7 @@ class SemVerUnitTest extends PHPUnit_Framework_TestCase
      */
     public function testSemVerHandleInvalidInput($invalid)
     {
-        $sem_ver = new SemVer($invalid);
+        $sem_ver = new SemanticVersion($invalid);
         $this->assertFalse($sem_ver->isValid());
     }
 
@@ -85,7 +85,7 @@ class SemVerUnitTest extends PHPUnit_Framework_TestCase
      */
     public function testGetMajorVersionReturnsNullForInvalidInput($invalid)
     {
-        $sem_ver = new SemVer($invalid);
+        $sem_ver = new SemanticVersion($invalid);
         $this->assertNull($sem_ver->getMajorVersion());
     }
 
@@ -95,7 +95,7 @@ class SemVerUnitTest extends PHPUnit_Framework_TestCase
      */
     public function testGetMinorVersionReturnsNullForInvalidInput($invalid)
     {
-        $sem_ver = new SemVer($invalid);
+        $sem_ver = new SemanticVersion($invalid);
         $this->assertNull($sem_ver->getMinorVersion());
     }
 
@@ -105,7 +105,7 @@ class SemVerUnitTest extends PHPUnit_Framework_TestCase
      */
     public function testGetPatchVersionReturnsNullForInvalidInput($invalid)
     {
-        $sem_ver = new SemVer($invalid);
+        $sem_ver = new SemanticVersion($invalid);
         $this->assertNull($sem_ver->getPatchVersion());
     }
 
@@ -115,7 +115,7 @@ class SemVerUnitTest extends PHPUnit_Framework_TestCase
      */
     public function testToStringReturnsOriginalString($value)
     {
-        $sem_ver = new SemVer($value);
+        $sem_ver = new SemanticVersion($value);
         $this->assertSame($value, (string)$sem_ver);
     }
 
@@ -125,7 +125,7 @@ class SemVerUnitTest extends PHPUnit_Framework_TestCase
      */
     public function testCompareReturnsZeroForEqualVersions($version)
     {
-        $sem_ver = new SemVer($version);
+        $sem_ver = new SemanticVersion($version);
 
         $result = $sem_ver->compare($sem_ver);
         $this->assertSame(0, $result);
@@ -147,8 +147,8 @@ class SemVerUnitTest extends PHPUnit_Framework_TestCase
      */
     public function testCompareReturnsMinusOneForLowerVersion($version_a, $version_b)
     {
-        $sem_ver_a = new SemVer($version_a);
-        $sem_ver_b = new SemVer($version_b);
+        $sem_ver_a = new SemanticVersion($version_a);
+        $sem_ver_b = new SemanticVersion($version_b);
 
         $result = $sem_ver_a->compare($sem_ver_b);
         $this->assertSame(-1, $result);
@@ -172,8 +172,8 @@ class SemVerUnitTest extends PHPUnit_Framework_TestCase
      */
     public function testCompareReturnsOneForHigherVersion($version_a, $version_b)
     {
-        $sem_ver_a = new SemVer($version_a);
-        $sem_ver_b = new SemVer($version_b);
+        $sem_ver_a = new SemanticVersion($version_a);
+        $sem_ver_b = new SemanticVersion($version_b);
 
         $result = $sem_ver_a->compare($sem_ver_b);
         $this->assertSame(1, $result);
