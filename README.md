@@ -12,7 +12,7 @@ Steps to follow
 
         curl -X POST /tokens "host name" "token string"
         
-* Add each repository's url to the service 
+* Add each repository's url to the service, without the .git extension 
  
         curl -X POST /repositories -d url="repository url"
 
@@ -52,6 +52,10 @@ Steps to follow
 
 # Composer update dependencies tool
 
-Update 1 or more required libraries in a repositories composer config. Require parameter is a json object with the key equal to the library name and the value equal to the version to update to.
+Update 1 or more required libraries in a repositories composer config. 
+The require parameter is a json object with the key equal to the library name and the value equal to the version to update to.
+The repository parameter is the url of a configured repo without the .git extension
 
-        curl -X POST /dependencies/composer -d repository='url' -d require='{"lib/name":"version"}'
+        curl -X POST /dependencies/composer \
+            -d repository='https://host.net/company/lib' \
+            -d require='{"lib/name":"version"}'
