@@ -111,13 +111,14 @@ class Route implements ServiceProviderInterface
 
             $negotiator = new FormatNegotiator();
             $type = $negotiator->getBest($accept, $priorities);
-            $value = $type ? $type->getValue() : '';
+            $value = $type ? $type->getValue() : $priorities[0];
+
             $view = $app['view_factory']->create('dependency/report', $value);
 
             $body = $view->render($result);
 
             // format based on request accept header
-            return new Response($body, 200, ['Content-Type' => $type->getValue()]);
+            return new Response($body, 200, ['Content-Type' => $value]);
 
         });
 
