@@ -68,13 +68,13 @@ class DependencySet implements DependencySetInterface
         // write the new composer config back to the file
         $this->repository->setFile(
             'composer.json',
-            json_encode($composer->getComposerJson(), JSON_PRETTY_PRINT)
+            json_encode($composer->getComposerJson(), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)
         );
 
         $this->repository->removeFile('composer.lock');
 
         // run composer install
-        $this->command_line->exec('composer install  --prefer-dist --no-scripts');
+            $this->command_line->exec('composer install  --prefer-dist --no-scripts');
 
         // Add composer.json and composer.lock to git branch
         $this->repository->add('composer.json');
