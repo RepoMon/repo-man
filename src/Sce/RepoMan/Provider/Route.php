@@ -117,7 +117,7 @@ class Route implements ServiceProviderInterface
             $body = $view->render($result);
 
             // format based on request accept header
-            return new Response($body, 200, ['Content-Type' => $type]);
+            return new Response($body, 200, ['Content-Type' => $type->getValue()]);
 
         });
 

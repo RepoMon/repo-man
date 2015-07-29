@@ -91,6 +91,14 @@ class Repository
     }
 
     /**
+     * @return bool
+     */
+    public function isCheckedOut()
+    {
+        return is_dir($this->getCheckoutDirectory());
+    }
+
+    /**
      * Update the local repo from the remote
      * clones repo if it has not been checked out out yet
      * runs git remote update and git fetch --tags
@@ -101,7 +109,7 @@ class Repository
         chdir($this->directory);
 
         // check if local repo exists
-        if (!is_dir($this->directory . '/' . $this->name)) {
+        if (!$this->isCheckedOut()) {
             exec('git clone ' . $this->generateUrl(), $output, $return);
             if (0 !== $return){
                 throw new \Exception("Could not clone {$this->url}");
