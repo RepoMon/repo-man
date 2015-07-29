@@ -116,15 +116,8 @@ class Repository
             }
         }
 
-        try {
-            $this->command_line->exec('git remote update');
-            $this->command_line->exec('git fetch --tags origin');
-            $this->command_line->exec('git pull origin');
-            return true;
-        } catch (DirectoryNotFoundException $ex){
-            var_dump($ex->getMessage());
-            return false;
-        }
+        $this->command_line->exec('git remote update');
+        $this->command_line->exec('git fetch --tags origin');
     }
 
     /**

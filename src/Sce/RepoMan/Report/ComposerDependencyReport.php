@@ -32,6 +32,11 @@ class ComposerDependencyReport implements ReportInterface
         // get the repositories
         foreach ($this->store->getAll() as $repository) {
 
+            // if the repository is not checked out then do that now
+            if (!$repository->isCheckedout()){
+                $repository->update();
+            }
+
             // create a composer instance for each repository
             $composer_json = $repository->getFile('composer.json');
             $composer_lock = $repository->getFile('composer.lock');

@@ -56,7 +56,9 @@ class DependencySet implements DependencySetInterface
         $composer_json = json_decode($this->repository->getFile('composer.json'), 1);
 
         if (!is_array($composer_json)){
-            throw new InvalidFileContentsException("'composer.json' is invalid");
+            throw new InvalidFileContentsException(
+                sprintf("'composer.json' is invalid: %s", $this->repository->getFile('composer.json'))
+            );
         }
 
         $composer = new ComposerConfig($composer_json, []);
@@ -74,7 +76,7 @@ class DependencySet implements DependencySetInterface
         $this->repository->removeFile('composer.lock');
 
         // run composer install
-            $this->command_line->exec('composer install  --prefer-dist --no-scripts');
+        $this->command_line->exec('composer install  --prefer-dist --no-scripts');
 
         // Add composer.json and composer.lock to git branch
         $this->repository->add('composer.json');

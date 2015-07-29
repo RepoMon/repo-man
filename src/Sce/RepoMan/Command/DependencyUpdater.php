@@ -27,9 +27,7 @@ class DependencyUpdater implements CommandInterface
      */
     public function execute($data)
     {
-        if (!$this->repository->update()) {
-            return false;
-        }
+        $this->repository->update();
 
         // generate branch name from current tag name
         $latest_tag = $this->repository->getLatestTag();
