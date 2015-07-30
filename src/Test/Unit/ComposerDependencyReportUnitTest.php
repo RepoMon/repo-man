@@ -123,24 +123,26 @@ class ComposerDependencyReportUnitTest extends PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->repositories));
     }
 
-    private function givenAMockRepository($url, $config_json, $lock_json, $latest_tag)
+    private function givenAMockRepository($url, $config_json, $lock_json, $latest_tag, $checked_out = true)
     {
         $mock_repository = $this->getMockBuilder('Sce\RepoMan\Domain\Repository')
             ->disableOriginalConstructor()
             ->getMock();
 
         $mock_repository->expects($this->any())
+            ->method('isCheckedout')
+            ->will($this->returnValue($checked_out));
+
+        $mock_repository->expects($this->any())
             ->method('getUrl')
             ->will($this->returnValue($url));
 
-        $mock_repository->expects($this->at(0))
-            ->method('getFile')
-            ->with('composer.json')
-            ->will($this->returnValue($config_json));
-
         $mock_repository->expects($this->at(1))
             ->method('getFile')
-            ->with('composer.lock')
+            ->will($this->returnValue($config_json));
+
+        $mock_repository->expects($this->at(2))
+            ->method('getFile')
             ->will($this->returnValue($lock_json));
 
         $mock_repository->expects($this->any())
