@@ -68,6 +68,8 @@ class Route implements ServiceProviderInterface
             foreach($app['git_repo_store']->getAll() as $repository) {
                 if (!$repository->update()){
                     $result = false;
+                } else {
+                    $repository->checkout('master');
                 }
             }
 
