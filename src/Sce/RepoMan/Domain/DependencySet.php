@@ -1,18 +1,17 @@
-<?php namespace Sce\RepoMan\Command;
+<?php namespace Sce\RepoMan\Domain;
 
 use Sce\RepoMan\Domain\CommandLine;
-use Sce\RepoMan\Domain\Composer;
+use Sce\RepoMan\Domain\ComposerConfig;
 use Sce\RepoMan\Domain\Repository;
+use Exception;
+use Sce\RepoMan\Exception\FileNotFoundException;
+use Sce\RepoMan\Exception\InvalidFileContentsException;
 
 /**
- * Update the dependencies of a composer configuration
- *
- *  Branches from master (always?)
- *  Installs the updates
- *  Commits changes
- *  Pushes new branch to origin
+ * @todo rename ComposerDependencySet
+ * @package Sce\RepoMan\Domain
  */
-class UpdateComposerDependencies implements CommandInterface
+class DependencySet implements DependencySetInterface
 {
     /**
      * @var Repository
@@ -24,6 +23,10 @@ class UpdateComposerDependencies implements CommandInterface
      */
     private $command_line;
 
+    /**
+     * @param Repository  $repository
+     * @param CommandLine $command_line
+     */
     public function __construct(Repository $repository, CommandLine $command_line)
     {
         $this->repository = $repository;
@@ -31,43 +34,43 @@ class UpdateComposerDependencies implements CommandInterface
     }
 
     /**
-     * @param $data
+     * @param $token
      */
-    public function execute($data)
+    public function setGitHubToken($token)
     {
-        if (!$this->repository->update()) {
-            return false;
-        }
+        $this->command_line->exec("composer config -g github-oauth.github.com $token");
+    }
 
-        // generate branch name from current tag name
-        $latest_tag = $this->repository->getLatestTag();
-        $branch = 'feature/update-' . $latest_tag;
-
-        $this->repository->branch($branch, $latest_tag);
-
-        $this->repository->checkout($branch);
-
+    /**
+     * Update the composer config for the repository to use the parameter versions
+     *
+     * @param array $versions
+     */
+    public function setRequiredVersions(array $versions)
+    {
         if (!$this->repository->hasFile('composer.json')){
-            return false;
+            throw new FileNotFoundException("'composer.json not found'");
         }
 
         // create a composer object from the files in repository
         $composer_json = json_decode($this->repository->getFile('composer.json'), 1);
 
         if (!is_array($composer_json)){
-            return false;
+            throw new InvalidFileContentsException(
+                sprintf("'composer.json' is invalid: %s", $this->repository->getFile('composer.json'))
+            );
         }
 
-        $composer = new Composer($composer_json, []);
+        $composer = new ComposerConfig($composer_json, []);
 
-        foreach($data['require'] as $library => $version) {
+        foreach($versions as $library => $version) {
             $composer->setRequireVersion($library, $version);
         }
 
         // write the new composer config back to the file
         $this->repository->setFile(
             'composer.json',
-            json_encode($composer->getComposerJson(), JSON_PRETTY_PRINT)
+            json_encode($composer->getComposerJson(), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)
         );
 
         $this->repository->removeFile('composer.lock');
@@ -78,13 +81,5 @@ class UpdateComposerDependencies implements CommandInterface
         // Add composer.json and composer.lock to git branch
         $this->repository->add('composer.json');
         $this->repository->add('composer.lock');
-
-        // run git commit
-        $this->repository->commit('Updates composer dependencies');
-
-        // run git push origin $branch
-        $this->repository->push($branch);
-
-        return true;
     }
 }

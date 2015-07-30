@@ -26,15 +26,15 @@ Steps to follow
 
 * GET the report on composer dependencies (default content-type is application/json)
 
-        curl -X GET /reports/dependency/composer
+        curl -X GET /dependency/report
         
 * GET a HTML representation of the report
         
-        curl -X GET /reports/dependency/composer -H "Accept: text/html"
+        curl -X GET /dependency/report -H "Accept: text/html"
         
 * GET a CSV representation of the report
 
-        curl -X GET /reports/dependency/composer -H "Accept: text/csv"
+        curl -X GET /dependency/report -H "Accept: text/csv"
         
         
 # Format of report
@@ -56,6 +56,6 @@ Update 1 or more required libraries in a repositories composer config.
 The require parameter is a json object with the key equal to the library name and the value equal to the version to update to.
 The repository parameter is the url of a configured repo without the .git extension
 
-        curl -X POST /dependencies/composer \
+        curl -X POST /dependencies \
             -d repository='https://host.net/company/lib' \
             -d require='{"lib/name":"version"}'

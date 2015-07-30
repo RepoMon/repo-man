@@ -1,10 +1,9 @@
 <?php namespace Sce\RepoMan\View;
 
 /**
- * Class ComposerDependencyViewHelper
  * @package Sce\RepoMan\View
  */
-class ComposerDependencyViewHelper
+class DependencyViewHelper
 {
     /**
      * @param $data

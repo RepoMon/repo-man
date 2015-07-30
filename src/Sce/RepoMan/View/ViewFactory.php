@@ -1,7 +1,5 @@
 <?php namespace Sce\RepoMan\View;
 
-use Sce\RepoMan\View\ComposerDependencyReportCSVView;
-
 /**
  * @author timrodger
  * Date: 22/07/15
@@ -17,16 +15,16 @@ class ViewFactory
     public function create($name, $type)
     {
         switch ($name) {
-            case 'dependency/composer':
+            case 'dependency/report':
                 switch ($type) {
                     case 'text/csv':
-                        return new ComposerDependencyReportCSVView();
+                        return new DependencyReportCSVView();
                     case 'application/json':
-                        return new ComposerDependencyReportJSONView();
+                        return new DependencyReportJSONView();
                     case 'text/html':
-                        return new ComposerDependencyReportHTMLView();
+                        return new DependencyReportHTMLView();
                     default:
-                        return new ComposerDependencyReportJSONView();
+                        return new DependencyReportJSONView();
                 }
 
         }

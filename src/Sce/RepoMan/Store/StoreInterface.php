@@ -13,4 +13,6 @@ interface StoreInterface
     public function add($url);
 
     public function addToken($host, $token);
+
+    public function getToken($host);
 }

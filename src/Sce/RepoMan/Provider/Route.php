@@ -99,9 +99,9 @@ class Route implements ServiceProviderInterface
         /**
          * Generate a composer dependency report on the repositories
          */
-        $app->get('/reports/dependency/composer', function(Request $req) use ($app){
+        $app->get('/dependency/report', function(Request $req) use ($app) {
 
-            $report = $app['report_factory']->create('dependency/composer');
+            $report = $app['report_factory']->create('dependency/report');
 
             // respond with the report output
             $result = $report->generate();
@@ -111,27 +111,28 @@ class Route implements ServiceProviderInterface
 
             $negotiator = new FormatNegotiator();
             $type = $negotiator->getBest($accept, $priorities);
-            $value = $type ? $type->getValue() : '';
-            $view = $app['view_factory']->create('dependency/composer', $value);
+            $value = $type ? $type->getValue() : $priorities[0];
+
+            $view = $app['view_factory']->create('dependency/report', $value);
 
             $body = $view->render($result);
 
             // format based on request accept header
-            return new Response($body, 200, ['Content-Type' => $type]);
+            return new Response($body, 200, ['Content-Type' => $value]);
 
         });
 
         /**
          * Add an endpoint to update a repositories dependencies
          */
-        $app->post('/dependencies/composer', function(Request $req) use ($app){
+        $app->post('/dependencies', function(Request $req) use ($app) {
 
             $require = $req->get('require');
             $repository = $req->get('repository');
 
             $app['logger']->addInfo("require = '$require' repository='$repository'");
 
-            $command = $app['command_factory']->create('dependencies/composer', $repository);
+            $command = $app['command_factory']->create('dependencies/update', $repository);
 
             $result = $command->execute(['require' => json_decode($require, true)]);
 

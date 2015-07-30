@@ -7,7 +7,7 @@ use Sce\RepoMan\Store\Redis as RedisStore;
  * @author timrodger
  * Date: 18/07/15
  */
-class GitStoreUnitTest extends PHPUnit_Framework_TestCase
+class RedisStoreUnitTest extends PHPUnit_Framework_TestCase
 {
 
     /**
@@ -100,7 +100,7 @@ class GitStoreUnitTest extends PHPUnit_Framework_TestCase
 
     public function testAddToken()
     {
-        $host = 'https://github.com';
+        $host = 'github.com';
         $token = 'abcdef';
 
         $this->mock_client->expects($this->once())
@@ -110,12 +110,28 @@ class GitStoreUnitTest extends PHPUnit_Framework_TestCase
         $this->store->addToken($host, $token);
     }
 
+    public function testGetToken()
+    {
+        $host = 'github.com';
+        $token = 'abcdef';
+
+        $this->mock_client->expects($this->once())
+            ->method('get')
+            ->with(RedisStore::TOKEN_SET_NAME . ':' . $host)
+            ->will($this->returnValue($token));
+
+        $actual = $this->store->getToken($host, $token);
+
+        $this->assertSame($token, $actual);
+    }
+
+
     /**
      * @expectedException Sce\RepoMan\Store\UnavailableException
      */
     public function testAddTokenThrowsExceptionWhenServerIsUnavailable()
     {
-        $host = 'https://github.com';
+        $host = 'github.com';
         $token = 'abcdef';
 
         $this->mock_client->expects($this->once())
@@ -124,6 +140,22 @@ class GitStoreUnitTest extends PHPUnit_Framework_TestCase
             ->will($this->throwException(new \Predis\Response\ServerException));
 
         $this->store->addToken($host, $token);
+    }
+
+    /**
+     * @expectedException Sce\RepoMan\Store\UnavailableException
+     */
+    public function testGetTokenThrowsExceptionWhenServerIsUnavailable()
+    {
+        $host = 'github.com';
+        $token = 'abcdef';
+
+        $this->mock_client->expects($this->once())
+            ->method('get')
+            ->with(RedisStore::TOKEN_SET_NAME . ':' . $host)
+            ->will($this->throwException(new \Predis\Response\ServerException));
+
+        $this->store->getToken($host, $token);
     }
 
     private function givenSomeMockedData(array $repos)

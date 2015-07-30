@@ -3,7 +3,7 @@
 /**
  * Provides access to the elements of a semantic version string
  */
-class SemVer
+class SemanticVersion
 {
     /**
      * @var string
@@ -77,10 +77,10 @@ class SemVer
      * Return 0 if they are equal, -1 if this is less than other, 1 if this is greater than other
      *
      * use with usort($version, function($a,$b) { return $a->compare($b);});
-     * @param SemVer $other
+     * @param SemanticVersion $other
      * @return integer
      */
-    public function compare(SemVer $other)
+    public function compare(SemanticVersion $other)
     {
         if ($this->getMajorVersion() > $other->getMajorVersion()) {
             return 1;

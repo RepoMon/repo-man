@@ -1,4 +1,5 @@
 <?php namespace Sce\RepoMan\Domain;
+use Sce\RepoMan\Exception\DirectoryNotFoundException;
 
 /**
  * Represents a git repository
@@ -43,7 +44,23 @@ class Repository
         $parts = explode('/', $this->url);
         $this->name = array_pop($parts);
         $this->token = $token;
-        $this->command_line = new CommandLine($this->directory .'/' . $this->name);
+        $this->command_line = new CommandLine($this->getCheckoutDirectory());
+    }
+
+    /**
+     * @return DependencySetInterface
+     */
+    public function getDependencySet()
+    {
+        $command_line = new CommandLine($this->getCheckoutDirectory());
+
+        $dependency_set = new DependencySet($this, $command_line);
+        
+        // assumes the repositories token is for git hub
+        if (!is_null($this->token)) {
+            $dependency_set->setGitHubToken($this->token);
+        }
+        return $dependency_set;
     }
 
     /**
@@ -51,7 +68,7 @@ class Repository
      *
      * @return string
      */
-    public function getCheckoutDirectory()
+    private function getCheckoutDirectory()
     {
         return $this->directory .'/' . $this->name;
     }
@@ -74,6 +91,14 @@ class Repository
     }
 
     /**
+     * @return bool
+     */
+    public function isCheckedOut()
+    {
+        return is_dir($this->getCheckoutDirectory());
+    }
+
+    /**
      * Update the local repo from the remote
      * clones repo if it has not been checked out out yet
      * runs git remote update and git fetch --tags
@@ -84,22 +109,15 @@ class Repository
         chdir($this->directory);
 
         // check if local repo exists
-        if (!is_dir($this->directory . '/' . $this->name)) {
+        if (!$this->isCheckedOut()) {
             exec('git clone ' . $this->generateUrl(), $output, $return);
             if (0 !== $return){
                 throw new \Exception("Could not clone {$this->url}");
             }
         }
 
-        try {
-            $this->command_line->exec('git remote update');
-            $this->command_line->exec('git fetch --tags origin');
-            $this->command_line->exec('git pull origin');
-            return true;
-        } catch (DirectoryNotFoundException $ex){
-            var_dump($ex->getMessage());
-            return false;
-        }
+        $this->command_line->exec('git remote update');
+        $this->command_line->exec('git fetch --tags origin');
     }
 
     /**
@@ -167,7 +185,7 @@ class Repository
     }
 
     /**
-     * Return the lasted tag name according to semantic versioning format
+     * Return the lasted tag name according to semantic version format
      * Ignore tags with invalid semantic version names
      *
      * @return string
@@ -177,7 +195,7 @@ class Repository
         $versions = [];
 
         foreach ($this->listTags() as $tag) {
-            $version = new SemVer($tag);
+            $version = new SemanticVersion($tag);
             if ($version->isValid()){
                 $versions []= $version;
             }

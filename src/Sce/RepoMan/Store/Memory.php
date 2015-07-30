@@ -62,4 +62,13 @@ class Memory implements StoreInterface
     {
 
     }
+
+    /**
+     * @param $host
+     * @return string
+     */
+    public function getToken($host)
+    {
+
+    }
 }

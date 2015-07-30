@@ -1,7 +1,7 @@
 <?php namespace Sce\RepoMan\Report;
 
 use Sce\RepoMan\Store\StoreInterface;
-use Sce\RepoMan\Domain\Composer;
+use Sce\RepoMan\Domain\ComposerConfig;
 
 /**
  * @author timrodger
@@ -10,7 +10,7 @@ use Sce\RepoMan\Domain\Composer;
 class ComposerDependencyReport implements ReportInterface
 {
     /**
-     * @var \Sce\Repoman\Store\StoreInterface
+     * @var StoreInterface
      */
     private $store;
 
@@ -32,11 +32,16 @@ class ComposerDependencyReport implements ReportInterface
         // get the repositories
         foreach ($this->store->getAll() as $repository) {
 
+            // if the repository is not checked out then do that now
+            if (!$repository->isCheckedout()){
+                $repository->update();
+            }
+
             // create a composer instance for each repository
             $composer_json = $repository->getFile('composer.json');
             $composer_lock = $repository->getFile('composer.lock');
 
-            $composer = new Composer(json_decode($composer_json, true), json_decode($composer_lock, true));
+            $composer = new ComposerConfig(json_decode($composer_json, true), json_decode($composer_lock, true));
 
             $lock_dependencies = $composer->getLockDependencies();
 

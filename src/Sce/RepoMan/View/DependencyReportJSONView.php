@@ -4,7 +4,7 @@
  * @author timrodger
  * Date: 22/07/15
  */
-class ComposerDependencyReportJSONView implements ViewInterface
+class DependencyReportJSONView implements ViewInterface
 {
     /**
      * @param $data
