@@ -129,6 +129,17 @@ class GitRepoIntegrationTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($result);
     }
 
+    public function testIsBranch()
+    {
+        $this->givenACheckout();
+
+        $result = $this->git_repo->isBranch('master');
+        $this->assertTrue($result);
+
+        $result = $this->git_repo->isBranch('not-a-branch');
+        $this->assertFalse($result);
+    }
+
     public function testListTags()
     {
         $this->givenACheckout();
