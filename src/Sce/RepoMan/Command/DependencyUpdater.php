@@ -33,7 +33,10 @@ class DependencyUpdater implements CommandInterface
         $latest_tag = $this->repository->getLatestTag();
         $branch = 'feature/update-' . $latest_tag;
 
-        $this->repository->branch($branch, $latest_tag);
+        // create a new branch if one is not present locally
+        if (!$this->repository->isLocalBranch($branch)) {
+            $this->repository->branch($branch, $latest_tag);
+        }
 
         $this->repository->checkout($branch);
 
