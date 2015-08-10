@@ -97,8 +97,8 @@ class DependencyUpdaterTest extends PHPUnit_Framework_TestCase
         $this->givenACommand();
         $data = ['require' => ['symfony/symfony' => '2.7.2']];
 
-        $result = $this->command->execute($data);
-        $this->assertTrue($result);
+        // commands throw exceptions on error do not return true from execute
+        $this->command->execute($data);
     }
 
     private function createGitRepo()

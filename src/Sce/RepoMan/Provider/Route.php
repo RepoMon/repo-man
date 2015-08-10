@@ -108,24 +108,25 @@ class Route implements ServiceProviderInterface
             // respond with the report output
             $result = $report->generate();
 
+            $view_name = 'dependency/report';
+
             $accept = $req->headers->get('Accept');
-            $priorities = ['application/json', 'text/html', 'text/csv'];
+            $priorities = $app['view_factory']->getAvailableContentTypes($view_name);
 
             $negotiator = new FormatNegotiator();
             $type = $negotiator->getBest($accept, $priorities);
-            $value = $type ? $type->getValue() : $priorities[0];
+            $content_type = $type ? $type->getValue() : $priorities[0];
 
-            $view = $app['view_factory']->create('dependency/report', $value);
+            $view = $app['view_factory']->create($view_name, $content_type);
 
             $body = $view->render($result);
 
             // format based on request accept header
-            return new Response($body, 200, ['Content-Type' => $value]);
-
+            return new Response($body, 200, ['Content-Type' => $content_type]);
         });
 
         /**
-         * Add an endpoint to update a repositories dependencies
+         * Update a repository's dependencies
          */
         $app->post('/dependencies', function(Request $req) use ($app) {
 
@@ -136,13 +137,9 @@ class Route implements ServiceProviderInterface
 
             $command = $app['command_factory']->create('dependencies/update', $repository);
 
-            $result = $command->execute(['require' => json_decode($require, true)]);
+            $command->execute(['require' => json_decode($require, true)]);
 
-            if ($result) {
-                return new Response('Repository updated', 200);
-            } else {
-                return new Response('Executing command failed', 500);
-            }
+            return new Response(sprintf('Repository "%s" updated', $repository), 200);
         });
     }
 }

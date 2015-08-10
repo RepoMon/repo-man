@@ -29,4 +29,14 @@ class ViewFactory
 
         }
     }
+
+    /**
+     * Return the supported content types for view $name
+     * @param $name
+     * @return array
+     */
+    public function getAvailableContentTypes($name)
+    {
+        return ['application/json', 'text/html', 'text/csv'];
+    }
 }

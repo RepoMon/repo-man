@@ -118,9 +118,8 @@ class DependencyUpdaterUnitTest extends PHPUnit_Framework_TestCase
 
         $data = ['require' => ['company/libx' => '2.0.0']];
 
-        $result = $this->command->execute($data);
-
-        $this->assertTrue($result);
+        // commands throw exceptions on error do not return true from execute
+        $this->command->execute($data);
     }
 
     public function testExecute()
@@ -153,9 +152,8 @@ class DependencyUpdaterUnitTest extends PHPUnit_Framework_TestCase
 
         $data = ['require' => ['company/libx' => '2.0.0']];
 
-        $result = $this->command->execute($data);
-
-        $this->assertTrue($result);
+        // commands throw exceptions on error do not return true from execute
+        $this->command->execute($data);
     }
 
     private function whenABranchExists($branch)

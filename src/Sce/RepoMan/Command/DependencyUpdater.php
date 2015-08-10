@@ -23,6 +23,7 @@ class DependencyUpdater implements CommandInterface
     }
 
     /**
+     * Throws exceptions on error
      * @param $data
      */
     public function execute($data)
@@ -47,7 +48,5 @@ class DependencyUpdater implements CommandInterface
 
         // run git push origin $branch
         $this->repository->push($branch);
-
-        return true;
     }
 }
