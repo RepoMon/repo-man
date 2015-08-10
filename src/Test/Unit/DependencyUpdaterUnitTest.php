@@ -90,6 +90,39 @@ class DependencyUpdaterUnitTest extends PHPUnit_Framework_TestCase
         $this->command->execute($data);
     }
 
+    public function testExecuteUsesExistingBranchIfPresent()
+    {
+        $this->givenAMockDependencySet();
+        $this->givenAMockRepository();
+
+        $latest_tag = 'v2.4.0';
+        $new_branch = 'feature/update-' . $latest_tag;
+
+        $this->givenALatestTag($latest_tag);
+        $this->whenABranchExists($new_branch);
+
+        $this->mock_repository->expects($this->once())
+            ->method('update');
+
+        $this->mock_repository->expects($this->never())
+            ->method('branch');
+
+        $this->mock_repository->expects($this->once())
+            ->method('checkout')
+            ->with($new_branch);
+
+        $this->mock_dependency_set->expects($this->once())
+            ->method('setRequiredVersions');
+
+        $this->givenACommand();
+
+        $data = ['require' => ['company/libx' => '2.0.0']];
+
+        $result = $this->command->execute($data);
+
+        $this->assertTrue($result);
+    }
+
     public function testExecute()
     {
         $this->givenAMockDependencySet();
@@ -98,9 +131,8 @@ class DependencyUpdaterUnitTest extends PHPUnit_Framework_TestCase
         $latest_tag = 'v1.3.6';
         $new_branch = 'feature/update-' . $latest_tag;
 
-        $this->mock_repository->expects($this->any())
-            ->method('getLatestTag')
-            ->will($this->returnValue($latest_tag));
+        $this->givenALatestTag($latest_tag);
+        $this->whenABranchDoesNotExist($new_branch);
 
         $this->mock_repository->expects($this->once())
             ->method('update')
@@ -124,6 +156,29 @@ class DependencyUpdaterUnitTest extends PHPUnit_Framework_TestCase
         $result = $this->command->execute($data);
 
         $this->assertTrue($result);
+    }
+
+    private function whenABranchExists($branch)
+    {
+        $this->mock_repository->expects($this->once())
+            ->method('isLocalBranch')
+            ->with($branch)
+            ->will($this->returnValue(true));
+    }
+
+    private function whenABranchDoesNotExist($branch)
+    {
+        $this->mock_repository->expects($this->once())
+            ->method('isLocalBranch')
+            ->with($branch)
+            ->will($this->returnValue(false));
+    }
+
+    private function givenALatestTag($latest_tag)
+    {
+        $this->mock_repository->expects($this->any())
+            ->method('getLatestTag')
+            ->will($this->returnValue($latest_tag));
     }
 
     private function givenACommand()

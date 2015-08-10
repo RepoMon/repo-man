@@ -148,6 +148,15 @@ class Repository
     }
 
     /**
+     * @param $name
+     * @return bool
+     */
+    public function isBranch($name)
+    {
+        return in_array($name, $this->listAllBranches());
+    }
+
+    /**
      * @return array
      */
     public function listAllBranches()
