@@ -63,21 +63,13 @@ class Route implements ServiceProviderInterface
          */
         $app->post('/repositories/update', function(Request $req) use ($app){
 
-            $errors = [];
-
-            foreach($app['git_repo_store']->getAll() as $repository) {
-                if ($repository->update()){
-                    $repository->checkout('master');
-                } else {
-                    $errors[]= $repository->getUrl();
-                }
+            foreach ($app['git_repo_store']->getAll() as $repository) {
+                $repository->update();
+                $repository->checkout('master');
+                $app['logger']->info("updated " . $repository->getUrl());
             }
-
-            if (0 === count($errors)) {
-                return new Response('', 200);
-            } else {
-                return new Response('Errors updating these repositories : ' . implode(',', $errors), 500);
-            }
+            
+            return new Response('', 200);
 
         });
 
