@@ -44,7 +44,7 @@ class DependencyUpdater implements CommandInterface
         $this->repository->getDependencySet()->setRequiredVersions($data['require']);
 
         // run git commit
-        $this->repository->commit('Updates dependencies');
+        $this->repository->commit('Updates dependencies. See commit diff.');
 
         // run git push origin $branch
         $this->repository->push($branch);

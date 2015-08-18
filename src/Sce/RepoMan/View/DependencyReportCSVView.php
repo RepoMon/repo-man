@@ -12,7 +12,19 @@ class DependencyReportCSVView implements ViewInterface
     public function render($data)
     {
         $helper = new DependencyViewHelper();
-        $lines = $helper->formatDataAsLines($data);
+
+        $lines = [];
+        $lines []= $helper->getHeader();
+
+        foreach($data as $name => $deps){
+
+            foreach($deps as $version => $client_data){
+
+                foreach($client_data as $client) {
+                        $lines []=  [$name, $version, $client['uri'].':'.$client['latest_tag'], $client['config_version'], $client['date']];
+                }
+            }
+        }
 
         $csv = fopen('php://temp/maxmemory:'. (5*1024*1024), 'r+');
         foreach ($lines as $row){

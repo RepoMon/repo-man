@@ -42,7 +42,7 @@ class DependencyViewHelper
 
     }
 
-    private function getHeader(){
+    public function getHeader(){
         return ['Library', 'Version', 'Used By', 'Configured Version', 'Last Updated'];
     }
 }

@@ -68,7 +68,7 @@ class Route implements ServiceProviderInterface
                 $repository->checkout('master');
                 $app['logger']->info("updated " . $repository->getUrl());
             }
-            
+
             return new Response('', 200);
 
         });
