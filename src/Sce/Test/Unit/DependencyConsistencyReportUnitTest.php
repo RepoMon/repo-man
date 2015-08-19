@@ -38,7 +38,7 @@ class DependencyConsistencyReportUnitTest extends PHPUnit_Framework_TestCase
         $this->assertNull($results);
     }
 
-    public function testReportForInconsistentRepositoriesHasInformation()
+    public function testReportForInconsistentRepositories()
     {
         $this->givenADependency("https://zithub.com/cool-toys/goo|v1.4.0", "framework/mvc", "2.*", "2.7.0");
         $this->givenADependency("https://zithub.com/cool-toys/goo-ui|v2.3.1", "framework/mvc", "1.*", "1.12.0");
@@ -50,5 +50,9 @@ class DependencyConsistencyReportUnitTest extends PHPUnit_Framework_TestCase
         $results = $report->generate();
 
         $this->assertTrue(is_array($results));
+
+        $this->assertTrue(in_array(['uri' => "https://zithub.com/cool-toys/goo", "requested" => "2.*", "actual" => "2.7.0"], $results["framework/mvc"]));
+        $this->assertTrue(in_array(['uri' => "https://zithub.com/cool-toys/goo-ui", "requested" => "1.*", "actual" => "1.12.0"], $results["framework/mvc"]));
+
     }
 }

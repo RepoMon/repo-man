@@ -15,10 +15,16 @@ class DependencyConsistencyReport extends ComposerDependencyReport
 
         foreach($data as $name => $versions){
 
-           // var_dump($name);
-           // var_dump($versions);
             if (count($versions) > 1) {
                 $results = [];
+
+                $results[$name] = [];
+
+                foreach($versions as $version => $data){
+                    foreach($data as $item){
+                        $results[$name] []= ['uri' => $item['uri'], 'requested' => $item['config_version'], 'actual' => $version];
+                    }
+                }
             }
         }
 
