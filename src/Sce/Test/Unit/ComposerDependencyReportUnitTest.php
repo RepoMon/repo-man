@@ -23,20 +23,15 @@ class ComposerDependencyReportUnitTest extends PHPUnit_Framework_TestCase
     public function testGenerateForOneRepository()
     {
         // create a mock repository
-        $name = 'widgets/cool';
+        $dependency = 'widgets/cool';
         $uri = 'https://github.com/user/service-name';
         $latest_tag = 'v2.0.4';
 
         $version = '~1.1';
-        $config_data = ['require' => [$name => $version]];
 
         $lock_version = '1.3.1';
-        $time = "2015-07-10 06:54:46";
-        $lock_data = ["packages-dev" => [
-            ['name' => $name, 'version' => $lock_version, 'time' => $time]
-        ]];
 
-        $this->givenAMockRepository($uri, json_encode($config_data), json_encode($lock_data), $latest_tag);
+        $this->givenADependency($uri.'|'.$latest_tag, $dependency, $version, $lock_version);
 
         // get mock store
         $this->givenAMockStore();
@@ -46,42 +41,31 @@ class ComposerDependencyReportUnitTest extends PHPUnit_Framework_TestCase
         $result = $this->report->generate();
 
         $this->assertTrue(is_array($result));
-        $this->assertTrue(array_key_exists($name, $result));
-        $this->assertTrue(array_key_exists($lock_version, $result[$name]));
-        $this->assertSame($uri, $result[$name][$lock_version][0]['uri']);
-        $this->assertSame($version, $result[$name][$lock_version][0]['config_version']);
-        $this->assertSame($time, $result[$name][$lock_version][0]['date']);
-        $this->assertSame($latest_tag, $result[$name][$lock_version][0]['latest_tag']);
+        $this->assertTrue(array_key_exists($dependency, $result));
+        $this->assertTrue(array_key_exists($lock_version, $result[$dependency]));
+        $this->assertSame($uri, $result[$dependency][$lock_version][0]['uri']);
+        $this->assertSame($version, $result[$dependency][$lock_version][0]['config_version']);
+        $this->assertSame($latest_tag, $result[$dependency][$lock_version][0]['latest_tag']);
     }
 
     public function testGenerateForMoreThanOneRepository()
     {
         // create a mock repository
-        $name = 'widgets/cool';
+        $dependency = 'widgets/cool';
         $uri = 'https://github.com/user/service-name';
         $latest_tag = 'v2.0.4';
 
         $version_a = '~1.1';
-        $config_data = ['require' => [$name => $version_a]];
 
         $lock_version_a = '1.3.1';
-        $time_a = "2015-07-10 06:54:46";
-        $lock_data = ["packages-dev" => [
-            ['name' => $name, 'version' => $lock_version_a, 'time' => $time_a]
-        ]];
 
-        $this->givenAMockRepository($uri, json_encode($config_data), json_encode($lock_data), $latest_tag);
+        $this->givenADependency($uri.'|'.$latest_tag, $dependency, $version_a, $lock_version_a);
 
         $version_b = '~2.3';
-        $config_data = ['require' => [$name => $version_b]];
 
         $lock_version_b = '2.4.9';
-        $time_b = "2015-07-20 02:12:00";
-        $lock_data = ["packages-dev" => [
-            ['name' => $name, 'version' => $lock_version_b, 'time' => $time_b]
-        ]];
 
-        $this->givenAMockRepository($uri, json_encode($config_data), json_encode($lock_data), $latest_tag);
+        $this->givenADependency($uri.'|'.$latest_tag, $dependency, $version_b, $lock_version_b);
 
         // get mock store
         $this->givenAMockStore();
@@ -91,19 +75,17 @@ class ComposerDependencyReportUnitTest extends PHPUnit_Framework_TestCase
         $result = $this->report->generate();
 
         $this->assertTrue(is_array($result));
-        $this->assertTrue(array_key_exists($name, $result));
+        $this->assertTrue(array_key_exists($dependency, $result));
 
-        $this->assertTrue(array_key_exists($lock_version_a, $result[$name]));
-        $this->assertSame($uri, $result[$name][$lock_version_a][0]['uri']);
-        $this->assertSame($version_a, $result[$name][$lock_version_a][0]['config_version']);
-        $this->assertSame($time_a, $result[$name][$lock_version_a][0]['date']);
-        $this->assertSame($latest_tag, $result[$name][$lock_version_a][0]['latest_tag']);
+        $this->assertTrue(array_key_exists($lock_version_a, $result[$dependency]));
+        $this->assertSame($uri, $result[$dependency][$lock_version_a][0]['uri']);
+        $this->assertSame($version_a, $result[$dependency][$lock_version_a][0]['config_version']);
+        $this->assertSame($latest_tag, $result[$dependency][$lock_version_a][0]['latest_tag']);
 
-        $this->assertTrue(array_key_exists($lock_version_b, $result[$name]));
-        $this->assertSame($uri, $result[$name][$lock_version_b][0]['uri']);
-        $this->assertSame($version_b, $result[$name][$lock_version_b][0]['config_version']);
-        $this->assertSame($time_b, $result[$name][$lock_version_b][0]['date']);
-        $this->assertSame($latest_tag, $result[$name][$lock_version_b][0]['latest_tag']);
+        $this->assertTrue(array_key_exists($lock_version_b, $result[$dependency]));
+        $this->assertSame($uri, $result[$dependency][$lock_version_b][0]['uri']);
+        $this->assertSame($version_b, $result[$dependency][$lock_version_b][0]['config_version']);
+        $this->assertSame($latest_tag, $result[$dependency][$lock_version_b][0]['latest_tag']);
     }
 
 }

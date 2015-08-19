@@ -49,4 +49,18 @@ trait RepositoryMockTrait
         $this->repositories []= $mock_repository;
     }
 
+    public function givenADependency($repo, $dependency, $version, $lock)
+    {
+
+        list($repo_uri, $latest_tag) = explode('|', $repo);
+        $config_data = ['require' => [$dependency => $version]];
+
+        $time = "2015-07-10 06:54:46";
+        $lock_data = ["packages" => [
+            ['name' => $dependency, 'version' => $lock, 'time' => $time]
+        ]];
+
+        $this->givenAMockRepository($repo_uri, json_encode($config_data), json_encode($lock_data), $latest_tag);
+    }
+
 }
