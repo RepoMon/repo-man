@@ -18,7 +18,7 @@ class AppErrorIntegrationTest extends WebTestCase
     public function createApplication()
     {
         putenv('REDIS_PORT=tcp://172.17.0.154:9999');
-        return require __DIR__.'/../../app.php';
+        return require __DIR__.'/../../../app.php';
     }
 
     public function testGetRootSucceeds()

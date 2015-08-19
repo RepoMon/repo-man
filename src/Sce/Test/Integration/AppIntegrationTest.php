@@ -18,7 +18,7 @@ class AppIntegrationTest extends WebTestCase
     public function createApplication()
     {
         putenv('REDIS_PORT=MEMORY');
-        return require __DIR__.'/../../app.php';
+        return require __DIR__.'/../../../app.php';
     }
 
     public function testGetRootSucceeds()

@@ -13,16 +13,6 @@ class ComposerDependencyReportUnitTest extends PHPUnit_Framework_TestCase
 {
     use RepositoryMockTrait;
 
-    /**
-     * @var array
-     */
-    private $repositories = [];
-
-    /**
-     * @var Sce\RepoMan\Store\StoreInterface
-     */
-    private $mock_store;
-
 
     public function setUp()
     {
