@@ -1,6 +1,8 @@
 <?php
 
 use Sce\RepoMan\Report\ComposerDependencyReport;
+use Sce\Test\RepositoryMockTrait;
+
 
 /**
  * @group unit
@@ -9,6 +11,7 @@ use Sce\RepoMan\Report\ComposerDependencyReport;
  */
 class ComposerDependencyReportUnitTest extends PHPUnit_Framework_TestCase
 {
+    use RepositoryMockTrait;
 
     /**
      * @var array
@@ -113,42 +116,4 @@ class ComposerDependencyReportUnitTest extends PHPUnit_Framework_TestCase
         $this->assertSame($latest_tag, $result[$name][$lock_version_b][0]['latest_tag']);
     }
 
-    private function givenAMockStore()
-    {
-        $this->mock_store = $this->getMockBuilder('Sce\RepoMan\Store\StoreInterface')
-            ->getMock();
-
-        $this->mock_store->expects($this->any())
-            ->method('getAll')
-            ->will($this->returnValue($this->repositories));
-    }
-
-    private function givenAMockRepository($url, $config_json, $lock_json, $latest_tag, $checked_out = true)
-    {
-        $mock_repository = $this->getMockBuilder('Sce\RepoMan\Domain\Repository')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $mock_repository->expects($this->any())
-            ->method('isCheckedout')
-            ->will($this->returnValue($checked_out));
-
-        $mock_repository->expects($this->any())
-            ->method('getUrl')
-            ->will($this->returnValue($url));
-
-        $mock_repository->expects($this->at(1))
-            ->method('getFile')
-            ->will($this->returnValue($config_json));
-
-        $mock_repository->expects($this->at(2))
-            ->method('getFile')
-            ->will($this->returnValue($lock_json));
-
-        $mock_repository->expects($this->any())
-            ->method('getLatestTag')
-            ->will($this->returnValue($latest_tag));
-
-        $this->repositories []= $mock_repository;
-    }
 }
