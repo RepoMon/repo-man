@@ -131,7 +131,7 @@ class AppIntegrationTest extends WebTestCase
         $this->givenAClient();
         $this->client->request('GET', '/dependency/report', [], [], ['HTTP_Accept' => 'text/csv']);
         $this->thenTheResponseIsSuccess();
-        $this->assertResponseContents('Library,Version,"Used By","Configured Version","Last Updated"');
+        $this->assertResponseContents('Vendor,Library,Version,"Used By","Configured Version","Last Updated"');
     }
 
     public function testGetComposerReportSucceedsWithJSONAsDefault()

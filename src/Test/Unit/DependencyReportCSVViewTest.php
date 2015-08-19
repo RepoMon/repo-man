@@ -12,7 +12,7 @@ class DependencyReportCSVViewTest extends PHPUnit_Framework_TestCase
     /**
      * @var string
      */
-    private  $header = 'Library,Version,"Used By","Configured Version","Last Updated"';
+    private  $header = 'Vendor,Library,Version,"Used By","Configured Version","Last Updated"';
 
     public function testRenderReturnsHeaderForNoData()
     {
@@ -36,10 +36,10 @@ class DependencyReportCSVViewTest extends PHPUnit_Framework_TestCase
 
         $body = $view->render($data);
 
-        $expected =  'Library,Version,"Used By","Configured Version","Last Updated"
-user/repo-a,v1.0.0,https://github.com/other/service-x:1.0.0,~1.0,"2015-07-10 06:54:46"
-user/repo-a,v1.0.0,https://github.com/other/service-c:1.0.0,1.0.0,"2015-07-10 06:54:46"
-user/repo-a,v1.0.0,https://github.com/other/service-z:1.0.0,1.*,"2015-07-10 06:54:46"';
+        $expected =  'Vendor,Library,Version,"Used By","Configured Version","Last Updated"
+user,repo-a,v1.0.0,https://github.com/other/service-x:1.0.0,~1.0,"2015-07-10 06:54:46"
+user,repo-a,v1.0.0,https://github.com/other/service-c:1.0.0,1.0.0,"2015-07-10 06:54:46"
+user,repo-a,v1.0.0,https://github.com/other/service-z:1.0.0,1.*,"2015-07-10 06:54:46"';
         $this->assertSame($expected, $body);
     }
 
@@ -56,10 +56,10 @@ user/repo-a,v1.0.0,https://github.com/other/service-z:1.0.0,1.*,"2015-07-10 06:5
 
         $body = $view->render($data);
 
-        $expected =  'Library,Version,"Used By","Configured Version","Last Updated"
-user/repo-a,v1.0.0,https://github.com/other/service-x:1.0.0,~1.0,"2015-07-10 06:54:46"
-user/repo-a,v1.0.0,https://github.com/other/service-c:1.0.0,1.0.0,"2015-07-10 06:54:46"
-user/repo-a,v2.0.0,https://github.com/other/service-z:1.0.0,2.*,"2015-07-10 06:54:46"';
+        $expected =  'Vendor,Library,Version,"Used By","Configured Version","Last Updated"
+user,repo-a,v1.0.0,https://github.com/other/service-x:1.0.0,~1.0,"2015-07-10 06:54:46"
+user,repo-a,v1.0.0,https://github.com/other/service-c:1.0.0,1.0.0,"2015-07-10 06:54:46"
+user,repo-a,v2.0.0,https://github.com/other/service-z:1.0.0,2.*,"2015-07-10 06:54:46"';
         $this->assertSame($expected, $body);
     }
 }

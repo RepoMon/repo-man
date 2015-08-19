@@ -14,14 +14,18 @@ class DependencyReportCSVView implements ViewInterface
         $helper = new DependencyViewHelper();
 
         $lines = [];
-        $lines []= $helper->getHeader();
+        $headers = $helper->getHeader();
+        array_unshift($headers, 'Vendor');
+        $lines []= $headers;
 
         foreach($data as $name => $deps){
+
+            list($vendor, $library) = explode('/', $name);
 
             foreach($deps as $version => $client_data){
 
                 foreach($client_data as $client) {
-                        $lines []=  [$name, $version, $client['uri'].':'.$client['latest_tag'], $client['config_version'], $client['date']];
+                    $lines []=  [$vendor, $library, $version, $client['uri'].':'.$client['latest_tag'], $client['config_version'], $client['date']];
                 }
             }
         }
