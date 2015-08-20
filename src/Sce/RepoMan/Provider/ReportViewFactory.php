@@ -2,7 +2,6 @@
 
 use Silex\ServiceProviderInterface;
 use Silex\Application;
-use Sce\RepoMan\View\ReportViewFactory;
 
 /**
  * @author timrodger
@@ -14,6 +13,6 @@ class ReportViewFactory implements ServiceProviderInterface
 
     public function boot(Application $app)
     {
-        $app['report_view_factory'] = new ReportViewFactory();
+        $app['report_view_factory'] = new \Sce\RepoMan\View\ReportViewFactory();
     }
 }
