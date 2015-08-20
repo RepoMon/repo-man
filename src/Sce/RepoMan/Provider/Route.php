@@ -1,5 +1,6 @@
 <?php namespace Sce\RepoMan\Provider;
 
+use SebastianBergmann\Exporter\Exception;
 use Silex\Application;
 use Silex\ServiceProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -90,31 +91,26 @@ class Route implements ServiceProviderInterface
             }
         });
 
-        /**
-         * Generate a composer dependency report on the repositories
-         */
-        $app->get('/dependency/report', function(Request $req) use ($app) {
+        $app->get('/report/{name}', function(Request $req, $name) use ($app) {
 
-            $report = $app['report_factory']->create('dependency/report');
+            $reporter = $app['report_factory']->create($name);
 
             // respond with the report output
-            $result = $report->generate();
+            $result = $reporter->generate();
 
-            $view_name = 'dependency/report';
+            // test result, if null return 200 and no body
+            if (is_null($result)){
+                return new Response('', 200, ['Content-Type' => 'text/plain']);
+            }
 
-            $accept = $req->headers->get('Accept');
-            $priorities = $app['view_factory']->getAvailableContentTypes($view_name);
+            $view_name = 'report/' . $name;
 
-            $negotiator = new FormatNegotiator();
-            $type = $negotiator->getBest($accept, $priorities);
-            $content_type = $type ? $type->getValue() : $priorities[0];
-
-            $view = $app['view_factory']->create($view_name, $content_type);
+            $view = $app['report_view_factory']->create($view_name, $req);
 
             $body = $view->render($result);
 
             // format based on request accept header
-            return new Response($body, 200, ['Content-Type' => $content_type]);
+            return new Response($body, 200, ['Content-Type' => $view->getContentType()]);
         });
 
         /**

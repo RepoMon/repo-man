@@ -7,6 +7,9 @@
 class DependencyConsistencyReport extends ComposerDependencyReport
 {
 
+    /**
+     * @return array|null
+     */
     public function generate()
     {
         $results = null;
@@ -20,9 +23,9 @@ class DependencyConsistencyReport extends ComposerDependencyReport
 
                 $results[$name] = [];
 
-                foreach($versions as $version => $data){
-                    foreach($data as $item){
-                        $results[$name] []= ['uri' => $item['uri'], 'requested' => $item['config_version'], 'actual' => $version];
+                foreach($versions as $version => $repositories){
+                    foreach($repositories as $repository){
+                        $results[$name] []= ['uri' => $repository['uri'], 'requested' => $repository['config_version'], 'actual' => $version];
                     }
                 }
             }

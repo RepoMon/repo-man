@@ -29,8 +29,11 @@ class ReportFactory
     {
         switch ($name){
 
-            case 'dependency/report':
+            case 'dependency':
                 return new ComposerDependencyReport($this->store);
+
+            case 'consistency':
+                return new DependencyConsistencyReport($this->store);
 
             default:
                 return null;

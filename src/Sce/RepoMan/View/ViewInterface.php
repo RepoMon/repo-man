@@ -11,4 +11,9 @@ interface ViewInterface
      * @return string
      */
     public function render($data);
+
+    /**
+     * @return string
+     */
+    public function getContentType();
 }

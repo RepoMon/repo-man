@@ -13,4 +13,10 @@ class DependencyReportJSONView implements ViewInterface
     {
         return json_encode($data);
     }
+
+
+    public function getContentType()
+    {
+        return 'application/json';
+    }
 }

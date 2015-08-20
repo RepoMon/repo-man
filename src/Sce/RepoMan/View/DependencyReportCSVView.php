@@ -30,14 +30,11 @@ class DependencyReportCSVView implements ViewInterface
             }
         }
 
-        $csv = fopen('php://temp/maxmemory:'. (5*1024*1024), 'r+');
-        foreach ($lines as $row){
-            fputcsv($csv, $row);
-        }
-        rewind($csv);
-        $string = stream_get_contents($csv);
-        fclose($csv);
-        return trim($string);
+        return (new CSVViewHelper())->generateCSV($lines);
+    }
 
+    public function getContentType()
+    {
+        return 'text/csv';
     }
 }

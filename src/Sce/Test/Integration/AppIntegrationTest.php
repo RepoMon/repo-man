@@ -110,7 +110,7 @@ class AppIntegrationTest extends WebTestCase
     public function testGetComposerReportSucceedsWithHTML()
     {
         $this->givenAClient();
-        $this->client->request('GET', '/dependency/report', [], [], ['HTTP_Accept' => 'text/html']);
+        $this->client->request('GET', '/report/dependency', [], [], ['HTTP_Accept' => 'text/html']);
         $this->thenTheResponseIsSuccess();
         $empty_html = "<table>
 <thead><tr><th>Library</th><th>Version</th><th>Used By</th><th>Configured Version</th><th>Last Updated</th></tr></thead>
@@ -121,7 +121,7 @@ class AppIntegrationTest extends WebTestCase
     public function testGetComposerReportSucceedsWithJSON()
     {
         $this->givenAClient();
-        $this->client->request('GET', '/dependency/report', [], [], ['HTTP_Accept' => 'application/json']);
+        $this->client->request('GET', '/report/dependency', [], [], ['HTTP_Accept' => 'application/json']);
         $this->thenTheResponseIsSuccess();
         $this->assertResponseContents(json_encode([]));
     }
@@ -129,7 +129,7 @@ class AppIntegrationTest extends WebTestCase
     public function testGetComposerReportSucceedsWithCSV()
     {
         $this->givenAClient();
-        $this->client->request('GET', '/dependency/report', [], [], ['HTTP_Accept' => 'text/csv']);
+        $this->client->request('GET', '/report/dependency', [], [], ['HTTP_Accept' => 'text/csv']);
         $this->thenTheResponseIsSuccess();
         $this->assertResponseContents('Vendor,Library,Version,"Used By","Configured Version","Last Updated"');
     }
@@ -137,7 +137,7 @@ class AppIntegrationTest extends WebTestCase
     public function testGetComposerReportSucceedsWithJSONAsDefault()
     {
         $this->givenAClient();
-        $this->client->request('GET', '/dependency/report', [], [], ['HTTP_Accept' => '']);
+        $this->client->request('GET', '/report/dependency', [], [], ['HTTP_Accept' => '']);
         $this->thenTheResponseIsSuccess();
         $this->assertResponseContents(json_encode([]));
     }
@@ -145,7 +145,7 @@ class AppIntegrationTest extends WebTestCase
     public function testGetComposerReportSucceedsWithJSONIfAcceptIsntSupported()
     {
         $this->givenAClient();
-        $this->client->request('GET', '/dependency/report', [], [], ['HTTP_Accept' => 'text/xml']);
+        $this->client->request('GET', '/report/dependency', [], [], ['HTTP_Accept' => 'text/xml']);
         $this->thenTheResponseIsSuccess();
         $this->assertResponseContents(json_encode([]));
     }
@@ -160,6 +160,14 @@ class AppIntegrationTest extends WebTestCase
         );
 
         $this->thenTheResponseIs500();
+    }
+
+    public function testGetConsistencyReportSucceedsWithCSV()
+    {
+        $this->givenAClient();
+        $this->client->request('GET', '/report/consistency', [], [], ['HTTP_Accept' => 'text/csv']);
+        $this->thenTheResponseIsSuccess();
+        $this->assertResponseContents('');
     }
 
     private function givenAClient()

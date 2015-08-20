@@ -37,4 +37,8 @@ class DependencyReportHTMLView implements ViewInterface
         return $html;
     }
 
+    public function getContentType()
+    {
+        return 'text/html';
+    }
 }
