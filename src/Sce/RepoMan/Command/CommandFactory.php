@@ -24,14 +24,19 @@ class CommandFactory
 
     /**
      * @param $repository_url string
+     * @return \Sce\RepoMan\Command\CommandInterface
      */
     public function create($type, $repository_url)
     {
+        $repository = $this->store->get($repository_url);
+
         switch ($type) {
 
-            case "dependencies/update":
-                $repository = $this->store->get($repository_url);
+            case 'dependencies/update/required':
                 return new VersionUpdater($repository);
+
+            case 'dependencies/update/current':
+                return new CurrentUpdater($repository);
         }
     }
 }

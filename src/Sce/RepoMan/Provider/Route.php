@@ -119,17 +119,26 @@ class Route implements ServiceProviderInterface
 
         /**
          * Update a repository's dependencies
+         * Either update the required versions or update the current versions
          */
         $app->post('/dependencies', function(Request $req) use ($app) {
 
-            $require = $req->get('require');
+            $require = $req->get('require', '');
             $repository = $req->get('repository');
 
-            $app['logger']->addInfo("require = '$require' repository='$repository'");
+            if (!empty($require)) {
 
-            $command = $app['command_factory']->create('dependencies/update', $repository);
+                $app['logger']->addInfo("require = '$require' repository='$repository'");
+                $command = $app['command_factory']->create('dependencies/update/required', $repository);
+                $command->execute(['require' => json_decode($require, true)]);
 
-            $command->execute(['require' => json_decode($require, true)]);
+            } else {
+
+                $app['logger']->addInfo("repository='$repository'");
+                $command = $app['command_factory']->create('dependencies/update/current', $repository);
+                $command->execute(null);
+
+            }
 
             return new Response(sprintf('Repository "%s" updated', $repository), 200);
         });

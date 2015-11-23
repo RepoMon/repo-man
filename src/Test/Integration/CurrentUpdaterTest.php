@@ -39,9 +39,8 @@ class CurrentUpdaterTest extends UpdateCommandTest
     {
         $this->givenACheckout();
         $this->givenACommand();
-        $data = [];
 
         // commands throw exceptions on error do not return true from execute
-        $this->command->execute($data);
+        $this->command->execute(null);
     }
 }
