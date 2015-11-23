@@ -4,7 +4,7 @@ use Sce\RepoMan\Domain\Repository as GitRepo;
 use Sce\RepoMan\Command\DependencyUpdater;
 use Sce\RepoMan\Domain\CommandLine;
 use Sce\RepoMan\Command\CommandInterface;
-use Sce\RepoMan\Domain\DependencySet;
+use Sce\RepoMan\Domain\ComposerDependencySet;
 
 /**
  * @group integration

@@ -188,7 +188,7 @@ class DependencyUpdaterUnitTest extends PHPUnit_Framework_TestCase
 
     private function givenAMockDependencySet()
     {
-        $this->mock_dependency_set = $this->getMockBuilder('Sce\RepoMan\Domain\DependencySet')
+        $this->mock_dependency_set = $this->getMockBuilder('Sce\RepoMan\Domain\ComposerDependencySet')
             ->disableOriginalConstructor()
             ->getMock();
     }

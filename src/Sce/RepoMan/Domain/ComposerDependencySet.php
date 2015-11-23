@@ -8,10 +8,9 @@ use Sce\RepoMan\Exception\FileNotFoundException;
 use Sce\RepoMan\Exception\InvalidFileContentsException;
 
 /**
- * @todo rename ComposerDependencySet
  * @package Sce\RepoMan\Domain
  */
-class DependencySet implements DependencySetInterface
+class ComposerDependencySet implements DependencySetInterface
 {
     /**
      * @var Repository
