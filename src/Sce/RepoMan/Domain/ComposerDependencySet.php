@@ -81,4 +81,20 @@ class ComposerDependencySet implements DependencySetInterface
         $this->repository->add('composer.json');
         $this->repository->add('composer.lock');
     }
+
+    /**
+     *
+     */
+    public function updateCurrent()
+    {
+        if (!$this->repository->hasFile('composer.json')){
+            throw new FileNotFoundException("'composer.json not found'");
+        }
+
+        // update the current dependencies
+        $this->command_line->exec('composer update  --prefer-dist --no-scripts');
+
+        // Add composer.lock to git branch
+        $this->repository->add('composer.lock');
+    }
 }

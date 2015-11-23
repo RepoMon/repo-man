@@ -24,6 +24,7 @@ class DependencyUpdater implements CommandInterface
 
     /**
      * Throws exceptions on error
+     *
      * @param $data
      */
     public function execute($data)

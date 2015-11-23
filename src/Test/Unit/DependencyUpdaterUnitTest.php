@@ -1,7 +1,6 @@
 <?php
 
 use Sce\RepoMan\Command\DependencyUpdater;
-use Sce\RepoMan\Domain\FileNotFoundException;
 use Sce\RepoMan\Exception\DirectoryNotFoundException;
 
 /**
@@ -12,17 +11,17 @@ use Sce\RepoMan\Exception\DirectoryNotFoundException;
 class DependencyUpdaterUnitTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var Repository
+     * @var Sce\RepoMan\Domain\Repository
      */
     private $mock_repository;
 
     /**
-     * @var DependencySet
+     * @var Sce\RepoMan\Domain\ComposerDependencySet
      */
     private $mock_dependency_set;
 
     /**
-     * @var DependencyUpdater
+     * @var Sce\RepoMan\Command\DependencyUpdater
      */
     private $command;
 
@@ -122,7 +121,7 @@ class DependencyUpdaterUnitTest extends PHPUnit_Framework_TestCase
         $this->command->execute($data);
     }
 
-    public function testExecute()
+    public function testExecuteCallsSetRequiredVersionsWhenRequireIsSet()
     {
         $this->givenAMockDependencySet();
         $this->givenAMockRepository();
