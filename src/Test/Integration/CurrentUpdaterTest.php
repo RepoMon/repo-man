@@ -2,7 +2,7 @@
 
 require_once(__DIR__.'/UpdateCommandTest.php');
 
-use Sce\RepoMan\Command\VersionUpdater;
+use Sce\RepoMan\Command\CurrentUpdater;
 
 /**
  * @group integration
@@ -10,8 +10,9 @@ use Sce\RepoMan\Command\VersionUpdater;
  * @author timrodger
  * Date: 27/07/15
  */
-class VersionUpdaterTest extends UpdateCommandTest
+class CurrentUpdaterTest extends UpdateCommandTest
 {
+
     public function setUp()
     {
         parent::setUp();
@@ -29,17 +30,16 @@ class VersionUpdaterTest extends UpdateCommandTest
 
     protected function givenACommand()
     {
-        $this->command = new VersionUpdater(
+        $this->command = new CurrentUpdater(
             $this->git_repo
         );
     }
 
-    public function testUpdateDependencyVersions()
+    public function testUpdateCurrent()
     {
         $this->givenACheckout();
         $this->givenACommand();
-
-        $data = ['require' => ['symfony/symfony' => '2.7.2']];
+        $data = [];
 
         // commands throw exceptions on error do not return true from execute
         $this->command->execute($data);

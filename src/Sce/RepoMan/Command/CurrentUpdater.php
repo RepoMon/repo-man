@@ -1,14 +1,10 @@
 <?php namespace Sce\RepoMan\Command;
 
 /**
- * Update the dependency versions of a repository
- *
- *  Branches from latest tag
- *  Installs the updates
- *  Commits changes
- *  Pushes new branch to origin
+ * @author timrodger
+ * Date: 23/11/15
  */
-class VersionUpdater extends UpdateCommand
+class CurrentUpdater extends UpdateCommand
 {
     /**
      * Throws exceptions on error
@@ -21,10 +17,10 @@ class VersionUpdater extends UpdateCommand
 
         $this->repository->checkout($branch);
 
-        $this->repository->getDependencySet()->setRequiredVersions($data['require']);
+        $this->repository->getDependencySet()->updateCurrent();
 
         // run git commit
-        $this->repository->commit('Updates required dependency versions. See commit diff.');
+        $this->repository->commit('Updates current dependencies. See commit diff.');
 
         // run git push origin $branch
         $this->repository->push($branch);
