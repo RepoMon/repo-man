@@ -10,7 +10,7 @@ use Sce\RepoMan\Domain\Repository;
  *  Commits changes
  *  Pushes new branch to origin
  */
-class DependencyUpdater implements CommandInterface
+class VersionUpdater implements CommandInterface
 {
     /**
      * @var Repository

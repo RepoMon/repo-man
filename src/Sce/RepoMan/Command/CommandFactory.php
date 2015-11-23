@@ -31,7 +31,7 @@ class CommandFactory
 
             case "dependencies/update":
                 $repository = $this->store->get($repository_url);
-                return new DependencyUpdater($repository);
+                return new VersionUpdater($repository);
         }
     }
 }

@@ -83,7 +83,7 @@ class ComposerDependencySet implements DependencySetInterface
     }
 
     /**
-     *
+     * Update the currently configured dependencies
      */
     public function updateCurrent()
     {

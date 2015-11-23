@@ -1,6 +1,6 @@
 <?php
 
-use Sce\RepoMan\Command\DependencyUpdater;
+use Sce\RepoMan\Command\VersionUpdater;
 use Sce\RepoMan\Exception\DirectoryNotFoundException;
 
 /**
@@ -21,7 +21,7 @@ class DependencyUpdaterUnitTest extends PHPUnit_Framework_TestCase
     private $mock_dependency_set;
 
     /**
-     * @var Sce\RepoMan\Command\DependencyUpdater
+     * @var Sce\RepoMan\Command\VersionUpdater
      */
     private $command;
 
@@ -180,7 +180,7 @@ class DependencyUpdaterUnitTest extends PHPUnit_Framework_TestCase
 
     private function givenACommand()
     {
-        $this->command = new DependencyUpdater(
+        $this->command = new VersionUpdater(
             $this->mock_repository
         );
     }
