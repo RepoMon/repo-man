@@ -20,10 +20,6 @@ class Route implements ServiceProviderInterface
 
     public function boot(Application $app)
     {
-        $app->get("/", function(Request $request) use ($app){
-            return new Response('RepoMan', 200);
-        });
-
         /**
          * Respond with a JSON array of the repository names (urls)
          */
@@ -100,7 +96,7 @@ class Route implements ServiceProviderInterface
         /**
          * Generate a composer dependency report on the repositories
          */
-        $app->get('/dependency/report', function(Request $request) use ($app) {
+        $app->get('/dependencies/report', function(Request $request) use ($app) {
 
             $report = $app['report_factory']->create('dependency/report');
 

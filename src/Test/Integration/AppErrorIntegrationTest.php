@@ -21,14 +21,6 @@ class AppErrorIntegrationTest extends WebTestCase
         return require __DIR__.'/../../app.php';
     }
 
-    public function testGetRootSucceeds()
-    {
-        $this->givenAClient();
-        $this->client->request('GET', '/');
-
-        $this->thenTheResponseIsSuccess();
-    }
-
     public function testListRepositoriesFails()
     {
         $this->givenAClient();
@@ -39,7 +31,7 @@ class AppErrorIntegrationTest extends WebTestCase
 
     public function testAddRepositoryFails()
     {
-        $url =  'https://github.com/timothy-r/render';
+        $url = 'https://github.com/timothy-r/render';
 
         $this->givenAClient();
         $this->client->request('POST', '/repositories', ['url' => $url]);
@@ -68,10 +60,6 @@ class AppErrorIntegrationTest extends WebTestCase
         $this->client = $this->createClient();
     }
 
-    private function thenTheResponseIsSuccess()
-    {
-        $this->assertSame(200, $this->client->getResponse()->getStatusCode());
-    }
 
     private function thenTheResponseIs500()
     {
