@@ -20,14 +20,14 @@ class Route implements ServiceProviderInterface
 
     public function boot(Application $app)
     {
-        $app->get("/", function(Request $req) use ($app){
+        $app->get("/", function(Request $request) use ($app){
             return new Response('RepoMan', 200);
         });
 
         /**
          * Respond with a JSON array of the repository names (urls)
          */
-        $app->get('/repositories', function(Request $req) use ($app){
+        $app->get('/repositories', function(Request $request) use ($app){
 
             $repositories = [];
 
@@ -42,18 +42,21 @@ class Route implements ServiceProviderInterface
         /**
          * Adds a repository
          */
-        $app->post('/repositories', function(Request $req) use ($app){
+        $app->post('/repositories', function(Request $request) use ($app){
 
             // add the repo to the store
-            $url = $req->request->get('url');
+            $url = $request->request->get('url');
 
-            if (!empty($url)) {
-                $app['git_repo_store']->add($url);
-                return $app->json(['status' => 'success', 'name' => $url]);
-            } else {
-                return $app->json(['status' => 'error'], 400);
+            $app['git_repo_store']->add($url);
+            return $app->json(['status' => 'success', 'name' => $url]);
+
+        })->before(function (Request $request, Application $app){
+
+            $url = $request->request->get('url');
+
+            if (empty($url)){
+                $app->abort(400, json_encode(['error' => 'Url is missing']), ['Content-Type' => 'application/json']);
             }
-
         });
 
         /**
@@ -61,7 +64,7 @@ class Route implements ServiceProviderInterface
          * Is this needed ? do we want to have users do this manually?
          * If we do support this it needs to be on a different endpoint
          */
-        $app->post('/repositories/update', function(Request $req) use ($app){
+        $app->post('/repositories/update', function(Request $request) use ($app){
 
             foreach ($app['git_repo_store']->getAll() as $repository) {
                 $repository->update();
@@ -77,23 +80,27 @@ class Route implements ServiceProviderInterface
          * Adds a token to use when authenticating with remote repository
          * $req should have a token and a host field
          */
-        $app->post('/tokens', function(Request $req) use ($app){
+        $app->post('/tokens', function(Request $request) use ($app){
 
-            $host = $req->request->get('host');
-            $token = $req->request->get('token');
+            $host = $request->request->get('host');
+            $token = $request->request->get('token');
 
-            if (!empty($host) && !empty($token)) {
-                $app['git_repo_store']->addToken($host, $token);
-                return $app->json(['status' => 'success', 'host' => $host]);
-            } else {
-                return $app->json(['status' => 'error'], 400);
+            $app['git_repo_store']->addToken($host, $token);
+            return $app->json(['status' => 'success', 'host' => $host]);
+
+        })->before(function (Request $request, Application $app) {
+            $host = $request->request->get('host');
+            $token = $request->request->get('token');
+
+            if (empty($host) || empty($token)) {
+                $app->abort(400, json_encode(['error' => 'Token and host are required']), ['Content-Type' => 'application/json']);
             }
         });
 
         /**
          * Generate a composer dependency report on the repositories
          */
-        $app->get('/dependency/report', function(Request $req) use ($app) {
+        $app->get('/dependency/report', function(Request $request) use ($app) {
 
             $report = $app['report_factory']->create('dependency/report');
 
@@ -102,7 +109,7 @@ class Route implements ServiceProviderInterface
 
             $view_name = 'dependency/report';
 
-            $accept = $req->headers->get('Accept');
+            $accept = $request->headers->get('Accept');
             $priorities = $app['view_factory']->getAvailableContentTypes($view_name);
 
             $negotiator = new FormatNegotiator();
@@ -121,10 +128,10 @@ class Route implements ServiceProviderInterface
          * Update a repository's dependencies
          * Either update the required versions or update the current versions
          */
-        $app->post('/dependencies', function(Request $req) use ($app) {
+        $app->post('/dependencies', function(Request $request) use ($app) {
 
-            $require = $req->get('require', '');
-            $repository = $req->get('repository');
+            $require = $request->get('require', '');
+            $repository = $request->get('repository');
 
             if (!empty($require)) {
 
@@ -141,6 +148,14 @@ class Route implements ServiceProviderInterface
             }
 
             return new Response(sprintf('Repository "%s" updated', $repository), 200);
+
+        })->before(function (Request $request, Application $app) {
+
+            $repository = $request->get('repository');
+
+            if (empty($repository)) {
+                $app->abort(400, json_encode(['error' => 'Repository is required']), ['Content-Type' => 'application/json']);
+            }
         });
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use Silex\Application;
+use Symfony\Component\HttpFoundation\Response;
 
 use Sce\RepoMan\Provider\Config as ConfigProvider;
 use Sce\RepoMan\Provider\Log as LogProvider;
@@ -25,5 +26,13 @@ $app->register(new GitRepoStoreProvider());
 $app->register(new ReportFactoryProvider());
 $app->register(new CommandFactoryProvider());
 $app->register(new ViewFactoryProvider());
+
+
+/**
+ */
+$app->error(function (Exception $e, $code) use($app) {
+    $app['logger']->addError($e->getMessage());
+    return new Response($e->getMessage());
+});
 
 return $app;
