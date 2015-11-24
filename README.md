@@ -12,11 +12,11 @@ Steps to follow
 
 * Add your authentication token for a git repository host to the service (if required to access its repositories)
 
-        curl -X POST /tokens "host name" "token string"
+        curl -X POST /tokens -d host="host" -d token="token"
         
 * Add each repository's url to the service, without the .git extension 
  
-        curl -X POST /repositories -d url="repository url"
+        curl -X POST /repositories -d url="repository-url"
 
 * List the repositories being managed (as JSON)
 
