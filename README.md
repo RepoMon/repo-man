@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/timothy-r/repo-man.png)](https://travis-ci.org/timothy-r/repo-man) 
+
 # RepoMan
 
 Tools for managing source code in multiple repositories, provided as a service.
