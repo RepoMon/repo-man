@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
-IP=172.17.8.123
+DIR=`dirname "${BASH_SOURCE[0]}" `
+. $DIR/.config
 
-curl -X GET http://$IP:49400/repositories -v
+curl -X GET http://$IP:$PORT/repositories -v

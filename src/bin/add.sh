@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 
-URL=$1
-IP=172.17.8.123
+DIR=`dirname "${BASH_SOURCE[0]}" `
+. $DIR/.config
 
-curl -X POST -d url=$URL http://$IP:49400/repositories -v
+URL=$1
+
+curl -X POST -d url=$URL http://$IP:$PORT/repositories -v
 

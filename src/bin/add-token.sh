@@ -1,8 +1,11 @@
 #!/usr/bin/env bash
 
+DIR=`dirname "${BASH_SOURCE[0]}" `
+. $DIR/.config
+
 HOST=$1
 TOKEN=$2
-IP=172.17.8.123
 
-curl -X POST -d host=$HOST -d token=$TOKEN http://$IP:49400/tokens -v
+
+curl -X POST -d host=$HOST -d token=$TOKEN http://$IP:$PORT/tokens -v
 

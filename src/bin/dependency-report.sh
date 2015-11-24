@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
-IP=172.17.8.123
+DIR=`dirname "${BASH_SOURCE[0]}" `
+. $DIR/.config
 
-curl -X GET http://$IP:49400/dependency/report -H "Accept: text/csv" -v
+
+curl -X GET http://$IP:$PORT/dependency/report -H "Accept: text/csv" -v
 

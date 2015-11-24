@@ -1,0 +1,4 @@
+# copy this file to .config and fill in the variable values
+
+export IP=YOUR-SERVICE-IP-ADDRESS
+export PORT=49400
