@@ -29,7 +29,7 @@ class Route implements ServiceProviderInterface
 
             // for each repo generate the url to access it here
             foreach($app['git_repo_store']->getAll() as $repository) {
-                $repositories[$repository->getId()] = $repository->getUrl();
+                $repositories[]= $repository->getUrl();
             }
 
             return $app->json($repositories);
