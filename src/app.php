@@ -28,11 +28,4 @@ $app->register(new CommandFactoryProvider());
 $app->register(new ViewFactoryProvider());
 
 
-/**
- */
-$app->error(function (Exception $e, $code) use($app) {
-    $app['logger']->addError($e->getMessage());
-    return new Response($e->getMessage());
-});
-
 return $app;
