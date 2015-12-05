@@ -43,5 +43,9 @@ RUN git config --global user.name "Automated user"
 
 WORKDIR /home/repo-man/public
 
+RUN chmod +x /home/app/run.sh
+
+RUN /home/app/run.sh &
+
 USER root
 
