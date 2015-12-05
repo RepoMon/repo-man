@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/timothy-r/repo-man.png)](https://travis-ci.org/timothy-r/repo-man) 
+[![Build Status](https://travis-ci.org/RepoMon/repo-man.png)](https://travis-ci.org/RepoMon/repo-man) 
 
 # RepoMan
 
