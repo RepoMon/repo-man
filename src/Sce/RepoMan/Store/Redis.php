@@ -154,7 +154,14 @@ class Redis implements StoreInterface
     {
         // try to get the token for this url
         $parts = parse_url($url);
-        $token = $this->client->get($this->getTokenKey($parts['host']));
+
+        if (isset($parts['token'])) {
+            $token = $this->client->get($this->getTokenKey($parts['host']));
+        } else {
+            // or throw an exception?
+            $token = '';
+        }
+
         return new Repository($url, $this->config->getRepoDir(), $token);
     }
 
