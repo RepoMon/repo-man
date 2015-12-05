@@ -24,24 +24,24 @@ RUN curl -sS https://getcomposer.org/installer | php \
 CMD ["php", "-S", "0.0.0.0:80"]
 
 # Move application files into place
-COPY src/ /home/repo-man/
+COPY src/ /home/app/
 
 # remove any development cruft
-RUN rm -rf /home/repo-man/vendor/*
+RUN rm -rf /home/app/vendor/*
 
 # create the directory to store the checked out repositories
 RUN mkdir /tmp/repositories
 
-WORKDIR /home/repo-man
+WORKDIR /home/app
 
 # Install dependencies
 RUN composer install --prefer-dist && \
     apt-get clean
 
-RUN git config --global user.email "bot@service.update.net"
-RUN git config --global user.name "Automated user"
+RUN git config --global user.email "bot@repo-mon.com"
+RUN git config --global user.name "Repository monitor"
 
-WORKDIR /home/repo-man/public
+WORKDIR /home/app/public
 
 RUN chmod +x /home/app/run.sh
 
