@@ -1,7 +1,7 @@
 <?php
 
-use Sce\RepoMan\Command\VersionUpdater;
-use Sce\RepoMan\Exception\DirectoryNotFoundException;
+use Ace\RepoMan\Command\VersionUpdater;
+use Ace\RepoMan\Exception\DirectoryNotFoundException;
 
 /**
  * @group unit
@@ -11,22 +11,22 @@ use Sce\RepoMan\Exception\DirectoryNotFoundException;
 class DependencyUpdaterUnitTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var Sce\RepoMan\Domain\Repository
+     * @var Ace\RepoMan\Domain\Repository
      */
     private $mock_repository;
 
     /**
-     * @var Sce\RepoMan\Domain\ComposerDependencySet
+     * @var Ace\RepoMan\Domain\ComposerDependencySet
      */
     private $mock_dependency_set;
 
     /**
-     * @var Sce\RepoMan\Command\VersionUpdater
+     * @var Ace\RepoMan\Command\VersionUpdater
      */
     private $command;
 
     /**
-     * @expectedException \Sce\RepoMan\Exception\DirectoryNotFoundException
+     * @expectedException \Ace\RepoMan\Exception\DirectoryNotFoundException
      */
     public function testExecuteThrowsExceptionIfUpdateFails()
     {
@@ -46,7 +46,7 @@ class DependencyUpdaterUnitTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Sce\RepoMan\Exception\FileNotFoundException
+     * @expectedException Ace\RepoMan\Exception\FileNotFoundException
      */
     public function testExecuteThrowsExceptionIfComposerFilesAreMissing()
     {
@@ -58,7 +58,7 @@ class DependencyUpdaterUnitTest extends PHPUnit_Framework_TestCase
 
         $this->mock_dependency_set->expects($this->once())
             ->method('setRequiredVersions')
-            ->will($this->throwException(new \Sce\RepoMan\Exception\FileNotFoundException()));
+            ->will($this->throwException(new \Ace\RepoMan\Exception\FileNotFoundException()));
 
         $this->givenACommand();
 
@@ -68,7 +68,7 @@ class DependencyUpdaterUnitTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Sce\RepoMan\Exception\InvalidFileContentsException
+     * @expectedException \Ace\RepoMan\Exception\InvalidFileContentsException
      */
     public function testExecuteThrowsExceptionIfComposerFileIsNotJson()
     {
@@ -80,7 +80,7 @@ class DependencyUpdaterUnitTest extends PHPUnit_Framework_TestCase
 
         $this->mock_dependency_set->expects($this->once())
             ->method('setRequiredVersions')
-            ->will($this->throwException(new \Sce\RepoMan\Exception\InvalidFileContentsException()));
+            ->will($this->throwException(new \Ace\RepoMan\Exception\InvalidFileContentsException()));
 
         $this->givenACommand();
 
@@ -187,14 +187,14 @@ class DependencyUpdaterUnitTest extends PHPUnit_Framework_TestCase
 
     private function givenAMockDependencySet()
     {
-        $this->mock_dependency_set = $this->getMockBuilder('Sce\RepoMan\Domain\ComposerDependencySet')
+        $this->mock_dependency_set = $this->getMockBuilder('Ace\RepoMan\Domain\ComposerDependencySet')
             ->disableOriginalConstructor()
             ->getMock();
     }
 
     private function givenAMockRepository()
     {
-        $this->mock_repository = $this->getMockBuilder('Sce\RepoMan\Domain\Repository')
+        $this->mock_repository = $this->getMockBuilder('Ace\RepoMan\Domain\Repository')
             ->disableOriginalConstructor()
             ->getMock();
 

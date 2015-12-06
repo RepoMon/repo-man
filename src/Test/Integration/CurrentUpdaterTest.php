@@ -2,7 +2,7 @@
 
 require_once(__DIR__.'/UpdateCommandTest.php');
 
-use Sce\RepoMan\Command\CurrentUpdater;
+use Ace\RepoMan\Command\CurrentUpdater;
 
 /**
  * @group integration

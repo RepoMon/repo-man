@@ -1,6 +1,6 @@
 <?php
 
-use Sce\RepoMan\Domain\Repository as GitRepo;
+use Ace\RepoMan\Domain\Repository as GitRepo;
 
 /**
  * @group integration
@@ -335,7 +335,7 @@ class GitRepoIntegrationTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Sce\RepoMan\Exception\CommandExecutionException
+     * @expectedException \Ace\RepoMan\Exception\CommandExecutionException
      */
     public function testCommitOnUnchangedRepoThrowsException()
     {

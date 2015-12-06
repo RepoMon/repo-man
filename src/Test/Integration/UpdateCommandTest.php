@@ -1,7 +1,7 @@
 <?php
 
-use Sce\RepoMan\Domain\Repository as GitRepo;
-use Sce\RepoMan\Command\CommandInterface;
+use Ace\RepoMan\Domain\Repository as GitRepo;
+use Ace\RepoMan\Command\CommandInterface;
 
 /**
  * @group integration

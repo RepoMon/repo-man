@@ -1,6 +1,6 @@
 <?php
 
-use Sce\RepoMan\View\DependencyReportHTMLView;
+use Ace\RepoMan\View\DependencyReportHTMLView;
 
 /**
  * @group unit

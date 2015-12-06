@@ -1,6 +1,6 @@
 <?php
 
-use Sce\RepoMan\View\DependencyReportJSONView;
+use Ace\RepoMan\View\DependencyReportJSONView;
 
 /**
  * @group unit

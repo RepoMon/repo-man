@@ -1,6 +1,6 @@
 <?php
 
-use Sce\RepoMan\Domain\SemanticVersion;
+use Ace\RepoMan\Domain\SemanticVersion;
 
 /**
  * @group unit

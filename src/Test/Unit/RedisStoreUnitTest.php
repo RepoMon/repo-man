@@ -1,6 +1,6 @@
 <?php
 
-use Sce\RepoMan\Store\Redis as RedisStore;
+use Ace\RepoMan\Store\Redis as RedisStore;
 
 /**
  * @group unit
@@ -21,7 +21,7 @@ class RedisStoreUnitTest extends PHPUnit_Framework_TestCase
     private $mock_client;
 
     /**
-     * @var Sce\RepoMan\Configuration
+     * @var Ace\RepoMan\Configuration
      */
     private $mock_config;
 
@@ -59,7 +59,7 @@ class RedisStoreUnitTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Sce\RepoMan\Store\UnavailableException
+     * @expectedException Ace\RepoMan\Store\UnavailableException
      */
     public function testGetAllThrowsExceptionWhenServerIsUnavailable()
     {
@@ -80,11 +80,11 @@ class RedisStoreUnitTest extends PHPUnit_Framework_TestCase
             ->with(RedisStore::REPO_SET_NAME, $url);
 
         $repository = $this->store->add($url);
-        $this->assertInstanceOf('Sce\RepoMan\Domain\Repository', $repository);
+        $this->assertInstanceOf('Ace\RepoMan\Domain\Repository', $repository);
     }
 
     /**
-     * @expectedException Sce\RepoMan\Store\UnavailableException
+     * @expectedException Ace\RepoMan\Store\UnavailableException
      */
     public function testAddRepositoryThrowsExceptionWhenServerIsUnavailable()
     {
@@ -127,7 +127,7 @@ class RedisStoreUnitTest extends PHPUnit_Framework_TestCase
 
 
     /**
-     * @expectedException Sce\RepoMan\Store\UnavailableException
+     * @expectedException Ace\RepoMan\Store\UnavailableException
      */
     public function testAddTokenThrowsExceptionWhenServerIsUnavailable()
     {
@@ -143,7 +143,7 @@ class RedisStoreUnitTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Sce\RepoMan\Store\UnavailableException
+     * @expectedException Ace\RepoMan\Store\UnavailableException
      */
     public function testGetTokenThrowsExceptionWhenServerIsUnavailable()
     {
@@ -181,7 +181,7 @@ class RedisStoreUnitTest extends PHPUnit_Framework_TestCase
      */
     private function givenAMockConfig($dir)
     {
-        $this->mock_config = $this->getMockBuilder('Sce\RepoMan\Configuration')
+        $this->mock_config = $this->getMockBuilder('Ace\RepoMan\Configuration')
             ->setMethods(['getRepoDir', 'getRepositoryNames'])
             ->disableOriginalConstructor()
             ->getMock();

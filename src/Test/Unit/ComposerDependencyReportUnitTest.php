@@ -1,6 +1,6 @@
 <?php
 
-use Sce\RepoMan\Report\ComposerDependencyReport;
+use Ace\RepoMan\Report\ComposerDependencyReport;
 
 /**
  * @group unit
@@ -16,7 +16,7 @@ class ComposerDependencyReportUnitTest extends PHPUnit_Framework_TestCase
     private $repositories = [];
 
     /**
-     * @var Sce\RepoMan\Store\StoreInterface
+     * @var Ace\RepoMan\Store\StoreInterface
      */
     private $mock_store;
 
@@ -115,7 +115,7 @@ class ComposerDependencyReportUnitTest extends PHPUnit_Framework_TestCase
 
     private function givenAMockStore()
     {
-        $this->mock_store = $this->getMockBuilder('Sce\RepoMan\Store\StoreInterface')
+        $this->mock_store = $this->getMockBuilder('Ace\RepoMan\Store\StoreInterface')
             ->getMock();
 
         $this->mock_store->expects($this->any())
@@ -125,7 +125,7 @@ class ComposerDependencyReportUnitTest extends PHPUnit_Framework_TestCase
 
     private function givenAMockRepository($url, $config_json, $lock_json, $latest_tag, $checked_out = true)
     {
-        $mock_repository = $this->getMockBuilder('Sce\RepoMan\Domain\Repository')
+        $mock_repository = $this->getMockBuilder('Ace\RepoMan\Domain\Repository')
             ->disableOriginalConstructor()
             ->getMock();
 
