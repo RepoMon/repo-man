@@ -2,6 +2,6 @@
 
 while (true)
 do
-    php ./consume.php
+    php /home/app/consume.php
     sleep 1
 done

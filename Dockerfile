@@ -21,7 +21,7 @@ RUN apt-get update -qq && \
 RUN curl -sS https://getcomposer.org/installer | php \
   && mv composer.phar /usr/bin/composer
 
-CMD ["php", "-S", "0.0.0.0:80"]
+CMD ["/home/app/run-all.sh"]
 
 # Move application files into place
 COPY src/ /home/app/
@@ -44,8 +44,7 @@ RUN git config --global user.name "Repository monitor"
 WORKDIR /home/app/public
 
 RUN chmod +x /home/app/run.sh
-
-RUN /home/app/run.sh &
+RUN chmod +x /home/app/run-all.sh
 
 USER root
 
