@@ -12,8 +12,8 @@ require_once __DIR__ . '/vendor/autoload.php';
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 
 $channel_name = 'repo-mon.main';
-$queue_host = getenv('RABBITMQ_PORT_5672_TCP_ADDR');
-$queue_port = getenv('RABBITMQ_PORT_5672_TCP_PORT');
+$queue_host = 'rabbitmq';
+$queue_port = 5672;
 
 printf(" rabbit host %s port %s\n", $queue_host, $queue_port);
 
