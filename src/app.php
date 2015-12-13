@@ -26,6 +26,6 @@ $app->register(new GitRepoStoreProvider());
 $app->register(new ReportFactoryProvider());
 $app->register(new CommandFactoryProvider());
 $app->register(new ViewFactoryProvider());
-$app->redirect(new QueueClientProvider());
+$app->register(new QueueClientProvider());
 
 return $app;
