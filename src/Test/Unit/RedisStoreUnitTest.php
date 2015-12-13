@@ -182,7 +182,7 @@ class RedisStoreUnitTest extends PHPUnit_Framework_TestCase
     private function givenAMockConfig($dir)
     {
         $this->mock_config = $this->getMockBuilder('Ace\RepoMan\Configuration')
-            ->setMethods(['getRepoDir', 'getRepositoryNames'])
+            ->setMethods(['getRepoDir'])
             ->disableOriginalConstructor()
             ->getMock();
 

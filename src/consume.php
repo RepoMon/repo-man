@@ -19,7 +19,7 @@ $app['logger']->notice("rabbit host: %s port: %s channel: %s\n",
 $store = $app['store'];
 
 $callback = function($msg) use ($app) {
-    
+
     $app['logger']->notice(" Received ", $msg->body);
     $event = json_decode($msg->body, true);
 
