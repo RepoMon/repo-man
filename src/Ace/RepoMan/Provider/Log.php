@@ -1,5 +1,6 @@
 <?php namespace Ace\RepoMan\Provider;
 
+use Monolog\Handler\StreamHandler;
 use Silex\Application;
 use Monolog\Logger;
 use Monolog\Handler\ErrorLogHandler;
@@ -15,6 +16,7 @@ class Log implements ServiceProviderInterface
     {
         $app['logger'] = new Logger('log');
         $app['logger']->pushHandler(new ErrorLogHandler());
+        $app['logger']->pushHandler(new StreamHandler('/var/log/consume.log'));
     }
 
     public function boot(Application $app)

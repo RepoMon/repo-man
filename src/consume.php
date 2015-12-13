@@ -3,42 +3,29 @@
  * @author timrodger
  * Date: 05/12/15
  *
- * Consumes events
+ * Consumes repo-mon.update.scheduled events
  * Updates repositories
  */
-require_once __DIR__ . '/vendor/autoload.php';
 
-use PhpAmqpLib\Connection\AMQPStreamConnection;
-use Monolog\Logger;
-use Monolog\Handler\StreamHandler;
+$app = require_once __DIR__ .'/app.php';
+$app->boot();
 
-$channel_name = 'repo-mon.main';
-$queue_host = 'rabbitmq';
-$queue_port = 5672;
+$app['logger']->notice("rabbit host: %s port: %s channel: %s\n",
+    $app['config']->getRabbitHost(),
+    $app['config']->getRabbitPort(),
+    $app['config']->getRabbitChannelName()
+);
 
-$logger = new Logger('log');
-$logger->pushHandler(new StreamHandler('/var/log/consume.log', Logger::DEBUG));
-$logger->notice(sprintf(" rabbit host %s port %s\n", $queue_host, $queue_port));
+$store = $app['store'];
 
-$connection = new AMQPStreamConnection($queue_host, $queue_port, 'guest', 'guest');
-$channel = $connection->channel();
-$channel->exchange_declare($channel_name, 'fanout', false, false, false);
+$callback = function($msg) use ($app) {
+    
+    $app['logger']->notice(" Received ", $msg->body);
+    $event = json_decode($msg->body, true);
 
-list($queue_name, ,) = $channel->queue_declare("", false, false, true, false);
-
-$channel->queue_bind($queue_name, $channel_name);
-
-echo ' Waiting for events. To exit press CTRL+C', "\n";
-
-$callback = function($event) use ($logger) {
-    $logger->notice(sprintf(" Received %s", $event->body));
+    if ($event['name'] === 'repo-mon.update.scheduled') {
+        // update this repo
+    }
 };
 
-$channel->basic_consume($queue_name, '', false, true, false, false, $callback);
-
-while(count($channel->callbacks)) {
-    $channel->wait();
-}
-
-$channel->close();
-$connection->close();
+$app['queue-client']->consume($callback);
