@@ -8,7 +8,7 @@ use Ace\RepoMan\Command\CommandInterface;
  * @group filesystem
  * @author timrodger
  */
-class UpdateCommandTest extends PHPUnit_Framework_TestCase
+abstract class UpdateCommandTest extends PHPUnit_Framework_TestCase
 {
     /**
      * name of file in repo
