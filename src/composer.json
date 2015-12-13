@@ -1,10 +1,10 @@
 {
-    "name": "scee/RepoMan",
+    "name": "RepoMon/repo-man",
     "description": "Repository management tools",
     "authors": [
         {
             "name": "Tim Rodger",
-            "email": "tim_rodger@scee.net"
+            "email": "tim.rodger@gmail.com"
         }
     ],
 
