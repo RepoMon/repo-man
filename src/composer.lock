@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "f49f52360411439b939dac122e853413",
+    "hash": "646bc1e7d6ebd7c2fc0fc5f6b2f0714a",
     "content-hash": "79956b5b9598c6fb298683ed1cdf9576",
     "packages": [
         {
@@ -490,12 +490,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-kernel.git",
-                "reference": "d2c7a898299aede828379907d4a222f04d68d007"
+                "reference": "1050e14e80d793a33c66d7ff31cd54bd9305ccc8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-kernel/zipball/d2c7a898299aede828379907d4a222f04d68d007",
-                "reference": "d2c7a898299aede828379907d4a222f04d68d007",
+                "url": "https://api.github.com/repos/symfony/http-kernel/zipball/1050e14e80d793a33c66d7ff31cd54bd9305ccc8",
+                "reference": "1050e14e80d793a33c66d7ff31cd54bd9305ccc8",
                 "shasum": ""
             },
             "require": {
@@ -564,7 +564,7 @@
             ],
             "description": "Symfony HttpKernel Component",
             "homepage": "https://symfony.com",
-            "time": "2015-11-30 20:53:55"
+            "time": "2015-12-11 20:32:48"
         },
         {
             "name": "symfony/polyfill-php54",
@@ -809,12 +809,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle.git",
-                "reference": "fd6447e50b77739fb9b877fa175e0218922d054f"
+                "reference": "27658fa79ea9ee7afcfc10844f60809693e75da6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/fd6447e50b77739fb9b877fa175e0218922d054f",
-                "reference": "fd6447e50b77739fb9b877fa175e0218922d054f",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/27658fa79ea9ee7afcfc10844f60809693e75da6",
+                "reference": "27658fa79ea9ee7afcfc10844f60809693e75da6",
                 "shasum": ""
             },
             "require": {
@@ -853,7 +853,7 @@
                 "rest",
                 "web service"
             ],
-            "time": "2015-11-23 00:38:42"
+            "time": "2015-12-11 17:51:00"
         },
         {
             "name": "guzzlehttp/ringphp",
@@ -1376,19 +1376,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/diff.git",
-                "reference": "2b0112e42c338afa9ad9dfeb94d66f6d84c2f828"
+                "reference": "13edfd8706462032c2f52b4b862974dd46b71c9e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/diff/zipball/2b0112e42c338afa9ad9dfeb94d66f6d84c2f828",
-                "reference": "2b0112e42c338afa9ad9dfeb94d66f6d84c2f828",
+                "url": "https://api.github.com/repos/sebastianbergmann/diff/zipball/13edfd8706462032c2f52b4b862974dd46b71c9e",
+                "reference": "13edfd8706462032c2f52b4b862974dd46b71c9e",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
             "require-dev": {
-                "phpunit/phpunit": "~5"
+                "phpunit/phpunit": "~4.8"
             },
             "type": "library",
             "extra": {
@@ -1420,7 +1420,7 @@
             "keywords": [
                 "diff"
             ],
-            "time": "2015-12-06 07:21:36"
+            "time": "2015-12-08 07:14:41"
         },
         {
             "name": "sebastian/environment",

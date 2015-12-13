@@ -16,7 +16,7 @@ class Log implements ServiceProviderInterface
     {
         $app['logger'] = new Logger('log');
         $app['logger']->pushHandler(new ErrorLogHandler());
-        $app['logger']->pushHandler(new StreamHandler('/var/log/consume.log'));
+        $app['logger']->pushHandler(new StreamHandler('/tmp/consume.log'));
     }
 
     public function boot(Application $app)

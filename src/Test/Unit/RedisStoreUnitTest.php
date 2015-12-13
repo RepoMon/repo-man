@@ -98,65 +98,6 @@ class RedisStoreUnitTest extends PHPUnit_Framework_TestCase
         $this->store->add($url);
     }
 
-    public function testAddToken()
-    {
-        $host = 'github.com';
-        $token = 'abcdef';
-
-        $this->mock_client->expects($this->once())
-            ->method('set')
-            ->with(RedisStore::TOKEN_SET_NAME . ':' . $host, $token);
-
-        $this->store->addToken($host, $token);
-    }
-
-    public function testGetToken()
-    {
-        $host = 'github.com';
-        $token = 'abcdef';
-
-        $this->mock_client->expects($this->once())
-            ->method('get')
-            ->with(RedisStore::TOKEN_SET_NAME . ':' . $host)
-            ->will($this->returnValue($token));
-
-        $actual = $this->store->getToken($host, $token);
-
-        $this->assertSame($token, $actual);
-    }
-
-
-    /**
-     * @expectedException Ace\RepoMan\Store\UnavailableException
-     */
-    public function testAddTokenThrowsExceptionWhenServerIsUnavailable()
-    {
-        $host = 'github.com';
-        $token = 'abcdef';
-
-        $this->mock_client->expects($this->once())
-            ->method('set')
-            ->with(RedisStore::TOKEN_SET_NAME . ':' . $host, $token)
-            ->will($this->throwException(new \Predis\Response\ServerException));
-
-        $this->store->addToken($host, $token);
-    }
-
-    /**
-     * @expectedException Ace\RepoMan\Store\UnavailableException
-     */
-    public function testGetTokenThrowsExceptionWhenServerIsUnavailable()
-    {
-        $host = 'github.com';
-        $token = 'abcdef';
-
-        $this->mock_client->expects($this->once())
-            ->method('get')
-            ->with(RedisStore::TOKEN_SET_NAME . ':' . $host)
-            ->will($this->throwException(new \Predis\Response\ServerException));
-
-        $this->store->getToken($host, $token);
-    }
 
     private function givenSomeMockedData(array $repos)
     {

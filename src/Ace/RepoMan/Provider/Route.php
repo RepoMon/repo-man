@@ -73,27 +73,6 @@ class Route implements ServiceProviderInterface
         });
 
         /**
-         * Adds a token to use when authenticating with remote repository
-         * $req should have a token and a host field
-         */
-        $app->post('/tokens', function(Request $request) use ($app){
-
-            $host = $request->request->get('host');
-            $token = $request->request->get('token');
-
-            $app['git_repo_store']->addToken($host, $token);
-            return $app->json(['status' => 'success', 'host' => $host]);
-
-        })->before(function (Request $request, Application $app) {
-            $host = $request->request->get('host');
-            $token = $request->request->get('token');
-
-            if (empty($host) || empty($token)) {
-                $app->abort(400, json_encode(['error' => 'Token and host are required']), ['Content-Type' => 'application/json']);
-            }
-        });
-
-        /**
          * Generate a composer dependency report on the repositories
          */
         $app->get('/dependencies/report', function(Request $request) use ($app) {

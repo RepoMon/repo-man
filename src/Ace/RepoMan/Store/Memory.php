@@ -53,22 +53,4 @@ class Memory implements StoreInterface
 
         return $repositories;
     }
-
-    /**
-     * @param $host
-     * @param $token
-     */
-    public function addToken($host, $token)
-    {
-
-    }
-
-    /**
-     * @param $host
-     * @return string
-     */
-    public function getToken($host)
-    {
-
-    }
 }

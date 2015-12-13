@@ -47,14 +47,6 @@ class AppErrorIntegrationTest extends WebTestCase
         $this->thenTheResponseIs500();
     }
 
-    public function testAddTokenFails()
-    {
-        $this->givenAClient();
-        $this->client->request('POST', '/tokens', ['host' => 'github.com', 'token'=> 'abcde']);
-
-        $this->thenTheResponseIs500();
-    }
-
     private function givenAClient()
     {
         $this->client = $this->createClient();

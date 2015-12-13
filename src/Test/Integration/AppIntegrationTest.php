@@ -68,37 +68,6 @@ class AppIntegrationTest extends WebTestCase
         $this->thenTheResponseIsSuccess();
     }
 
-    public function testAddTokenSucceeds()
-    {
-        $host =  'github.com';
-        $token = 'abcde12345';
-
-        $this->givenAClient();
-        $this->client->request('POST', '/tokens', ['host' => $host, 'token'=> $token]);
-
-        $this->thenTheResponseIsSuccess();
-    }
-
-    public function testAddTokenFailsWhenHostIsMissing()
-    {
-        $token = 'abcde12345';
-
-        $this->givenAClient();
-        $this->client->request('POST', '/tokens', ['token'=> $token]);
-
-        $this->thenTheResponseIs400();
-    }
-
-    public function testAddTokenFailsWhenTokenIsMissing()
-    {
-        $host =  'github.com';
-
-        $this->givenAClient();
-        $this->client->request('POST', '/tokens', ['host' => $host]);
-
-        $this->thenTheResponseIs400();
-    }
-
     public function testGetComposerReportSucceedsWithHTML()
     {
         $this->givenAClient();

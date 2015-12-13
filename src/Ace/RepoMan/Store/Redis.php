@@ -21,11 +21,6 @@ class Redis implements StoreInterface
     const REPO_SET_NAME = 'git-repositories';
 
     /**
-     * key used to store the host names that have tokens attached
-     */
-    const TOKEN_SET_NAME = 'git-host-tokens';
-
-    /**
      * @var Configuration
      */
     private $config;
@@ -120,59 +115,15 @@ class Redis implements StoreInterface
     }
 
     /**
-     * @param $host
-     * @param $token
-     */
-    public function addToken($host, $token)
-    {
-        try {
-            $this->client->set($this->getTokenKey($host), $token);
-        } catch (ServerException $ex) {
-            throw new UnavailableException($ex->getMessage());
-        }
-    }
-
-    /**
-     * @param $host
-     * @return string
-     */
-    public function getToken($host)
-    {
-        try {
-            return $this->client->get($this->getTokenKey($host));
-        } catch (ServerException $ex) {
-            throw new UnavailableException($ex->getMessage());
-        }
-    }
-
-    /**
      * Create a new Repository instance, pass it the token to use if one is available
      *
      * @param $url string
      */
     private function createRepository($url)
     {
-        // try to get the token for this url
-        $parts = parse_url($url);
-
-        if (isset($parts['token'])) {
-            $token = $this->client->get($this->getTokenKey($parts['host']));
-        } else {
-            // or throw an exception?
-            $token = '';
-        }
+        // or throw an exception?
+        $token = '';
 
         return new Repository($url, $this->config->getRepoDir(), $token);
-    }
-
-    /**
-     * Generate the key to store the token for this host
-     *
-     * @param $host
-     * @return string
-     */
-    private function getTokenKey($host)
-    {
-        return self::TOKEN_SET_NAME . ':' . $host;
     }
  }
