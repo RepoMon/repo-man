@@ -19,6 +19,11 @@ class Configuration
         $this->repo_dir = $repo_dir;
     }
 
+    public function getServiceName()
+    {
+        return 'Repository Monitor v4.0.0';
+    }
+
     /**
      * @return string
      */
@@ -84,5 +89,13 @@ class Configuration
     {
         // use an env var for the channel name too
         return 'repo-mon.main';
+    }
+
+    /**
+     * @return string
+     */
+    public function getTokenService()
+    {
+        return 'http://token';
     }
 }

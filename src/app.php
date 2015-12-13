@@ -11,6 +11,7 @@ use Ace\RepoMan\Provider\ReportFactory as ReportFactoryProvider;
 use Ace\RepoMan\Provider\ViewFactory as ViewFactoryProvider;
 use Ace\RepoMan\Provider\CommandFactory as CommandFactoryProvider;
 use Ace\RepoMan\Provider\QueueClientProvider;
+use Ace\RepoMan\Provider\TokenProvider;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
@@ -27,5 +28,6 @@ $app->register(new ReportFactoryProvider());
 $app->register(new CommandFactoryProvider());
 $app->register(new ViewFactoryProvider());
 $app->register(new QueueClientProvider());
+$app->register(new TokenProvider());
 
 return $app;
