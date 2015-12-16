@@ -25,11 +25,16 @@ class Memory implements StoreInterface
     /**
      * @param $url
      */
-    public function add($url)
+    public function add($url, $owner, $language, $dependency_manager)
     {
         $this->data []= $url;
     }
 
+    /**
+     * @param $url
+     * @return Repository
+     * @throws UnavailableException
+     */
     public function get($url)
     {
         if (in_array($url, $this->data)){
@@ -41,9 +46,9 @@ class Memory implements StoreInterface
 
     /**
      * Return the template contents for $path
-     * @param $path
+     * @param string $owner
      */
-    public function getAll()
+    public function getAll($owner)
     {
         $repositories = [];
 
@@ -52,5 +57,13 @@ class Memory implements StoreInterface
         }
 
         return $repositories;
+    }
+
+    /**
+     * @param string $url
+     */
+    public function delete($url)
+    {
+
     }
 }

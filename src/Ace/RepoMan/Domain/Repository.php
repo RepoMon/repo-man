@@ -55,11 +55,11 @@ class Repository
         $command_line = new CommandLine($this->getCheckoutDirectory());
 
         /**
-         * ought to detect the sort of dependency set to use
+         * pass type of dependency set to use to constructor
          */
         $dependency_set = new ComposerDependencySet($this, $command_line);
         
-        // assumes the repositories token is for git hub
+        // assumes the token is for git hub
         if (!is_null($this->token)) {
             $dependency_set->setGitHubToken($this->token);
         }

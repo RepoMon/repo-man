@@ -6,10 +6,12 @@
  */
 interface StoreInterface
 {
-    public function getAll();
+    public function getAll($owner);
 
     public function get($url);
 
-    public function add($url);
+    public function add($url, $owner, $language, $dependency_manager);
+
+    public function delete($url);
 
 }

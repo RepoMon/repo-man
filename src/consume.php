@@ -24,12 +24,29 @@ $callback = function($msg) use ($app) {
 
     if ($event['name'] === 'repo-mon.update.scheduled') {
         // update this repo
+
         // get token
         $token = $app['token-service']->getToken($event['data']['owner']);
         // update the repository, locally using the token
-        $command = $app['command_factory']->create('dependencies/update/current', $event['data']['url']);
-        $command->execute(null);
+        $command = $app['command_factory']->create(
+            'dependencies/update/current',
+            $event['data']['url'],
+            $token
+        );
 
+        $command->execute();
+
+    } else if ($event['name'] === 'repo-mon.repo.configured') {
+        /**
+        $result = $app['store']->add(
+            $event['data']['url'],
+            $event['data']['owner'],
+            $event['data']['language'],
+            $event['data']['dependency_manager']
+        );
+        echo " Result of insert is '$result'\n";
+
+        */
     }
 };
 
