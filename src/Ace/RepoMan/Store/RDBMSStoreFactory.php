@@ -31,7 +31,7 @@ class RDBMSStoreFactory implements StoreFactoryInterface
     /**
      * @var string
      */
-    private $table_name = 'tasks';
+    private $table_name = 'repositories';
 
     /**
      * @var string
