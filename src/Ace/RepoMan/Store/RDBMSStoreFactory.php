@@ -69,6 +69,6 @@ class RDBMSStoreFactory implements StoreFactoryInterface
         // next ensure table exists
         $pdo->query(sprintf('CREATE TABLE IF NOT EXISTS %s (url TEXT, owner TEXT, lang TEXT, dependency_manager)', $this->table_name));
 
-        return new RDBMSStore($pdo, $this->table_name, $directory);
+        return new RDBMSStore($pdo, $this->table_name, $this->directory);
     }
 }
