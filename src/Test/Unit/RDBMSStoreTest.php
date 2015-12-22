@@ -78,7 +78,7 @@ class RDBMSStoreTest extends PHPUnit_Framework_TestCase
         ];
     }
 
-    public function testGet()
+    public function testGetRepositoryByUrl()
     {
         $url = 'owner/repo';
 
@@ -115,7 +115,7 @@ class RDBMSStoreTest extends PHPUnit_Framework_TestCase
 
     }
 
-    public function testGetAll()
+    public function testGetAllRepositoriesForOwner()
     {
         $this->givenAClient();
 
@@ -140,5 +140,57 @@ class RDBMSStoreTest extends PHPUnit_Framework_TestCase
         $repositories = $this->store->getAll('malcolm-q');
 
         $this->assertSame(['owner/repo'], $repositories);
+    }
+
+    public function testDeleteReturnsTrueOnSuccess()
+    {
+        $url = '/test/repo';
+
+        $this->givenAClient();
+
+        $this->givenAStore();
+
+        $mock_statement = $this->getMockBuilder('PDOStatement')
+            ->getMock();
+
+        $this->client->expects($this->once())
+            ->method('prepare')
+            ->with('DELETE FROM ' . $this->table_name . ' WHERE url = :url')
+            ->will($this->returnValue($mock_statement));
+
+        $mock_statement->expects($this->once())
+            ->method('execute')
+            ->with([':url' => $url])
+            ->will($this->returnValue(true));
+
+        $result = $this->store->delete($url);
+
+        $this->assertTrue($result);
+    }
+
+    public function testDeleteReturnsFalseOnFailure()
+    {
+        $url = '/test/repo';
+
+        $this->givenAClient();
+
+        $this->givenAStore();
+
+        $mock_statement = $this->getMockBuilder('PDOStatement')
+            ->getMock();
+
+        $this->client->expects($this->once())
+            ->method('prepare')
+            ->with('DELETE FROM ' . $this->table_name . ' WHERE url = :url')
+            ->will($this->returnValue($mock_statement));
+
+        $mock_statement->expects($this->once())
+            ->method('execute')
+            ->with([':url' => $url])
+            ->will($this->returnValue(false));
+
+        $result = $this->store->delete($url);
+
+        $this->assertFalse($result);
     }
 }

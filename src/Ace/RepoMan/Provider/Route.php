@@ -28,7 +28,7 @@ class Route implements ServiceProviderInterface
             $repositories = [];
 
             // for each repo generate the url to access it here
-            foreach($app['git_repo_store']->getAll() as $repository) {
+            foreach($app['store']->getAll() as $repository) {
                 $repositories[]= $repository->getUrl();
             }
 
@@ -43,7 +43,7 @@ class Route implements ServiceProviderInterface
             // add the repo to the store
             $url = $request->request->get('url');
 
-            $app['git_repo_store']->add($url);
+            $app['store']->add($url);
             return $app->json(['status' => 'success', 'name' => $url]);
 
         })->before(function (Request $request, Application $app){
@@ -55,49 +55,22 @@ class Route implements ServiceProviderInterface
             }
         });
 
-        /**
-         * Update all the configured repositories
-         * Is this needed ? do we want to have users do this manually?
-         * If we do support this it needs to be on a different endpoint
-         */
-        $app->post('/repositories/update', function(Request $request) use ($app){
-
-            foreach ($app['git_repo_store']->getAll() as $repository) {
-                $repository->update();
-                $repository->checkout('master');
-                $app['logger']->info("updated " . $repository->getUrl());
-            }
-
-            return new Response('', 200);
-
-        });
-
-        /**
-         * Generate a composer dependency report on the repositories
-         */
-        $app->get('/dependencies/report', function(Request $request) use ($app) {
-
-            $report = $app['report_factory']->create('dependency/report');
-
-            // respond with the report output
-            $result = $report->generate();
-
-            $view_name = 'dependency/report';
-
-            $accept = $request->headers->get('Accept');
-            $priorities = $app['view_factory']->getAvailableContentTypes($view_name);
-
-            $negotiator = new FormatNegotiator();
-            $type = $negotiator->getBest($accept, $priorities);
-            $content_type = $type ? $type->getValue() : $priorities[0];
-
-            $view = $app['view_factory']->create($view_name, $content_type);
-
-            $body = $view->render($result);
-
-            // format based on request accept header
-            return new Response($body, 200, ['Content-Type' => $content_type]);
-        });
+//        /**
+//         * Update all the configured repositories
+//         * Is this needed ? do we want to have users do this manually?
+//         * If we do support this it needs to be on a different endpoint
+//         */
+//        $app->post('/repositories/update', function(Request $request) use ($app){
+//
+//            foreach ($app['git_repo_store']->getAll() as $repository) {
+//                $repository->update();
+//                $repository->checkout('master');
+//                $app['logger']->info("updated " . $repository->getUrl());
+//            }
+//
+//            return new Response('', 200);
+//
+//        });
 
         /**
          * Update a repository's dependencies

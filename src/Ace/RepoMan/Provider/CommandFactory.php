@@ -13,7 +13,7 @@ class CommandFactory implements ServiceProviderInterface
 
     public function boot(Application $app)
     {
-        $app['command_factory'] = new \Ace\RepoMan\Command\CommandFactory($app['git_repo_store']);
+        $app['command_factory'] = new \Ace\RepoMan\Command\CommandFactory($app['store']);
     }
 
 }
