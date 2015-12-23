@@ -12,7 +12,7 @@ class Configuration
     private $repo_dir;
 
     /**
-     * @param $base_dir
+     * @param $repo_dir
      */
     public function __construct($repo_dir)
     {

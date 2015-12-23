@@ -4,7 +4,6 @@ use Silex\Application;
 use Silex\ServiceProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Negotiation\FormatNegotiator;
 
 /**
  * Configures routing
@@ -21,56 +20,14 @@ class Route implements ServiceProviderInterface
     public function boot(Application $app)
     {
         /**
-         * Respond with a JSON array of the repository names (urls)
+         * Respond with a JSON array of the repositories
          */
-        $app->get('/repositories', function(Request $request) use ($app){
+        $app->get('/repositories/{owner}', function(Request $request, $owner) use ($app){
 
-            $repositories = [];
-
-            // for each repo generate the url to access it here
-            foreach($app['store']->getAll() as $repository) {
-                $repositories[]= $repository->getUrl();
-            }
-
-            return $app->json($repositories);
+            return $app->json(
+                $app['store']->getAll($owner)
+            );
         });
-
-        /**
-         * Adds a repository
-         */
-        $app->post('/repositories', function(Request $request) use ($app){
-
-            // add the repo to the store
-            $url = $request->request->get('url');
-
-            $app['store']->add($url);
-            return $app->json(['status' => 'success', 'name' => $url]);
-
-        })->before(function (Request $request, Application $app){
-
-            $url = $request->request->get('url');
-
-            if (empty($url)){
-                $app->abort(400, json_encode(['error' => 'Url is missing']), ['Content-Type' => 'application/json']);
-            }
-        });
-
-//        /**
-//         * Update all the configured repositories
-//         * Is this needed ? do we want to have users do this manually?
-//         * If we do support this it needs to be on a different endpoint
-//         */
-//        $app->post('/repositories/update', function(Request $request) use ($app){
-//
-//            foreach ($app['git_repo_store']->getAll() as $repository) {
-//                $repository->update();
-//                $repository->checkout('master');
-//                $app['logger']->info("updated " . $repository->getUrl());
-//            }
-//
-//            return new Response('', 200);
-//
-//        });
 
         /**
          * Update a repository's dependencies

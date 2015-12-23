@@ -11,7 +11,7 @@ use Silex\WebTestCase;
 class AppErrorIntegrationTest extends WebTestCase
 {
     /**
-     * @var Symfony\Component\HttpKernel\Client
+     * @var \Symfony\Component\HttpKernel\Client
      */
     private $client;
 
@@ -25,24 +25,6 @@ class AppErrorIntegrationTest extends WebTestCase
     {
         $this->givenAClient();
         $this->client->request('GET', '/repositories');
-
-        $this->thenTheResponseIs500();
-    }
-
-    public function testAddRepositoryFails()
-    {
-        $url = 'https://github.com/timothy-r/render';
-
-        $this->givenAClient();
-        $this->client->request('POST', '/repositories', ['url' => $url]);
-
-        $this->thenTheResponseIs500();
-    }
-
-    public function testUpdateRepositoriesFails()
-    {
-        $this->givenAClient();
-        $this->client->request('POST', '/repositories/update');
 
         $this->thenTheResponseIs500();
     }

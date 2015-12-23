@@ -17,13 +17,14 @@ $app = new Application();
 
 $dir = '/tmp/repositories';
 
+$app->register(new ErrorHandlerProvider());
+$app->register(new StoreProvider());
 $app->register(new ConfigProvider($dir));
 $app->register(new LogProvider());
-$app->register(new ErrorHandlerProvider());
 $app->register(new RouteProvider());
 $app->register(new CommandFactoryProvider());
 $app->register(new QueueClientProvider());
 $app->register(new TokenProvider());
-$app->register(new StoreProvider());
+
 
 return $app;

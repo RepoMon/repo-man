@@ -15,55 +15,55 @@ class Memory implements StoreInterface
     private $data = [];
 
     /**
-     * @param Configuration $config
-     */
-    public function __construct(Configuration $config)
-    {
-        $this->config = $config;
-    }
-
-    /**
      * @param $url
+     * @param $owner
+     * @param $language
+     * @param $dependency_manager
+     * @return bool
      */
     public function add($url, $owner, $language, $dependency_manager)
     {
-        $this->data []= $url;
+        $this->data []= ['url' => $url, 'owner' => $owner, 'lang' => $language, 'dependency_manager' => $dependency_manager];
+        return true;
     }
 
     /**
      * @param $url
-     * @return Repository
+     * @return array
      * @throws UnavailableException
      */
     public function get($url)
     {
         if (in_array($url, $this->data)){
-            return new Repository($url, $this->config->getRepoDir());
+            return $this->data[$url];
         } else {
             throw new UnavailableException;
         }
     }
 
     /**
-     * Return the template contents for $path
-     * @param string $owner
+     * @param $owner
+     * @return array
      */
     public function getAll($owner)
     {
         $repositories = [];
 
-        foreach($this->data as $url) {
-            $repositories []= new Repository($url, $this->config->getRepoDir());
+        foreach($this->data as $repository) {
+            if ($repository['owner'] === $owner) {
+                $repositories [] = $repository;
+            }
         }
-
         return $repositories;
     }
 
     /**
-     * @param string $url
+     * @param $url
+     * @return bool
      */
     public function delete($url)
     {
-
+        unset($this->data[$url]);
+        return true;
     }
 }

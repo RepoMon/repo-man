@@ -1,5 +1,6 @@
 <?php namespace Ace\RepoMan\Provider;
 
+use Ace\RepoMan\Store\Memory;
 use Ace\RepoMan\Store\RDBMSStoreFactory;
 use Silex\Application;
 use Silex\ServiceProviderInterface;
@@ -23,15 +24,19 @@ class StoreProvider implements ServiceProviderInterface
      */
     public function boot(Application $app)
     {
-        $config = $app['config'];
+        if (getenv('DB_TYPE') === 'MEMORY') {
+            $app['store'] = new Memory();
+        } else {
+            $config = $app['config'];
 
-        $factory = new RDBMSStoreFactory(
-            $config->getDbHost(),
-            $config->getDbName(),
-            $config->getDbUser(),
-            $config->getDbPassword(),
-            'dir'
-        );
-        $app['store'] = $factory->create();
+            $factory = new RDBMSStoreFactory(
+                $config->getDbHost(),
+                $config->getDbName(),
+                $config->getDbUser(),
+                $config->getDbPassword(),
+                'dir'
+            );
+            $app['store'] = $factory->create();
+        }
     }
 }

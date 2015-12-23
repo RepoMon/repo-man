@@ -1,6 +1,7 @@
 <?php namespace Ace\RepoMan\Store;
 
 use PDO;
+use PDOException;
 
 /**
  * @author timrodger
@@ -59,16 +60,20 @@ class RDBMSStoreFactory implements StoreFactoryInterface
      */
     public function create()
     {
-        $dsn = sprintf('mysql:host=%s', $this->db_host);
-        $pdo = new PDO($dsn, $this->user, $this->password);
+        try {
+            $dsn = sprintf('mysql:host=%s', $this->db_host);
+            $pdo = new PDO($dsn, $this->user, $this->password);
 
-        // ensure db exists
-        $pdo->query(sprintf('CREATE DATABASE IF NOT EXISTS %s', $this->db_name));
-        $pdo->query(sprintf('use %s', $this->db_name));
+            // ensure db exists
+            $pdo->query(sprintf('CREATE DATABASE IF NOT EXISTS %s', $this->db_name));
+            $pdo->query(sprintf('use %s', $this->db_name));
 
-        // next ensure table exists
-        $pdo->query(sprintf('CREATE TABLE IF NOT EXISTS %s (url TEXT, owner TEXT, lang TEXT, dependency_manager)', $this->table_name));
+            // next ensure table exists
+            $pdo->query(sprintf('CREATE TABLE IF NOT EXISTS %s (url TEXT, owner TEXT, lang TEXT, dependency_manager)', $this->table_name));
 
-        return new RDBMSStore($pdo, $this->table_name, $this->directory);
+            return new RDBMSStore($pdo, $this->table_name, $this->directory);
+        } catch (PDOException $ex) {
+            throw new UnavailableException($ex->getMessage());
+        }
     }
 }

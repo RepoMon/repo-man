@@ -17,110 +17,21 @@ class AppIntegrationTest extends WebTestCase
 
     public function createApplication()
     {
-        putenv('REDIS_PORT=MEMORY');
+        putenv('DB_TYPE=MEMORY');
         return require __DIR__.'/../../app.php';
     }
 
     public function testListRepositoriesReturnsAJsonArray()
     {
         $this->givenAClient();
-        $this->client->request('GET', '/repositories');
+        $owner = 'dave';
+        $this->client->request('GET', '/repositories/' . $owner);
 
         $this->thenTheResponseIsSuccess();
 
         $body = $this->client->getResponse()->getContent();
 
         $this->assertTrue(is_array(json_decode($body, 1)));
-    }
-
-    public function testAddRepositorySucceeds()
-    {
-        $url =  'https://github.com/timothy-r/render';
-
-        $this->givenAClient();
-        $this->client->request('POST', '/repositories', ['url' => $url]);
-
-        $this->thenTheResponseIsSuccess();
-
-    }
-
-    public function testAddRepositoryFailsWhenUrlIsEmpty()
-    {
-        $this->givenAClient();
-        $this->client->request('POST', '/repositories', ['url' => '']);
-
-        $this->thenTheResponseIs400();
-    }
-
-    public function testAddRepositoryFailsWhenUrlIsMissing()
-    {
-        $this->givenAClient();
-        $this->client->request('POST', '/repositories');
-
-        $this->thenTheResponseIs400();
-    }
-
-    public function testUpdateRepositoriesSucceeds()
-    {
-        $this->givenAClient();
-        $this->client->request('POST', '/repositories/update');
-
-        $this->thenTheResponseIsSuccess();
-    }
-
-    public function testGetComposerReportSucceedsWithHTML()
-    {
-        $this->givenAClient();
-        $this->client->request('GET', '/dependencies/report', [], [], ['HTTP_Accept' => 'text/html']);
-        $this->thenTheResponseIsSuccess();
-        $empty_html = "<table>
-<thead><tr><th>Library</th><th>Version</th><th>Used By</th><th>Configured Version</th><th>Last Updated</th></tr></thead>
-</table>";
-        $this->assertResponseContents($empty_html);
-    }
-
-    public function testGetComposerReportSucceedsWithJSON()
-    {
-        $this->givenAClient();
-        $this->client->request('GET', '/dependencies/report', [], [], ['HTTP_Accept' => 'application/json']);
-        $this->thenTheResponseIsSuccess();
-        $this->assertResponseContents(json_encode([]));
-    }
-
-    public function testGetComposerReportSucceedsWithCSV()
-    {
-        $this->givenAClient();
-        $this->client->request('GET', '/dependencies/report', [], [], ['HTTP_Accept' => 'text/csv']);
-        $this->thenTheResponseIsSuccess();
-        $this->assertResponseContents('Vendor,Library,Version,"Used By","Configured Version","Last Updated"');
-    }
-
-    public function testGetComposerReportSucceedsWithJSONAsDefault()
-    {
-        $this->givenAClient();
-        $this->client->request('GET', '/dependencies/report', [], [], ['HTTP_Accept' => '']);
-        $this->thenTheResponseIsSuccess();
-        $this->assertResponseContents(json_encode([]));
-    }
-
-    public function testGetComposerReportSucceedsWithJSONIfAcceptIsntSupported()
-    {
-        $this->givenAClient();
-        $this->client->request('GET', '/dependencies/report', [], [], ['HTTP_Accept' => 'text/xml']);
-        $this->thenTheResponseIsSuccess();
-        $this->assertResponseContents(json_encode([]));
-    }
-
-    public function testUpdateComposerDependenciesFailsForMissingRepo()
-    {
-        $this->givenAClient();
-        $this->client->request(
-            'POST',
-            '/dependencies',
-            ['require' => json_encode(['lib/www' => 'v0.3.4']), 'repository' => 'https://github.com/user/repo']
-        );
-
-        $this->thenTheResponseIs500();
     }
 
     private function givenAClient()
