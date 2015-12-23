@@ -56,7 +56,8 @@ class RDBMSStoreFactory implements StoreFactoryInterface
     }
 
     /**
-     * @return StoreInterface
+     * @return RDBMSStore
+     * @throws UnavailableException
      */
     public function create()
     {

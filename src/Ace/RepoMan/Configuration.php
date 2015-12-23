@@ -63,7 +63,7 @@ class Configuration
 
     public function getDbName()
     {
-        return 'scheduler';
+        return 'repositories';
     }
 
     /**
