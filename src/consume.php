@@ -42,6 +42,9 @@ $callback = function($msg) use ($app) {
 
     } else if ($event['name'] === 'repo-mon.repo.configured') {
 
+        // remove any existing configuration for this repository
+        $app['store']->delete($event['data']['url']);
+
         $result = $app['store']->add(
             $event['data']['url'],
             $event['data']['owner'],

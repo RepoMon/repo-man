@@ -21,6 +21,9 @@ class AppErrorIntegrationTest extends WebTestCase
         return require __DIR__.'/../../app.php';
     }
 
+    /**
+     * @expectedException Ace\RepoMan\Store\UnavailableException
+     */
     public function testListRepositoriesFails()
     {
         $this->givenAClient();
