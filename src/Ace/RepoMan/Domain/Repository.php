@@ -1,4 +1,5 @@
 <?php namespace Ace\RepoMan\Domain;
+
 use Ace\RepoMan\Exception\DirectoryNotFoundException;
 
 /**
