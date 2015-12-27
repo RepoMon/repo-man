@@ -1,6 +1,8 @@
 <?php namespace Ace\RepoMan\Domain;
 
 use Ace\RepoMan\Exception\DirectoryNotFoundException;
+use RecursiveIteratorIterator;
+use RecursiveDirectoryIterator;
 
 /**
  * Represents a git repository
@@ -245,6 +247,24 @@ class Repository
         if ($this->hasFile($name)) {
             return file_get_contents($this->getFilePath($name));
         }
+    }
+
+    /**
+     * @param $name
+     * @return string the contents of file named $name somewhere in checkout
+     */
+    public function findFile($name)
+    {
+        $files = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($this->directory . '/' . $this->name), RecursiveIteratorIterator::SELF_FIRST
+        );
+
+        foreach($files as $file){
+            if ($name === $file->getFileName()){
+                return file_get_contents($file->getPathName());
+            }
+        }
+
     }
 
     /**

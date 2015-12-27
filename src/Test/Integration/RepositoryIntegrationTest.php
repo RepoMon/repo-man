@@ -23,6 +23,11 @@ class RepositoryIntegrationTest extends PHPUnit_Framework_TestCase
     const FILE_TWO = 'two.txt';
 
     /**
+     * Another file name
+     */
+    const FILE_THREE = 'three.txt';
+
+    /**
      * @var string
      */
     private $url;
@@ -190,6 +195,33 @@ class RepositoryIntegrationTest extends PHPUnit_Framework_TestCase
         $this->givenACheckout();
 
         $contents = $this->repository->getFile('not-there');
+
+        $this->assertSame(null, $contents);
+    }
+
+    public function testFindFile()
+    {
+        $this->givenACheckout();
+
+        $contents = $this->repository->findFile(self::FILE_ONE);
+
+        $this->assertSame('one contents', $contents);
+    }
+
+    public function testFindFileInSubDirectory()
+    {
+        $this->givenACheckout();
+
+        $contents = $this->repository->findFile(self::FILE_THREE);
+
+        $this->assertSame('three contents', $contents);
+    }
+
+    public function testFindFileReturnsNullForMissingFile()
+    {
+        $this->givenACheckout();
+
+        $contents = $this->repository->findFile('not-there');
 
         $this->assertSame(null, $contents);
     }
@@ -421,6 +453,9 @@ class RepositoryIntegrationTest extends PHPUnit_Framework_TestCase
 
         file_put_contents(self::FILE_ONE, 'one contents');
         file_put_contents(self::FILE_TWO, 'two contents');
+
+        mkdir('sub-dir', 0777, true);
+        file_put_contents('sub-dir/' . self::FILE_THREE, 'three contents');
 
         exec("git init .");
         exec("git add .");
