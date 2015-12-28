@@ -3,7 +3,6 @@
 use Ace\RepoMan\Domain\CommandLine;
 use Ace\RepoMan\Domain\ComposerConfig;
 use Ace\RepoMan\Domain\Repository;
-use Exception;
 use Ace\RepoMan\Exception\FileNotFoundException;
 use Ace\RepoMan\Exception\InvalidFileContentsException;
 
