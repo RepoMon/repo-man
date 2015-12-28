@@ -268,6 +268,23 @@ class Repository
     }
 
     /**
+     * @param $name string
+     * @return string the path to the file with this name
+     */
+    public function findFilePath($name)
+    {
+        $files = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($this->directory . '/' . $this->name), RecursiveIteratorIterator::SELF_FIRST
+        );
+
+        foreach($files as $file){
+            if ($name === $file->getFileName()){
+                return $file->getPath();
+            }
+        }
+    }
+
+    /**
      * Write or overwrite file's contents
      * @param $name
      * @param $contents

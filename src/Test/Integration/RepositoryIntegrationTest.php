@@ -226,6 +226,33 @@ class RepositoryIntegrationTest extends PHPUnit_Framework_TestCase
         $this->assertSame(null, $contents);
     }
 
+    public function testFindFilePath()
+    {
+        $this->givenACheckout();
+
+        $path = $this->repository->findFilePath(self::FILE_ONE);
+
+        $this->assertSame($this->directory . '/' . $this->repo_name, $path);
+    }
+
+    public function testFindFilePathInSubDirectory()
+    {
+        $this->givenACheckout();
+
+        $path = $this->repository->findFilePath(self::FILE_THREE);
+
+        $this->assertSame($this->directory . '/' . $this->repo_name . '/sub-dir', $path);
+    }
+
+    public function testFindFilePathReturnsNullForMissingFile()
+    {
+        $this->givenACheckout();
+
+        $path = $this->repository->findFilePath('not-there');
+
+        $this->assertSame(null, $path);
+    }
+
     public function testSetFileOverwritesExisting()
     {
         $this->givenACheckout();
