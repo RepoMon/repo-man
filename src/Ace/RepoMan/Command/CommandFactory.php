@@ -1,6 +1,7 @@
 <?php namespace Ace\RepoMan\Command;
 
 use Ace\RepoMan\Domain\CommandLine;
+use Ace\RepoMan\Domain\Repository;
 use Ace\RepoMan\Store\StoreInterface;
 
 /**
@@ -15,20 +16,37 @@ class CommandFactory
     private $store;
 
     /**
-     * @param StoreInterface $store
+     * @var string
      */
-    public function __construct(StoreInterface $store)
+    private $repository_dir;
+
+    /**
+     * @param StoreInterface $store
+     * @param $repository_dir
+     */
+    public function __construct(StoreInterface $store, $repository_dir)
     {
         $this->store = $store;
+        $this->repository_dir = $repository_dir;
     }
 
     /**
-     * @param $repository_url string
-     * @return \Ace\RepoMan\Command\CommandInterface
+     * @param $type
+     * @param $repository_url
+     * @param $token
+     * @return CurrentUpdater|VersionUpdater
      */
-    public function create($type, $repository_url)
+    public function create($type, $repository_url, $token)
     {
-        $repository = $this->store->get($repository_url);
+        // use the data associated with the repository url to construct the command instance
+        $repository_data = $this->store->get($repository_url);
+
+        // create a repository instance from the data returned by store
+        $repository = new Repository(
+            $repository_data['url'],
+            $this->repository_dir,
+            $token
+        );
 
         switch ($type) {
 

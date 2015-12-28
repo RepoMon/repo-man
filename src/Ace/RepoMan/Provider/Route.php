@@ -37,17 +37,20 @@ class Route implements ServiceProviderInterface
 
             $require = $request->get('require', '');
             $repository = $request->get('repository');
+            $owner = $request->get('owner');
+
+            $token = $app['token-service']->getToken($owner);
 
             if (!empty($require)) {
 
                 $app['logger']->addInfo("require = '$require' repository='$repository'");
-                $command = $app['command_factory']->create('dependencies/update/required', $repository);
+                $command = $app['command_factory']->create('dependencies/update/required', $repository, $token);
                 $command->execute(['require' => json_decode($require, true)]);
 
             } else {
 
                 $app['logger']->addInfo("repository='$repository'");
-                $command = $app['command_factory']->create('dependencies/update/current', $repository);
+                $command = $app['command_factory']->create('dependencies/update/current', $repository, $token);
                 $command->execute(null);
 
             }
@@ -60,6 +63,12 @@ class Route implements ServiceProviderInterface
 
             if (empty($repository)) {
                 $app->abort(400, json_encode(['error' => 'Repository is required']), ['Content-Type' => 'application/json']);
+            }
+
+            $owner = $request->get('owner');
+
+            if (empty($owner)) {
+                $app->abort(400, json_encode(['error' => 'Owner is required']), ['Content-Type' => 'application/json']);
             }
         });
     }
