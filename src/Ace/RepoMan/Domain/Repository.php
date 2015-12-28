@@ -216,7 +216,7 @@ class Repository
             }
         }
 
-        usort($versions, function($a, $b) { return $a->compare($b);});
+        usort($versions, function(SemanticVersion $a, SemanticVersion $b) { return $a->compare($b);});
         return (string) array_pop($versions);
     }
 

@@ -93,7 +93,7 @@ class ComposerDependencySet implements DependencySetInterface
         }
 
         $this->command_line->exec('cd ' . $path);
-        
+
         // update the current dependencies
         $this->command_line->exec('composer update  --prefer-dist --no-scripts');
 
