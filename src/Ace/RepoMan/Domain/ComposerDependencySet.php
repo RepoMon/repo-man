@@ -86,10 +86,14 @@ class ComposerDependencySet implements DependencySetInterface
      */
     public function updateCurrent()
     {
-        if (!$this->repository->hasFile('composer.json')){
+        $path = $this->repository->findFilePath('composer.json');
+
+        if (!$path){
             throw new FileNotFoundException("'composer.json not found'");
         }
 
+        $this->command_line->exec('cd ' . $path);
+        
         // update the current dependencies
         $this->command_line->exec('composer update  --prefer-dist --no-scripts');
 
