@@ -46,7 +46,7 @@ class RDBMSStore implements StoreInterface
      * @param int $active
      * @return bool
      */
-    §
+    public function add($url, $owner, $description, $lang, $dependency_manager, $timezone, $active)
     {
         $statement = $this->client->prepare(
             sprintf('INSERT INTO %s (
@@ -79,7 +79,6 @@ class RDBMSStore implements StoreInterface
      */
     public function get($url)
     {
-
         $statement = $this->client->prepare('SELECT * FROM ' . $this->table_name . ' WHERE url = :url');
 
         $statement->execute(
