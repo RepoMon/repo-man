@@ -42,19 +42,27 @@ $callback = function($msg) use ($app) {
 
     } else if ($event['name'] === 'repo-mon.repo.configured') {
 
-        // remove any existing configuration for this repository
+        $data = $event['data'];
+
+        $active = 1;
+
+        // remove any existing configuration for this repository - or use update?
         $app['store']->delete($event['data']['url']);
 
         $result = $app['store']->add(
-            $event['data']['url'],
-            $event['data']['owner'],
-            $event['data']['language'],
-            $event['data']['dependency_manager']
+            $data['url'],
+            $data['owner'],
+            $data['description'],
+            $data['language'],
+            $data['dependency_manager'],
+            $data['timezone'],
+            $active
         );
         echo " Result of insert is '$result'\n";
 
     } else if ($event['name'] === 'repo-mon.repo.unconfigured') {
 
+        // set active to be 0 rather than delete the repository
         $result = $app['store']->delete($event['data']['url']);
         echo " Result of delete is '$result'\n";
 }

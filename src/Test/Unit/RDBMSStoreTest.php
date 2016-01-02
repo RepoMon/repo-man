@@ -50,7 +50,7 @@ class RDBMSStoreTest extends PHPUnit_Framework_TestCase
      * @param $frequency
      * @param $timezone
      */
-    public function testAdd($url, $owner, $language, $dependency_manager)
+    public function testAdd($url, $owner, $description, $lang, $dependency_manager, $timezone, $active)
     {
 
         $this->givenAClient();
@@ -59,22 +59,33 @@ class RDBMSStoreTest extends PHPUnit_Framework_TestCase
 
         $mock_statement = $this->getMockBuilder('PDOStatement')
             ->getMock();
+
         $this->client->expects($this->once())
             ->method('prepare')
-            ->with('INSERT INTO ' . $this->table_name . ' (url, owner, lang, dependency_manager) VALUES(:url, :owner, :lang, :dependency_manager)')
+            ->with('INSERT INTO ' . $this->table_name . ' (
+                url, description, owner, lang, dependency_manager, timezone, active)
+            VALUES (:url, :description, :owner, :lang, :dependency_manager, :timezone, :active)')
             ->will($this->returnValue($mock_statement));
 
         $mock_statement->expects($this->once())
             ->method('execute')
-            ->with([':url' => $url, ':owner' => $owner, ':lang' => $language, ':dependency_manager' => $dependency_manager]);
+            ->with([
+                ':url' => $url,
+                ':description' => $description,
+                ':owner' => $owner,
+                ':lang' => $lang,
+                ':dependency_manager' => $dependency_manager,
+                ':timezone' => $timezone,
+                ':active' => $active
+            ]);
 
-        $this->store->add($url, $owner, $language, $dependency_manager);
+        $this->store->add($url, $owner, $description, $lang, $dependency_manager, $timezone, $active);
     }
 
     public function getAddData()
     {
         return [
-            ['test/repo-a', 'malcolm-x', 'PHP5.6', 'composer'],
+            ['test/repo-a', 'malcolm-x', 'A test repo', 'PHP', 'composer', 'Europe/London', 1],
         ];
     }
 

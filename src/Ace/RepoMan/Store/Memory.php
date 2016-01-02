@@ -17,13 +17,24 @@ class Memory implements StoreInterface
     /**
      * @param $url
      * @param $owner
-     * @param $language
+     * @param $description
+     * @param $lang
      * @param $dependency_manager
+     * @param $timezone
+     * @param $active
      * @return bool
      */
-    public function add($url, $owner, $language, $dependency_manager)
+    public function add($url, $owner, $description, $lang, $dependency_manager, $timezone, $active)
     {
-        $this->data []= ['url' => $url, 'owner' => $owner, 'lang' => $language, 'dependency_manager' => $dependency_manager];
+        $this->data []= [
+            'url' => $url,
+            'owner' => $owner,
+            'description' => $description,
+            'lang' => $lang,
+            'dependency_manager' => $dependency_manager,
+            'timezone' => $timezone,
+            'active' => $active
+        ];
         return true;
     }
 

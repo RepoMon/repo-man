@@ -37,22 +37,33 @@ class RDBMSStore implements StoreInterface
     }
 
     /**
-     * @param $url
-     * @param $owner
-     * @param $language
-     * @param $dependency_manager
+     * @param string $url
+     * @param string $owner
+     * @param string $description
+     * @param string $lang
+     * @param string $dependency_manager
+     * @param string $timezone
+     * @param int $active
      * @return bool
      */
-    public function add($url, $owner, $language, $dependency_manager)
+    §
     {
-        $statement = $this->client->prepare('INSERT INTO ' . $this->table_name . ' (url, owner, lang, dependency_manager) VALUES(:url, :owner, :lang, :dependency_manager)');
+        $statement = $this->client->prepare(
+            sprintf('INSERT INTO %s (
+                url, description, owner, lang, dependency_manager, timezone, active)
+            VALUES (:url, :description, :owner, :lang, :dependency_manager, :timezone, :active)'
+            , $this->table_name)
+        );
 
         $result = $statement->execute(
             [
                 ':url' => $url,
+                ':description' => $description,
                 ':owner' => $owner,
-                ':lang' => $language,
-                ':dependency_manager' => $dependency_manager
+                ':lang' => $lang,
+                ':dependency_manager' => $dependency_manager,
+                ':timezone' => $timezone,
+                ':active' => $active
             ]
         );
 

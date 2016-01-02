@@ -10,7 +10,7 @@ interface StoreInterface
 
     public function get($url);
 
-    public function add($url, $owner, $language, $dependency_manager);
+    public function add($url, $owner, $description, $lang, $dependency_manager, $timezone, $active);
 
     public function delete($url);
 

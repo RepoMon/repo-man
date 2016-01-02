@@ -26,5 +26,4 @@ $app->register(new CommandFactoryProvider());
 $app->register(new QueueClientProvider());
 $app->register(new TokenProvider());
 
-
 return $app;
