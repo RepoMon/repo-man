@@ -40,17 +40,18 @@ $callback = function($msg) use ($app) {
 
         $command->execute();
 
-    } else if ($event['name'] === 'repo-mon.repo.configured') {
+    } else if ($event['name'] === 'repo-mon.repository.added') {
 
         $data = $event['data'];
 
-        $active = 1;
+        $active = 0;
 
         // remove any existing configuration for this repository - or use update?
-        $app['store']->delete($event['data']['url']);
+        // $app['store']->delete($event['data']['url']);
 
         $result = $app['store']->add(
             $data['url'],
+            $data['full_name'],
             $data['owner'],
             $data['description'],
             $data['language'],
@@ -60,12 +61,23 @@ $callback = function($msg) use ($app) {
         );
         echo " Result of insert is '$result'\n";
 
-    } else if ($event['name'] === 'repo-mon.repo.unconfigured') {
+    } else if ($event['name'] === 'repo-mon.repository.activated') {
+        $data = $event['data'];
+        $result = $app['store']->activate(
+            $data['full_name']
+        );
+        echo " Result of activate is '$result'\n";
+    } else if ($event['name'] === 'repo-mon.repository.deactivated') {
+        $data = $event['data'];
+        $result = $app['store']->deactivate(
+            $data['full_name']
+        );
+        echo " Result of deactivate is '$result'\n";
 
         // set active to be 0 rather than delete the repository
-        $result = $app['store']->delete($event['data']['url']);
-        echo " Result of delete is '$result'\n";
-}
+       // $result = $app['store']->delete($event['data']['url']);
+       // echo " Result of delete is '$result'\n";
+    }
 };
 
 $app['queue-client']->consume($callback);

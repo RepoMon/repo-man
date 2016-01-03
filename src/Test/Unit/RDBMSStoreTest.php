@@ -46,11 +46,16 @@ class RDBMSStoreTest extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider getAddData
      *
-     * @param $hour
-     * @param $frequency
+     * @param $url
+     * @param $full_name
+     * @param $owner
+     * @param $description
+     * @param $lang
+     * @param $dependency_manager
      * @param $timezone
+     * @param $active
      */
-    public function testAdd($url, $owner, $description, $lang, $dependency_manager, $timezone, $active)
+    public function testAdd($url, $full_name, $owner, $description, $lang, $dependency_manager, $timezone, $active)
     {
 
         $this->givenAClient();
@@ -63,14 +68,15 @@ class RDBMSStoreTest extends PHPUnit_Framework_TestCase
         $this->client->expects($this->once())
             ->method('prepare')
             ->with('INSERT INTO ' . $this->table_name . ' (
-                url, description, owner, lang, dependency_manager, timezone, active)
-            VALUES (:url, :description, :owner, :lang, :dependency_manager, :timezone, :active)')
+                url, full_name, description, owner, lang, dependency_manager, timezone, active)
+            VALUES (:url, :full_name, :description, :owner, :lang, :dependency_manager, :timezone, :active)')
             ->will($this->returnValue($mock_statement));
 
         $mock_statement->expects($this->once())
             ->method('execute')
             ->with([
                 ':url' => $url,
+                ':full_name' => $full_name,
                 ':description' => $description,
                 ':owner' => $owner,
                 ':lang' => $lang,
@@ -79,28 +85,28 @@ class RDBMSStoreTest extends PHPUnit_Framework_TestCase
                 ':active' => $active
             ]);
 
-        $this->store->add($url, $owner, $description, $lang, $dependency_manager, $timezone, $active);
+        $this->store->add($url, $full_name, $owner, $description, $lang, $dependency_manager, $timezone, $active);
     }
 
     public function getAddData()
     {
         return [
-            ['test/repo-a', 'malcolm-x', 'A test repo', 'PHP', 'composer', 'Europe/London', 1],
+            ['https://github.com/test/repo-a', 'test/repo-a', 'malcolm-x', 'A test repo', 'PHP', 'composer', 'Europe/London', 1],
         ];
     }
 
-    public function testGetRepositoryByUrl()
+    public function testGetRepository()
     {
-        $url = 'owner/repo';
+        $full_name = 'owner/repo';
 
         $this->givenAClient();
 
         $this->givenAStore();
 
         $result = [
-                'url' => $url,
+                'full_name' => $full_name,
                 'owner' => 'xavier',
-                'language' => 'PHP7',
+                'language' => 'PHP',
                 'dependency_manager' => 'composer'
         ];
 
@@ -109,18 +115,18 @@ class RDBMSStoreTest extends PHPUnit_Framework_TestCase
 
         $this->client->expects($this->once())
             ->method('prepare')
-            ->with('SELECT * FROM ' .$this->table_name. ' WHERE url = :url')
+            ->with('SELECT * FROM ' .$this->table_name. ' WHERE full_name = :full_name')
             ->will($this->returnValue($mock_statement));
 
         $mock_statement->expects($this->once())
             ->method('execute')
-            ->with([':url' => $url]);
+            ->with([':full_name' => $full_name]);
 
         $mock_statement->expects($this->once())
             ->method('fetch')
             ->will($this->returnValue($result));
 
-        $repository = $this->store->get($url);
+        $repository = $this->store->get($full_name);
 
         $this->assertSame($result, $repository);
 
@@ -155,7 +161,7 @@ class RDBMSStoreTest extends PHPUnit_Framework_TestCase
 
     public function testDeleteReturnsTrueOnSuccess()
     {
-        $url = '/test/repo';
+        $full_name = '/test/repo';
 
         $this->givenAClient();
 
@@ -166,22 +172,22 @@ class RDBMSStoreTest extends PHPUnit_Framework_TestCase
 
         $this->client->expects($this->once())
             ->method('prepare')
-            ->with('DELETE FROM ' . $this->table_name . ' WHERE url = :url')
+            ->with('DELETE FROM ' . $this->table_name . ' WHERE full_name = :full_name')
             ->will($this->returnValue($mock_statement));
 
         $mock_statement->expects($this->once())
             ->method('execute')
-            ->with([':url' => $url])
+            ->with([':full_name' => $full_name])
             ->will($this->returnValue(true));
 
-        $result = $this->store->delete($url);
+        $result = $this->store->delete($full_name);
 
         $this->assertTrue($result);
     }
 
     public function testDeleteReturnsFalseOnFailure()
     {
-        $url = '/test/repo';
+        $full_name = '/test/repo';
 
         $this->givenAClient();
 
@@ -192,15 +198,15 @@ class RDBMSStoreTest extends PHPUnit_Framework_TestCase
 
         $this->client->expects($this->once())
             ->method('prepare')
-            ->with('DELETE FROM ' . $this->table_name . ' WHERE url = :url')
+            ->with('DELETE FROM ' . $this->table_name . ' WHERE full_name = :full_name')
             ->will($this->returnValue($mock_statement));
 
         $mock_statement->expects($this->once())
             ->method('execute')
-            ->with([':url' => $url])
+            ->with([':full_name' => $full_name])
             ->will($this->returnValue(false));
 
-        $result = $this->store->delete($url);
+        $result = $this->store->delete($full_name);
 
         $this->assertFalse($result);
     }

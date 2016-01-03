@@ -16,6 +16,7 @@ class Memory implements StoreInterface
 
     /**
      * @param $url
+     * @param $full_name
      * @param $owner
      * @param $description
      * @param $lang
@@ -24,10 +25,11 @@ class Memory implements StoreInterface
      * @param $active
      * @return bool
      */
-    public function add($url, $owner, $description, $lang, $dependency_manager, $timezone, $active)
+    public function add($url, $full_name, $owner, $description, $lang, $dependency_manager, $timezone, $active)
     {
-        $this->data []= [
+        $this->data[$full_name] = [
             'url' => $url,
+            'full_name' => $full_name,
             'owner' => $owner,
             'description' => $description,
             'lang' => $lang,
@@ -43,10 +45,10 @@ class Memory implements StoreInterface
      * @return array
      * @throws UnavailableException
      */
-    public function get($url)
+    public function get($full_name)
     {
-        if (in_array($url, $this->data)){
-            return $this->data[$url];
+        if (in_array($full_name, $this->data)){
+            return $this->data[$full_name];
         } else {
             throw new UnavailableException;
         }
@@ -69,12 +71,34 @@ class Memory implements StoreInterface
     }
 
     /**
+     * @param $full_name
+     * @throws UnavailableException
+     */
+    public function activate($full_name)
+    {
+        $repo = $this->get($full_name);
+        $repo['active'] = true;
+        $this->data[$full_name] = $repo;
+    }
+
+    /**
+     * @param $full_name
+     * @throws UnavailableException
+     */
+    public function deactivate($full_name)
+    {
+        $repo = $this->get($full_name);
+        $repo['active'] = false;
+        $this->data[$full_name] = $repo;
+    }
+
+    /**
      * @param $url
      * @return bool
      */
-    public function delete($url)
+    public function delete($full_name)
     {
-        unset($this->data[$url]);
+        unset($this->data[$full_name]);
         return true;
     }
 }

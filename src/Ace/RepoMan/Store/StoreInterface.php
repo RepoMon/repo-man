@@ -8,10 +8,14 @@ interface StoreInterface
 {
     public function getAll($owner);
 
-    public function get($url);
+    public function get($full_name);
 
-    public function add($url, $owner, $description, $lang, $dependency_manager, $timezone, $active);
+    public function add($url, $full_name, $owner, $description, $lang, $dependency_manager, $timezone, $active);
 
-    public function delete($url);
+    public function activate($full_name);
+
+    public function deactivate($full_name);
+
+    public function delete($full_name);
 
 }

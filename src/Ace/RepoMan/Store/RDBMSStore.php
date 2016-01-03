@@ -38,6 +38,7 @@ class RDBMSStore implements StoreInterface
 
     /**
      * @param string $url
+     * @param string $full_name
      * @param string $owner
      * @param string $description
      * @param string $lang
@@ -46,18 +47,19 @@ class RDBMSStore implements StoreInterface
      * @param int $active
      * @return bool
      */
-    public function add($url, $owner, $description, $lang, $dependency_manager, $timezone, $active)
+    public function add($url, $full_name, $owner, $description, $lang, $dependency_manager, $timezone, $active)
     {
         $statement = $this->client->prepare(
             sprintf('INSERT INTO %s (
-                url, description, owner, lang, dependency_manager, timezone, active)
-            VALUES (:url, :description, :owner, :lang, :dependency_manager, :timezone, :active)'
+                url, full_name, description, owner, lang, dependency_manager, timezone, active)
+            VALUES (:url, :full_name, :description, :owner, :lang, :dependency_manager, :timezone, :active)'
             , $this->table_name)
         );
 
         $result = $statement->execute(
             [
                 ':url' => $url,
+                ':full_name' => $full_name,
                 ':description' => $description,
                 ':owner' => $owner,
                 ':lang' => $lang,
@@ -77,13 +79,13 @@ class RDBMSStore implements StoreInterface
      * @param $token
      * @return array
      */
-    public function get($url)
+    public function get($full_name)
     {
-        $statement = $this->client->prepare('SELECT * FROM ' . $this->table_name . ' WHERE url = :url');
+        $statement = $this->client->prepare('SELECT * FROM ' . $this->table_name . ' WHERE full_name = :full_name');
 
         $statement->execute(
             [
-                ':url' => $url
+                ':full_name' => $full_name
             ]
         );
 
@@ -106,15 +108,43 @@ class RDBMSStore implements StoreInterface
     }
 
     /**
+     * @param $full_name
+     * @throws UnavailableException
+     */
+    public function activate($full_name)
+    {
+        $statement = $this->client->prepare('UPDATE ' . $this->table_name . ' SET active = 1 WHERE full_name = :full_name');
+        return $statement->execute(
+            [
+                ':full_name' => $full_name
+            ]
+        );
+    }
+
+    /**
+     * @param $full_name
+     * @throws UnavailableException
+     */
+    public function deactivate($full_name)
+    {
+        $statement = $this->client->prepare('UPDATE ' . $this->table_name . ' SET active = 0 WHERE full_name = :full_name');
+        return $statement->execute(
+            [
+                ':full_name' => $full_name
+            ]
+        );
+    }
+
+    /**
      * @param $name
      * @return boolean
      */
-    public function delete($url)
+    public function delete($full_name)
     {
-        $statement = $this->client->prepare('DELETE FROM ' . $this->table_name . ' WHERE url = :url');
+        $statement = $this->client->prepare('DELETE FROM ' . $this->table_name . ' WHERE full_name = :full_name');
         return $statement->execute(
             [
-                ':url' => $url
+                ':full_name' => $full_name
             ]
         );
     }
