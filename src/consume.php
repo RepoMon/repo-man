@@ -29,9 +29,12 @@ $callback = function($msg) use ($app) {
     if ($event['name'] === 'repo-mon.update.scheduled') {
         // update this repo
 
+        // use $event['data']['full_name'] to get owner and url from this service
+
         $token = $app['token-service']->getToken($event['data']['owner']);
 
         // update the repository, locally using the token
+        // pass the dependency manager and lang to the factory
         $command = $app['command_factory']->create(
             'dependencies/update/current',
             $event['data']['url'],
@@ -46,9 +49,7 @@ $callback = function($msg) use ($app) {
 
         $active = 0;
 
-        // remove any existing configuration for this repository - or use update?
-        // $app['store']->delete($event['data']['url']);
-
+        // should not overwrite existing data?
         $result = $app['store']->add(
             $data['url'],
             $data['full_name'],
@@ -59,24 +60,22 @@ $callback = function($msg) use ($app) {
             $data['timezone'],
             $active
         );
-        echo " Result of insert is '$result'\n";
+        echo " Result of add is '$result'\n";
 
     } else if ($event['name'] === 'repo-mon.repository.activated') {
-        $data = $event['data'];
+
         $result = $app['store']->activate(
-            $data['full_name']
+            $event['data']['full_name']
         );
         echo " Result of activate is '$result'\n";
+
     } else if ($event['name'] === 'repo-mon.repository.deactivated') {
-        $data = $event['data'];
+
         $result = $app['store']->deactivate(
-            $data['full_name']
+            $event['data']['full_name']
         );
         echo " Result of deactivate is '$result'\n";
 
-        // set active to be 0 rather than delete the repository
-       // $result = $app['store']->delete($event['data']['url']);
-       // echo " Result of delete is '$result'\n";
     }
 };
 
