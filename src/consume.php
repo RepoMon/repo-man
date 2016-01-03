@@ -24,6 +24,7 @@ $app['logger']->notice(sprintf("rabbit host: %s port: %s channel: %s\n",
 $callback = function($msg) use ($app) {
 
     $app['logger']->notice(" Received " . $msg->body);
+
     $event = json_decode($msg->body, true);
 
     if ($event['name'] === 'repo-mon.update.scheduled') {
@@ -61,6 +62,13 @@ $callback = function($msg) use ($app) {
             $active
         );
         echo " Result of add is '$result'\n";
+
+    } else if ($event['name'] === 'repo-mon.repository.removed') {
+
+        $result = $app['store']->delete(
+            $event['data']['full_name']
+        );
+        echo " Result of delete is '$result'\n";
 
     } else if ($event['name'] === 'repo-mon.repository.activated') {
 
