@@ -32,13 +32,15 @@ $callback = function($msg) use ($app) {
 
         // use $event['data']['full_name'] to get owner and url from this service
 
-        $token = $app['token-service']->getToken($event['data']['owner']);
+        $repository = $app['store']->get($event['data']['full_name']);
+
+        $token = $app['token-service']->getToken($repository['owner']);
 
         // update the repository, locally using the token
         // pass the dependency manager and lang to the factory
         $command = $app['command_factory']->create(
             'dependencies/update/current',
-            $event['data']['url'],
+            $repository['url'],
             $token
         );
 
