@@ -1,8 +1,9 @@
-<?php namespace Ace\RepoMan\Queue;
+<?php namespace Ace\Scheduler\Queue;
 
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
-use PhpAmqpLib\Channel\AMQPChannel;;
+use PhpAmqpLib\Channel\AMQPChannel;
+use Exception;
 
 /**
  * @author timrodger
@@ -35,6 +36,10 @@ class QueueClient
      */
     private $channel;
 
+    /**
+     * @var array
+     */
+    private $event_handlers = [];
 
     /**
      * @param $host
@@ -88,11 +93,37 @@ class QueueClient
     }
 
     /**
+     * Add a handler function for an event
+     *
+     * @param $event
      * @param callable $callback
      */
-    public function consume(callable $callback)
+    public function addEventHandler($event, callable $callback)
     {
-        //printf(" %s host %s port %s channel %s\n", __METHOD__, $this->host, $this->port, $this->channel_name);
+        $this->event_handlers[$event] = $callback;
+    }
+
+    /**
+     * Sit in loop waiting for incoming messages
+     * Call event handlers to consume events
+     */
+    public function consume()
+    {
+        $handlers = $this->event_handlers;
+
+        $callback = function($message) use ($handlers) {
+
+            $event = json_decode($message->body, true);
+
+            if (array_key_exists($event['name'], $handlers)){
+                try {
+                    $handlers[$event['name']]($event);
+                } catch (Exception $ex) {
+                    print "Error handling " . $event['name'] . "\n\n" . $ex->getMessage();
+                }
+            }
+        };
+
         $this->connect();
 
         list($queue_name, ,) = $this->channel->queue_declare("", false, false, true, false);
