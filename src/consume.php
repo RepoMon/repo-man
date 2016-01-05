@@ -36,7 +36,7 @@ $updateHandler = function($event) use ($app) {
         $token
     );
 
-    $command->execute();
+    $command->execute([]);
 };
 
 $addedHandler = function($event) use ($app) {
