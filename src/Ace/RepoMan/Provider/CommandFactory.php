@@ -14,7 +14,6 @@ class CommandFactory implements ServiceProviderInterface
     public function boot(Application $app)
     {
         $app['command_factory'] = new \Ace\RepoMan\Command\CommandFactory(
-            $app['store'],
             $app['config']->getRepoDir()
         );
     }
