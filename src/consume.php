@@ -5,10 +5,11 @@
  *
  * Consumes these events:
  *
- *  repo-mon.update.scheduled
- *  repo-mon.repo.configured
- *  repo-mon.repo.unconfigured
- *
+ *  repo-mon.repository.activated
+ *  repo-mon.repository.deactivated
+ *  repo-mon.repository.added
+ *  repo-mon.repository.removed
+ *  repo-mon.update.scheduled - change to command.update.scheduled
  */
 
 $app = require_once __DIR__ .'/app.php';
@@ -26,17 +27,28 @@ $updateHandler = function($event) use ($app) {
 
     $repository = $app['store']->get($event['data']['full_name']);
 
+    if (!('1' === $repository['active'])){
+        // log mis-configuration?
+        return;
+    }
+
+    // check language & dependency manager are supported
+
     $token = $app['token-service']->getToken($repository['owner']);
 
-    // update the repository, locally using the token
-    // pass the dependency manager and lang to the factory
-    $command = $app['command_factory']->create(
-        'dependencies/update/current',
-        $repository['url'],
-        $token
-    );
+    // publish a command
+    $command = [
+        'name' => 'command.repository.update',
+        'data' => [
+            'url' => $repository['url'],
+            'token' => $token,
+            'language' => $repository['lang'],
+            'dependency_manager' => $repository['dependency_manager']
+        ]
+    ];
 
-    $command->execute([]);
+    $app['queue-client']->publish($command);
+
 };
 
 $addedHandler = function($event) use ($app) {
