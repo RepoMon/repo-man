@@ -1,6 +1,6 @@
 {
-    "name": "RepoMon/repo-man",
-    "description": "Repository management tools",
+    "name": "RepoMon/repository",
+    "description": "Repository service",
     "authors": [
         {
             "name": "Tim Rodger",
