@@ -50,7 +50,7 @@ class Memory implements StoreInterface
         if (in_array($full_name, $this->data)){
             return $this->data[$full_name];
         } else {
-            throw new UnavailableException;
+            throw new NotFoundException;
         }
     }
 

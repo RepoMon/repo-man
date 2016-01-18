@@ -18,7 +18,8 @@ class ErrorHandler implements ServiceProviderInterface
     {
         $app->error(function (Exception $e) use($app) {
             $app['logger']->addError($e->getMessage());
-            return new Response($e->getMessage());
+            $status = ($e->getCode() > 99) ? $e->getCode() : 500;
+            return new Response($e->getMessage(), $status);
         });
 
     }

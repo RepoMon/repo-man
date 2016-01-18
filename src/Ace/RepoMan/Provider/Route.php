@@ -20,14 +20,27 @@ class Route implements ServiceProviderInterface
     public function boot(Application $app)
     {
         /**
-         * Respond with a JSON array of the repositories
+         * Respond with a JSON array of the repositories owned by owner query parameter
          */
-        $app->get('/repositories/{owner}', function(Request $request, $owner) use ($app){
+        $app->get('/repositories', function(Request $request) use ($app){
+
+            $owner = $request->query->get('owner');
 
             return $app->json(
                 $app['store']->getAll($owner)
             );
         });
+
+        /**
+         * return the information for the named repository
+         */
+        $app->get('/repositories/{vendor}/{library}', function(Request $request, $vendor, $library) use ($app){
+
+            return $app->json(
+                $app['store']->get("$vendor/$library")
+            );
+        });
+
 
         /**
          * Update a repository's dependencies

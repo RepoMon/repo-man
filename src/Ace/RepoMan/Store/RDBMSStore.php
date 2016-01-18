@@ -8,7 +8,6 @@ use PDO;
  */
 class RDBMSStore implements StoreInterface
 {
-
     /**
      * @var PDO
      */
@@ -75,8 +74,7 @@ class RDBMSStore implements StoreInterface
     }
 
     /**
-     * @param $url
-     * @param $token
+     * @param $full_name
      * @return array
      */
     public function get($full_name)
@@ -93,7 +91,8 @@ class RDBMSStore implements StoreInterface
     }
 
     /**
-     * @param $repository
+     * @param $owner
+     * @return array
      */
     public function getAll($owner)
     {
@@ -109,7 +108,7 @@ class RDBMSStore implements StoreInterface
 
     /**
      * @param $full_name
-     * @throws UnavailableException
+     * @return bool
      */
     public function activate($full_name)
     {
@@ -124,6 +123,7 @@ class RDBMSStore implements StoreInterface
     /**
      * @param $full_name
      * @throws UnavailableException
+     * @return bool
      */
     public function deactivate($full_name)
     {
@@ -136,8 +136,8 @@ class RDBMSStore implements StoreInterface
     }
 
     /**
-     * @param $name
-     * @return boolean
+     * @param $full_name
+     * @return bool
      */
     public function delete($full_name)
     {
