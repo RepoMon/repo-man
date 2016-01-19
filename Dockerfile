@@ -26,9 +26,6 @@ CMD ["/home/app/run-all.sh"]
 # Move application files into place
 COPY src/ /home/app/
 
-# remove any development cruft
-RUN rm -rf /home/app/vendor/*
-
 # create the directory to store the checked out repositories
 RUN mkdir /tmp/repositories
 
