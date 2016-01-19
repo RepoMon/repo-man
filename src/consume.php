@@ -94,6 +94,6 @@ $app['queue-client']->addEventHandler('repo-mon.repository.added', $addedHandler
 $app['queue-client']->addEventHandler('repo-mon.repository.activated', $activatedHandler);
 $app['queue-client']->addEventHandler('repo-mon.repository.deactivated', $deactivatedHandler);
 $app['queue-client']->addEventHandler('repo-mon.repository.removed', $removedHandler);
-$app['queue-client']->addEventHandler('repo-mon.update.scheduled', $updateHandler);
+# $app['queue-client']->addEventHandler('repo-mon.update.scheduled', $updateHandler);
 
 $app['queue-client']->consume();
