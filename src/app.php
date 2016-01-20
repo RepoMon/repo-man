@@ -23,6 +23,5 @@ $app->register(new ConfigProvider($dir));
 $app->register(new LogProvider());
 $app->register(new RouteProvider());
 $app->register(new QueueClientProvider());
-$app->register(new TokenProvider());
 
 return $app;
