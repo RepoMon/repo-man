@@ -35,7 +35,7 @@ $addedHandler = function($event) use ($app) {
         $data['dependency_manager'],
         $data['timezone'],
         $active = false,
-        $private = (boolean) $data['private']
+        $private = (bool) $data['private']
     );
     echo " Result of add is '$result'\n";
 };

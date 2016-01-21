@@ -57,7 +57,7 @@ class RDBMSStore implements StoreInterface
     {
         $statement = $this->client->prepare(
             sprintf('INSERT INTO %s (
-                url, full_name, description, owner, lang, dependency_manager, timezone, active)
+                url, full_name, description, owner, lang, dependency_manager, timezone, active, branch, private)
             VALUES (:url, :full_name, :description, :owner, :lang, :dependency_manager, :timezone, :active, :branch, :private)'
             , $this->table_name)
         );
@@ -96,7 +96,10 @@ class RDBMSStore implements StoreInterface
             ]
         );
 
-        return $statement->fetch();
+        $repository = $statement->fetch();
+        $repository['private'] = (bool)$repository['private'];
+        $repository['active'] = (bool)$repository['active'];
+        return $repository;
     }
 
     /**
@@ -112,7 +115,13 @@ class RDBMSStore implements StoreInterface
             ]
         );
 
-        return $statement->fetchAll();
+        // convert booleans into booleans
+        $repositories = $statement->fetchAll();
+        foreach($repositories as &$repository) {
+            $repository['private'] = (bool)$repository['private'];
+            $repository['active'] = (bool)$repository['active'];
+        }
+        return $repositories;
     }
 
     /**
