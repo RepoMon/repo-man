@@ -10,7 +10,7 @@ interface StoreInterface
 
     public function get($full_name);
 
-    public function add($url, $full_name, $owner, $description, $lang, $dependency_manager, $timezone, $active);
+    public function add($url, $full_name, $owner, $description, $lang, $dependency_manager, $timezone, $active, $is_private);
 
     public function activate($full_name);
 

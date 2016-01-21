@@ -69,7 +69,7 @@ class RDBMSStoreFactory implements StoreFactoryInterface
             $pdo->query(sprintf('CREATE DATABASE IF NOT EXISTS %s', $this->db_name));
             $pdo->query(sprintf('use %s', $this->db_name));
 
-            // next ensure table exists
+            // ensure table exists
             $pdo->query(
                 sprintf('CREATE TABLE IF NOT EXISTS %s (
                   url VARCHAR (2048) UNIQUE NOT NULL,
@@ -77,9 +77,12 @@ class RDBMSStoreFactory implements StoreFactoryInterface
                   description TEXT,
                   owner TEXT NOT NULL,
                   lang TEXT,
+                  version TEXT,
                   dependency_manager TEXT,
+                  branch TEXT,
                   timezone TEXT,
-                  active INT NOT NULL DEFAULT 0
+                  active INT NOT NULL DEFAULT 0,
+                  private INT NOT NULL DEFAULT 0
                 )', $this->table_name)
             );
 

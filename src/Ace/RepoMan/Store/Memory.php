@@ -23,9 +23,10 @@ class Memory implements StoreInterface
      * @param $dependency_manager
      * @param $timezone
      * @param $active
+     * @param $is_private
      * @return bool
      */
-    public function add($url, $full_name, $owner, $description, $lang, $dependency_manager, $timezone, $active)
+    public function add($url, $full_name, $owner, $description, $lang, $dependency_manager, $timezone, $active, $is_private)
     {
         $this->data[$full_name] = [
             'url' => $url,
@@ -35,7 +36,9 @@ class Memory implements StoreInterface
             'lang' => $lang,
             'dependency_manager' => $dependency_manager,
             'timezone' => $timezone,
-            'active' => $active
+            'active' => $active,
+            'branch' => 'master',
+            'private' => $is_private
         ];
         return true;
     }

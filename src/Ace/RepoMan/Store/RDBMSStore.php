@@ -24,6 +24,12 @@ class RDBMSStore implements StoreInterface
     private $directory;
 
     /**
+     * Branch name to use until we allow configuration
+     * @var string
+     */
+    private $branch = 'master';
+
+    /**
      * @param PDO $client
      * @param string $table_name
      * @param string $directory
@@ -43,15 +49,16 @@ class RDBMSStore implements StoreInterface
      * @param string $lang
      * @param string $dependency_manager
      * @param string $timezone
-     * @param int $active
+     * @param boolean $active
+     * @param boolean $is_private
      * @return bool
      */
-    public function add($url, $full_name, $owner, $description, $lang, $dependency_manager, $timezone, $active)
+    public function add($url, $full_name, $owner, $description, $lang, $dependency_manager, $timezone, $active, $is_private)
     {
         $statement = $this->client->prepare(
             sprintf('INSERT INTO %s (
                 url, full_name, description, owner, lang, dependency_manager, timezone, active)
-            VALUES (:url, :full_name, :description, :owner, :lang, :dependency_manager, :timezone, :active)'
+            VALUES (:url, :full_name, :description, :owner, :lang, :dependency_manager, :timezone, :active, :branch, :private)'
             , $this->table_name)
         );
 
@@ -64,7 +71,9 @@ class RDBMSStore implements StoreInterface
                 ':lang' => $lang,
                 ':dependency_manager' => $dependency_manager,
                 ':timezone' => $timezone,
-                ':active' => $active
+                ':active' => $active ? 1 : 0,
+                ':branch' => $this->branch,
+                ':private' => $is_private ? 1 : 0
             ]
         );
 

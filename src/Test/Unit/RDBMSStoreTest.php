@@ -54,8 +54,9 @@ class RDBMSStoreTest extends PHPUnit_Framework_TestCase
      * @param $dependency_manager
      * @param $timezone
      * @param $active
+     * @paran $branch
      */
-    public function testAdd($url, $full_name, $owner, $description, $lang, $dependency_manager, $timezone, $active)
+    public function testAdd($url, $full_name, $owner, $description, $lang, $dependency_manager, $timezone, $active, $is_private)
     {
 
         $this->givenAClient();
@@ -69,8 +70,9 @@ class RDBMSStoreTest extends PHPUnit_Framework_TestCase
             ->method('prepare')
             ->with('INSERT INTO ' . $this->table_name . ' (
                 url, full_name, description, owner, lang, dependency_manager, timezone, active)
-            VALUES (:url, :full_name, :description, :owner, :lang, :dependency_manager, :timezone, :active)')
+            VALUES (:url, :full_name, :description, :owner, :lang, :dependency_manager, :timezone, :active, :branch, :private)')
             ->will($this->returnValue($mock_statement));
+
 
         $mock_statement->expects($this->once())
             ->method('execute')
@@ -82,16 +84,28 @@ class RDBMSStoreTest extends PHPUnit_Framework_TestCase
                 ':lang' => $lang,
                 ':dependency_manager' => $dependency_manager,
                 ':timezone' => $timezone,
-                ':active' => $active
+                ':active' => $active,
+                ':branch' => 'master',
+                ':private' => $is_private
             ]);
 
-        $this->store->add($url, $full_name, $owner, $description, $lang, $dependency_manager, $timezone, $active);
+        $this->store->add($url, $full_name, $owner, $description, $lang, $dependency_manager, $timezone, $active, $is_private);
     }
 
     public function getAddData()
     {
         return [
-            ['https://github.com/test/repo-a', 'test/repo-a', 'malcolm-x', 'A test repo', 'PHP', 'composer', 'Europe/London', 1],
+            [
+                'https://github.com/test/repo-a',
+                'test/repo-a',
+                'malcolm-x',
+                'A test repo',
+                'PHP',
+                'composer',
+                'Europe/London',
+                1,
+                0
+            ],
         ];
     }
 
