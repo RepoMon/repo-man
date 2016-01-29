@@ -77,7 +77,7 @@ class RDBMSStoreFactory implements StoreFactoryInterface
                   description TEXT,
                   owner TEXT NOT NULL,
                   lang TEXT,
-                  version TEXT DEFAULT "",
+                  version TEXT,
                   dependency_manager TEXT,
                   branch TEXT,
                   timezone TEXT,
