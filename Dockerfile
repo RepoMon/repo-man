@@ -35,9 +35,6 @@ WORKDIR /home/app
 RUN composer install --prefer-dist && \
     apt-get clean
 
-RUN git config --global user.email "bot@repo-mon.com"
-RUN git config --global user.name "Repository monitor"
-
 WORKDIR /home/app/public
 
 RUN chmod +x /home/app/run.sh
