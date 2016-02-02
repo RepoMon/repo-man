@@ -57,8 +57,8 @@ class RDBMSStore implements StoreInterface
     {
         $statement = $this->client->prepare(
             sprintf('INSERT INTO %s (
-                url, full_name, description, owner, lang, dependency_manager, timezone, active, branch, private)
-            VALUES (:url, :full_name, :description, :owner, :lang, :dependency_manager, :timezone, :active, :branch, :private)'
+                url, full_name, description, owner, lang, dependency_manager, timezone, active, branch, private, version)
+            VALUES (:url, :full_name, :description, :owner, :lang, :dependency_manager, :timezone, :active, :branch, :private, "")'
             , $this->table_name)
         );
 

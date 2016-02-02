@@ -69,8 +69,8 @@ class RDBMSStoreTest extends PHPUnit_Framework_TestCase
         $this->client->expects($this->once())
             ->method('prepare')
             ->with('INSERT INTO ' . $this->table_name . ' (
-                url, full_name, description, owner, lang, dependency_manager, timezone, active)
-            VALUES (:url, :full_name, :description, :owner, :lang, :dependency_manager, :timezone, :active, :branch, :private)')
+                url, full_name, description, owner, lang, dependency_manager, timezone, active, branch, private, version)
+            VALUES (:url, :full_name, :description, :owner, :lang, :dependency_manager, :timezone, :active, :branch, :private, "")')
             ->will($this->returnValue($mock_statement));
 
 
@@ -121,7 +121,9 @@ class RDBMSStoreTest extends PHPUnit_Framework_TestCase
                 'full_name' => $full_name,
                 'owner' => 'xavier',
                 'language' => 'PHP',
-                'dependency_manager' => 'composer'
+                'dependency_manager' => 'composer',
+                'private' => 0,
+                'active' => 0
         ];
 
         $mock_statement = $this->getMockBuilder('PDOStatement')
@@ -141,6 +143,9 @@ class RDBMSStoreTest extends PHPUnit_Framework_TestCase
             ->will($this->returnValue($result));
 
         $repository = $this->store->get($full_name);
+
+        $result['private'] = false;
+        $result['active'] = false;
 
         $this->assertSame($result, $repository);
 
@@ -164,13 +169,15 @@ class RDBMSStoreTest extends PHPUnit_Framework_TestCase
             ->method('execute')
             ->with([':owner' => 'malcolm-q']);
 
+        $expected = [['full_name' => 'owner/repo', 'private' => false, 'active' => true]];
+
         $mock_statement->expects($this->once())
             ->method('fetchAll')
-            ->will($this->returnValue(['owner/repo']));
+            ->will($this->returnValue($expected));
 
         $repositories = $this->store->getAll('malcolm-q');
 
-        $this->assertSame(['owner/repo'], $repositories);
+        $this->assertSame($expected, $repositories);
     }
 
     public function testDeleteReturnsTrueOnSuccess()
