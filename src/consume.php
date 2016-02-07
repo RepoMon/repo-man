@@ -44,14 +44,14 @@ $removedHandler = function ($event) use ($app) {
     $result = $app['store']->delete(
         $event['data']['full_name']
     );
-    echo " Result of deactivate is '$result'\n";
+    echo " Result of delete is '$result'\n";
 };
 
 $activatedHandler = function ($event) use ($app) {
     $result = $app['store']->activate(
         $event['data']['full_name']
     );
-    echo " Result of deactivate is '$result'\n";
+    echo " Result of activate is '$result'\n";
 };
 
 $deactivatedHandler = function ($event) use ($app) {
