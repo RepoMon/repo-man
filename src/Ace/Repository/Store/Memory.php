@@ -1,7 +1,7 @@
-<?php namespace Ace\RepoMan\Store;
+<?php namespace Ace\Repository\Store;
 
-use Ace\RepoMan\Configuration;
-use Ace\RepoMan\Domain\Repository;
+use Ace\Repository\Configuration;
+use Ace\Repository\Domain\Repository;
 
 /**
  * @author timrodger

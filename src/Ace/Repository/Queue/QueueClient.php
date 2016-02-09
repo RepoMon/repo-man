@@ -1,4 +1,4 @@
-<?php namespace Ace\RepoMan\Queue;
+<?php namespace Ace\Repository\Queue;
 
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;

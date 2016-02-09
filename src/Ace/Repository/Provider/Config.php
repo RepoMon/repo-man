@@ -1,6 +1,6 @@
-<?php namespace Ace\RepoMan\Provider;
+<?php namespace Ace\Repository\Provider;
 
-use Ace\RepoMan\Configuration;
+use Ace\Repository\Configuration;
 use Silex\Application;
 use Silex\ServiceProviderInterface;
 

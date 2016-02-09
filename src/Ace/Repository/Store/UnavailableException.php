@@ -1,4 +1,4 @@
-<?php namespace Ace\RepoMan\Store;
+<?php namespace Ace\Repository\Store;
 
 use Exception;
 

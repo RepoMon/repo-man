@@ -1,6 +1,6 @@
 <?php
 
-use Ace\RepoMan\Store\RDBMSStore;
+use Ace\Repository\Store\RDBMSStore;
 
 class PDOMock extends \PDO {
     public function __construct() {}

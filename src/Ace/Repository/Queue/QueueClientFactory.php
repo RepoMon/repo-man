@@ -1,7 +1,7 @@
-<?php namespace Ace\RepoMan\Queue;
+<?php namespace Ace\Repository\Queue;
 
-use Ace\RepoMan\Configuration;
-use Ace\RepoMan\Queue\QueueClient;
+use Ace\Repository\Configuration;
+use Ace\Repository\Queue\QueueClient;
 
 /**
  * @author timrodger

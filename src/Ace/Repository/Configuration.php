@@ -1,4 +1,4 @@
-<?php namespace Ace\RepoMan;
+<?php namespace Ace\Repository;
 
 /*
  * @author tim rodger

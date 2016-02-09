@@ -1,7 +1,7 @@
-<?php namespace Ace\RepoMan\Provider;
+<?php namespace Ace\Repository\Provider;
 
-use Ace\RepoMan\Store\Memory;
-use Ace\RepoMan\Store\RDBMSStoreFactory;
+use Ace\Repository\Store\Memory;
+use Ace\Repository\Store\RDBMSStoreFactory;
 use Silex\Application;
 use Silex\ServiceProviderInterface;
 

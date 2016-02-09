@@ -1,6 +1,6 @@
-<?php namespace Ace\RepoMan\Provider;
+<?php namespace Ace\Repository\Provider;
 
-use Ace\RepoMan\Queue\QueueClientFactory;
+use Ace\Repository\Queue\QueueClientFactory;
 use Silex\Application;
 use Silex\ServiceProviderInterface;
 

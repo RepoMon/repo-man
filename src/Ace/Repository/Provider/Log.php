@@ -1,4 +1,4 @@
-<?php namespace Ace\RepoMan\Provider;
+<?php namespace Ace\Repository\Provider;
 
 use Monolog\Handler\StreamHandler;
 use Silex\Application;

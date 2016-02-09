@@ -22,7 +22,7 @@ class AppErrorIntegrationTest extends WebTestCase
     }
 
     /**
-     * @expectedException Ace\RepoMan\Store\UnavailableException
+     * @expectedException Ace\Repository\Store\UnavailableException
      */
     public function testListRepositoriesFails()
     {

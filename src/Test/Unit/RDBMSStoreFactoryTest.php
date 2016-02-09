@@ -1,5 +1,5 @@
 <?php namespace Test\Unit; 
-use Ace\RepoMan\Store\RDBMSStoreFactory;
+use Ace\Repository\Store\RDBMSStoreFactory;
 use PHPUnit_Framework_TestCase;
 
 /**
@@ -10,7 +10,7 @@ class RDBMSStoreFactoryTest extends PHPUnit_Framework_TestCase
 {
 
     /**
-     * @expectedException \Ace\RepoMan\Store\UnavailableException
+     * @expectedException \Ace\Repository\Store\UnavailableException
      */
     public function testCreateFailsForInvalidDsn()
     {

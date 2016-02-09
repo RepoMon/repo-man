@@ -2,14 +2,14 @@
 
 use Silex\Application;
 
-use Ace\RepoMan\Provider\Config as ConfigProvider;
-use Ace\RepoMan\Provider\Log as LogProvider;
-use Ace\RepoMan\Provider\Route as RouteProvider;
-use Ace\RepoMan\Provider\ErrorHandler as ErrorHandlerProvider;
-use Ace\RepoMan\Provider\CommandFactory as CommandFactoryProvider;
-use Ace\RepoMan\Provider\QueueClientProvider;
-use Ace\RepoMan\Provider\TokenProvider;
-use Ace\RepoMan\Provider\StoreProvider;
+use Ace\Repository\Provider\Config as ConfigProvider;
+use Ace\Repository\Provider\Log as LogProvider;
+use Ace\Repository\Provider\Route as RouteProvider;
+use Ace\Repository\Provider\ErrorHandler as ErrorHandlerProvider;
+use Ace\Repository\Provider\CommandFactory as CommandFactoryProvider;
+use Ace\Repository\Provider\QueueClientProvider;
+use Ace\Repository\Provider\TokenProvider;
+use Ace\Repository\Provider\StoreProvider;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
