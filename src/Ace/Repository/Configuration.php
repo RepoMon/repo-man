@@ -14,6 +14,14 @@ class Configuration
     /**
      * @return string
      */
+    public function getDbType()
+    {
+        getenv('DB_TYPE');
+    }
+
+    /**
+     * @return string
+     */
     public function getDbUser()
     {
         return 'root';

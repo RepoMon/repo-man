@@ -24,11 +24,11 @@ class StoreProvider implements ServiceProviderInterface
      */
     public function boot(Application $app)
     {
-        if (getenv('DB_TYPE') === 'MEMORY') {
+        $config = $app['config'];
+
+        if ($config->getDbType() === 'MEMORY') {
             $app['store'] = new Memory();
         } else {
-            $config = $app['config'];
-
             $factory = new RDBMSStoreFactory(
                 $config->getDbHost(),
                 $config->getDbName(),
