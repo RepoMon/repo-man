@@ -35,24 +35,17 @@ class RDBMSStoreFactory implements StoreFactoryInterface
     private $table_name = 'repositories';
 
     /**
-     * @var string
-     */
-    private $directory;
-
-    /**
      * @param string $db_host
      * @param string $db_name
      * @param string $user
      * @param string $password
-     * @param string $directory
      */
-    public function __construct($db_host, $db_name, $user, $password, $directory)
+    public function __construct($db_host, $db_name, $user, $password)
     {
         $this->db_host = $db_host;
         $this->db_name = $db_name;
         $this->user = $user;
         $this->password = $password;
-        $this->directory = $directory;
     }
 
     /**
@@ -86,7 +79,7 @@ class RDBMSStoreFactory implements StoreFactoryInterface
                 )', $this->table_name)
             );
 
-            return new RDBMSStore($pdo, $this->table_name, $this->directory);
+            return new RDBMSStore($pdo, $this->table_name);
         } catch (PDOException $ex) {
             throw new UnavailableException($ex->getMessage());
         }

@@ -6,36 +6,9 @@
  */
 class Configuration
 {
-    /**
-     * @var string
-     */
-    private $repo_dir;
-
-    /**
-     * @param $repo_dir
-     */
-    public function __construct($repo_dir)
-    {
-        $this->repo_dir = $repo_dir;
-    }
-
     public function getServiceName()
     {
         return 'Repository Monitor v4.0.0';
-    }
-
-    /**
-     * @return string
-     */
-    public function getRepoDir()
-    {
-        return $this->repo_dir;
-    }
-
-    public function getStoreDsn()
-    {
-        // should contain a string like this 'tcp://172.17.0.154:6379'
-        return getenv('REDIS_PORT');
     }
 
     /**
@@ -51,9 +24,13 @@ class Configuration
      */
     public function getDbPassword()
     {
-        // env vars not available on publish?
-        return '1234';
-        //return getenv('MYSQL_ROOT_PASSWORD');
+        $pw = getenv('MYSQL_ROOT_PASSWORD');
+
+        if ($pw) {
+            return $pw;
+        } else {
+            return '1234';
+        }
     }
 
     public function getDbHost()
@@ -89,13 +66,5 @@ class Configuration
     {
         // use an env var for the channel name too
         return 'repo-mon.main';
-    }
-
-    /**
-     * @return string
-     */
-    public function getTokenService()
-    {
-        return 'http://token';
     }
 }

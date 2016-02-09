@@ -115,11 +115,13 @@ class QueueClient
 
             $event = json_decode($message->body, true);
 
+            printf('Handling : %s', $event['name']);
+
             if (array_key_exists($event['name'], $handlers)){
                 try {
                     $handlers[$event['name']]($event);
                 } catch (Exception $ex) {
-                    print "Error handling " . $event['name'] . " with exception " . get_class($ex) . "\n" . $ex->getMessage();
+                    printf("Error handling : %s with exception %s\n%s", $event['name'], get_class($ex), $ex->getMessage());
                 }
             }
         };

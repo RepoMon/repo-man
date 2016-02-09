@@ -33,8 +33,7 @@ class StoreProvider implements ServiceProviderInterface
                 $config->getDbHost(),
                 $config->getDbName(),
                 $config->getDbUser(),
-                $config->getDbPassword(),
-                'dir'
+                $config->getDbPassword()
             );
             $app['store'] = $factory->create();
         }

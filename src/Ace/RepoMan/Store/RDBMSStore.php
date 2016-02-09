@@ -19,11 +19,6 @@ class RDBMSStore implements StoreInterface
     private $table_name;
 
     /**
-     * @var string
-     */
-    private $directory;
-
-    /**
      * Branch name to use until we allow configuration
      * @var string
      */
@@ -32,13 +27,11 @@ class RDBMSStore implements StoreInterface
     /**
      * @param PDO $client
      * @param string $table_name
-     * @param string $directory
      */
-    public function __construct(PDO $client, $table_name, $directory)
+    public function __construct(PDO $client, $table_name)
     {
         $this->client = $client;
         $this->table_name = $table_name;
-        $this->directory = $directory;
     }
 
     /**
