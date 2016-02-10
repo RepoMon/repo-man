@@ -90,6 +90,8 @@ class RDBMSStore implements StoreInterface
         );
 
         $repository = $statement->fetch();
+        $statement->closeCursor();
+
         $repository['private'] = (bool)$repository['private'];
         $repository['active'] = (bool)$repository['active'];
         return $repository;
@@ -110,6 +112,8 @@ class RDBMSStore implements StoreInterface
 
         // convert booleans into booleans
         $repositories = $statement->fetchAll();
+        $statement->closeCursor();
+
         foreach($repositories as &$repository) {
             $repository['private'] = (bool)$repository['private'];
             $repository['active'] = (bool)$repository['active'];
@@ -124,11 +128,14 @@ class RDBMSStore implements StoreInterface
     public function activate($full_name)
     {
         $statement = $this->client->prepare('UPDATE ' . $this->table_name . ' SET active = 1 WHERE full_name = :full_name');
-        return $statement->execute(
+        $result = $statement->execute(
             [
                 ':full_name' => $full_name
             ]
         );
+        $statement->closeCursor();
+
+        return $result;
     }
 
     /**
@@ -139,11 +146,14 @@ class RDBMSStore implements StoreInterface
     public function deactivate($full_name)
     {
         $statement = $this->client->prepare('UPDATE ' . $this->table_name . ' SET active = 0 WHERE full_name = :full_name');
-        return $statement->execute(
+        $result = $statement->execute(
             [
                 ':full_name' => $full_name
             ]
         );
+        $statement->closeCursor();
+
+        return $result;
     }
 
     /**
@@ -153,10 +163,13 @@ class RDBMSStore implements StoreInterface
     public function delete($full_name)
     {
         $statement = $this->client->prepare('DELETE FROM ' . $this->table_name . ' WHERE full_name = :full_name');
-        return $statement->execute(
+        $result = $statement->execute(
             [
                 ':full_name' => $full_name
             ]
         );
+        $statement->closeCursor();
+
+        return $result;
     }
 }
